@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/* Declaro el reset de CSS */
+/* * {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  border: none;
+  outline: none;
+} */
+
+/* Declara colores */
+@theme {
+  --color-green: #2E7D32;
+  --color-light-green: #81C784;
+  --color-brown: #8D6E63;
+  --color-vanille: #F6D7B0;
+  --color-vanille-opacity: #F6D7B080;
+  --color-black: #212121;
+  --color-black-opacity: rgba(33, 33, 33, 0.5); 
+  --color-white: #FAFAFA;
+  --color-dark-grey: #656565;
+  --color-grey: #BDBDBD;
+}
+
+/* Declaro las fuentes */
+@font-face {
+  font-family: "Lato";
+  src: url('../fonts/Lato-Regular.ttf') format("truetype");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url('../fonts/Montserrat-Regular.ttf') format("truetype");
+}
+
+@font-face {
+  font-family: "Montserrat-Bold";
+  src: url('../fonts/Montserrat-ExtraBold.ttf') format("truetype");
+}
+
+/* Declaro los estilos basicos */
+body {
+  font-family: 'Lato', sans-serif !important;
+}
+
+h1, h2 {
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  font-weight: bolder;
+}
+
+h1 {
+  font-size: 3.5rem;
+}
+h2 {
+  font-size: 3rem;
+}
+h3 {
+  font-size: 2.5rem;
+}
+h4 {
+  font-size: 2rem;
+}

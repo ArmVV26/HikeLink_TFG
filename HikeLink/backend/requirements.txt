@@ -1,0 +1,12 @@
+Django>=4.2
+djangorestframework
+psycopg2-binary
+django-cors-headers
+djangorestframework-simplejwt
+django-environ
+dj-rest-auth
+django-allauth
+requests
+cryptography
+markdown
+Pillow
