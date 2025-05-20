@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-    import ShowMap from '@/components/ShowMap.vue';
+    import ShowMap from '@/components/map/ShowMap.vue';
 </script>
 
 <style scoped>

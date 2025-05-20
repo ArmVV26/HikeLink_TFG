@@ -889,5 +889,5 @@
     .leaflet-control-scale-line {
         background-color: transparent;
         color: var(--color-black);
-    }
+    }    
 </style>

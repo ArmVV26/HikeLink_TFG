@@ -15,7 +15,7 @@ router.register(r'favorites', FavoritesViewSet)
 urlpatterns = [
     path('', include(router.urls)),
 
-    # Ruta que llama a user_info para enviar los datos al Token del Login1
+    # Ruta que llama a user_info para enviar los datos al Token del Login
     path('user/', user_info),
 
     # Ruta para obtener el rating del usuario
@@ -29,4 +29,7 @@ urlpatterns = [
 
     # Ruta para personalizar el actualizar una ruta
     path('update-route/<int:route_id>/', update_route, name='update-route'),
+
+    # Ruta para obtener solamente las rutas para un usuario
+    path('routes/user/<int:user_id>/', get_routes_by_user, name='user-routes'),
 ]

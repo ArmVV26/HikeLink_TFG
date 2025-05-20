@@ -23,7 +23,6 @@
     import LoginButton from '../auth/LoginButton.vue';
 
     const route = useRoute();
-    console.log(route)
 </script>
 
 <style scoped>

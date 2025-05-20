@@ -6,10 +6,13 @@
             <div>
                 <p>{{ formatDate(route.created_date) }}</p>
                 <CommonButton 
-                    :text="'Favoritos'"
+                    :text="isFavorite ? 'Quitar Favorito' : 'Añadir a Favoritos'"
                     :icon="'fa-solid fa-bookmark'"
                     :thin="true"
-                    :route="'/'"
+                    :route="''"
+                    :asButton="true"
+                    :disabled="!isAuthenticated"
+                    @click="toggleFavorite"
                 />
                 <CommonButton 
                     v-if="isOwner"
@@ -137,15 +140,21 @@
 
     import api from '@/api/api'
     
-    import ShowMap from '@/components/ShowMap.vue'
+    import ShowMap from '@/components/map/ShowMap.vue'
     import CommonButton from '@/components/common/CommonButton.vue'
     import RouteCarousel from '@/components/images/RouteCarousel.vue'
     import RatingButton from '@/components/auth/RatingButton.vue'
     import AddComment from '@/components/auth/AddComment.vue'
 
     const props = defineProps({
-        id: String,
-        slug: String
+        id: {
+            type: String,
+            required: true
+        },
+        slug: {
+            type: String,
+            required: true
+        }
     })
 
     // Funcion que permite actualizar los datos de la Ruta
@@ -162,7 +171,8 @@
 
     // Realiza la llamada a la API para obtener los datos de la Ruta
     onMounted(async () => {
-        refreshRouteData()
+        await refreshRouteData()
+        await checkIfFavorite()
     })
 
     const route = ref(null)
@@ -172,6 +182,7 @@
 
     // Compruebo si el usuario es el dueño de la ruta
     const authStore = useAuthStore()
+    const isAuthenticated = computed(() => authStore.isAuthenticated)
     const currentUserId = computed(() => authStore.user?.id ?? null)
     const isOwner = computed(() => {
         return route.value && currentUserId.value === route.value.user.id
@@ -288,6 +299,48 @@
             descent: Math.round(loss),
             maxElevation: Math.max(...elevations).toFixed(1),
             minElevation: Math.min(...elevations).toFixed(1)
+        }
+    }
+
+    const isFavorite = ref(false)
+    const favoriteId = ref(null)
+
+    // Funcion para guardar una ruta en favoritos
+    const toggleFavorite = async () => {
+        try {
+            // Eliminar de favoritos
+            if (isFavorite.value) {
+                await api.delete(`/favorites/${favoriteId.value}/`)
+                isFavorite.value = false
+                favoriteId.value = null
+            
+            // Añadir a favoritos
+            } else {
+                const response = await api.post(`/favorites/`, {
+                    user: currentUserId.value,
+                    route: route.value.id
+                })
+                isFavorite.value = true
+                favoriteId.value = response.data.id
+            }
+        } catch (error) {
+            console.error('Error en toggle de favoritos:', error)
+        }
+    }
+
+    // Funcion que comprueba si una ruta esta en favoritos o no
+    const checkIfFavorite = async () => {
+        try {
+            const response = await api.get(`/favorites/?user=${currentUserId.value}&route=${route.value.id}`)
+            if (response.data.length > 0) {
+                isFavorite.value = true
+                favoriteId.value = response.data[0].id
+            } else {
+                isFavorite.value = false
+                favoriteId.value = null
+            }
+        } catch (error) {
+            console.error('Error comprobando favoritos:', error)
         }
     }
 </script>  

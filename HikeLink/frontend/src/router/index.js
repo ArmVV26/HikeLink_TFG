@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import api from '@/api/api'
+import ConfigProfile from '@/views/auth/ConfigProfile.vue'
 import Login from '@/views/auth/Login.vue'
 import Register from '@/views/auth/Register.vue'
 import UpdateRoute from '@/views/auth/UpdateRoute.vue'
@@ -48,11 +49,12 @@ const requireIsOwner = async (to, from, next) => {
 }
 
 const routes = [
+  { path: '/config-profile', name:'ConfigProfile', component: ConfigProfile},
   { path: '/login', name:'Login', component: Login},
   { path: '/register', name:'Register', component: Register},
   { path: '/update-route/:slug-:id(\\d+)', name:'UpdateRoute', component: UpdateRoute, props: true, beforeEnter: requireIsOwner},
   { path: '/upload-route', name:'UploadRoute', component: UploadRoute, beforeEnter: requireAuth},
-  { path: '/profile', name:'UserProfile', component: UserProfile},
+  { path: '/profile/:id(\\d+)', name:'UserProfile', component: UserProfile, props: true, beforeEnter: requireAuth},
   { path: '/foro', name:'Foro', component: Foro },
   { path: '/map', name:'Map', component: Map },
   { path: '/routes/:slug-:id(\\d+)', name:'RouteDetail', component: RouteDetail, props: true },
@@ -68,6 +70,24 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
+})
+
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore()
+
+  if (!authStore.isAuthResolved) {
+    // Esperar a que isAuthResolved sea true
+    await new Promise(resolve => {
+      const stopWatching = authStore.$subscribe((mutation, state) => {
+        if (state.isAuthResolved) {
+          stopWatching()
+          resolve()
+        }
+      })
+    })
+  }
+
+  next()
 })
 
 export default router

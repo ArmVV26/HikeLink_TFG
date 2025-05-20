@@ -12,13 +12,13 @@
   import Header from './components/common/Header.vue'
   import Footer from './components/common/Footer.vue'
 
-  import { onMounted } from 'vue'
+  import { onBeforeMount } from 'vue'
   import axios from 'axios'
   import { useAuthStore } from './stores/authStore'
 
   const authStore = useAuthStore()
 
-  onMounted(async () => {
+  onBeforeMount(async () => {
     const token = localStorage.getItem('access')
     if (token && !authStore.user) {
       try {

@@ -16,7 +16,7 @@
             <transition name="fade-dropdown">
                 <div v-if="menuOpen" class="dropdown">
                     <h1>{{ authStore.user.username }}</h1>
-                    <router-link to="/profile"> Mi Perfil </router-link>
+                    <router-link :to="`/profile/${authStore.user.id}`"> Mi Perfil </router-link>
                     <router-link to="/upload-route"> Subir Ruta </router-link>
                     <router-link @click="authStore.logout" to="/">Cerrar Sesión</router-link>
                 </div>
@@ -30,12 +30,12 @@
     import { useAuthStore } from '@/stores/authStore';
     import CommonButton from '../common/CommonButton.vue';
     import { getMediaUrl } from '@/api/media';
-    import { useRouter } from 'vue-router';
+    import { useRoute } from 'vue-router';
 
     const authStore = useAuthStore()
     const menuOpen = ref(false)    
     const userImg = ref(null)
-    const route = useRouter()
+    const route = useRoute()
 
     // Si cambia de pagina se cierra el menu
     watch(() => route.fullPath, () => {
