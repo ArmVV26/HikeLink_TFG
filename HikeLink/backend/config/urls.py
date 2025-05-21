@@ -33,14 +33,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('hikelink_app.urls')), # Cualquier llamada a la API se delega al urls.py de hikelink_app
 
-    # SimpleJWT - Endpoints para login con JWT
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
-    # Autenticacion y registro
-    path('api/auth/', include('dj_rest_auth.urls')),
-    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
-
     # AllAuth se usa internamente por dj_rest_auth
     path('accounts/', include('allauth.urls')),
 

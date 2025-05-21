@@ -24,5 +24,19 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthResolved.value = true
   }
 
-  return { user, isAuthResolved, isAuthenticated, login, logout, setResolved, accessToken, refreshToken }
+  async function fetchUser() {
+    try {
+      const response = await api.get('/users/me/', {
+        headers: {
+          Authorization: `Bearer ${accessToken.value}`
+        }
+      })
+      user.value = response.data
+    } catch (error) {
+      console.error('Error al obtener el usuario:', error)
+      logout() 
+    }
+  }
+  return { user, isAuthResolved, isAuthenticated, login, logout, 
+           setResolved, accessToken, refreshToken, fetchUser }
 })

@@ -330,6 +330,8 @@
 
     // Funcion que comprueba si una ruta esta en favoritos o no
     const checkIfFavorite = async () => {
+        if (!isAuthenticated.value) return
+
         try {
             const response = await api.get(`/favorites/?user=${currentUserId.value}&route=${route.value.id}`)
             if (response.data.length > 0) {

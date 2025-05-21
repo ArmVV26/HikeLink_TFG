@@ -62,7 +62,6 @@
     import { useRoute } from 'vue-router';
     import { useAuthStore } from '@/stores/authStore'
 
-    
     import api from '@/api/api';
     
     const props = defineProps({
@@ -87,6 +86,8 @@
     
     // Llamada a la API para obtener los datos de la ruta a modificar
     onMounted(async () => {
+        if (!isAuthenticated.value) return
+
         try {
             const response = await api.get(`/routes/${props.id}/`)
             route.value = response.data

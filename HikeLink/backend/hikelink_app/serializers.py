@@ -194,9 +194,9 @@ class UploadRouteSerializer(serializers.ModelSerializer):
 class UpdateRouteSerializer(serializers.ModelSerializer):
     """Clase que se encarga de actualizar los datos de la ruta:
         - Recoge todos los datos.
-        - Borrar imagenes si se sube imagenes
+        - Borrar imagenes si se sube imagenes.
         - Guardar las imagenes con el nombre adecuado.
-        - Actualizar todos los campos
+        - Actualizar todos los campos.
     """
     images = serializers.ListField(
         child=serializers.ImageField(), write_only=True, required=False
@@ -241,6 +241,44 @@ class UpdateRouteSerializer(serializers.ModelSerializer):
         instance.description = validated_data.get('description', instance.description)
         instance.difficulty = validated_data.get('difficulty', instance.difficulty)
         instance.origin = validated_data.get('origin', instance.origin)
+
+        instance.save()
+        return instance
+    
+class UpdateUserSerializer(serializers.ModelSerializer):
+    """Clase que se encarga de actualizar un usuario:
+        - Busca si hay una nueva imagen de perfil.
+        - Si hay borra la que hay y añade la nueva.
+    """
+    class Meta:
+        model = User
+        fields = ['full_name', 'bio', 'email', 'profile_picture']
+
+    def update(self, instance, validated_data):
+        # Actualizar campos simples
+        instance.full_name = validated_data.get('full_name', instance.full_name)
+        instance.bio = validated_data.get('bio', instance.bio)
+        instance.email = validated_data.get('email', instance.email)
+
+        new_image = validated_data.get('profile_picture')
+        if new_image:
+            # Eliminar imagen anterior si existe
+            if instance.profile_picture:
+                old_path = os.path.join(settings.MEDIA_ROOT, instance.username, str(instance.profile_picture))
+                if os.path.exists(old_path):
+                    os.remove(old_path)
+
+            # Guardar nueva imagen con nombre personalizado
+            user_folder = os.path.join(settings.MEDIA_ROOT, instance.username)
+            ext = new_image.name.split('.')[-1]
+            filename = f"{slugify(instance.username)}-{uuid.uuid4().hex[:8]}.{ext}"
+            file_path = os.path.join(user_folder, filename)
+
+            with open(file_path, 'wb+') as destination:
+                for chunk in new_image.chunks():
+                    destination.write(chunk)
+
+            instance.profile_picture = filename
 
         instance.save()
         return instance

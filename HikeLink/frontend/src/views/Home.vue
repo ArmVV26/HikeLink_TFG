@@ -33,7 +33,7 @@
       <div>
         <CommonButton 
           :text="'Conoce Nuestra Historia'"
-          :route="'/aboutus'"
+          :route="'/about-us'"
         />
       </div>
     </div>

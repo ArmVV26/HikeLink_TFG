@@ -13,13 +13,13 @@
             <div class="explore flex flex-col">
                 <h2>Explora</h2>
                 <router-link to="/map">Mapa</router-link>
-                <router-link to="/searchroutes">Buscar Ruta</router-link>
+                <router-link to="/search-routes">Buscar Ruta</router-link>
                 <router-link to="/foro">Foro</router-link>
             </div>
             
             <div class="about flex flex-col">
                 <h2>Acerca de HikeLink</h2>
-                <router-link to="/aboutus">Sobre Nosotros</router-link>
+                <router-link to="/about-us">Sobre Nosotros</router-link>
                 <router-link to="/contact">Contacta con Nosotros</router-link>
                 <router-link to="/help">Ayuda</router-link>
             </div>
@@ -44,7 +44,7 @@
             <p><span>© HikeLink.</span> Todos los derechos reservados.</p>
 
             <div class="extra-links">
-                <router-link to="/conditionuse">Condiciones de Uso</router-link>
+                <router-link to="/condition-use">Condiciones de Uso</router-link>
                 <router-link to="/privacity">Política de Privacidad</router-link>
             </div>
         </div>

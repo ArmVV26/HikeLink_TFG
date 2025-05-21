@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import api from '@/api/api'
-import ConfigProfile from '@/views/auth/ConfigProfile.vue'
+import EditProfile from '@/views/auth/EditProfile.vue'
 import Login from '@/views/auth/Login.vue'
 import Register from '@/views/auth/Register.vue'
 import UpdateRoute from '@/views/auth/UpdateRoute.vue'
@@ -48,8 +48,24 @@ const requireIsOwner = async (to, from, next) => {
   }
 }
 
+const requireIsProfileOwner = (to, from, next) => {
+  const authStore = useAuthStore()
+  const isAuthenticated = authStore.isAuthenticated
+  const userId = authStore.user?.id
+
+  if (!isAuthenticated) {
+    return next('/login')
+  }
+
+  if (parseInt(to.params.id) !== userId) {
+    return next('/')
+  }
+
+  next()
+}
+
 const routes = [
-  { path: '/config-profile', name:'ConfigProfile', component: ConfigProfile},
+  { path: '/edit-profile/:id(\\d+)', name:'EditProfile', component: EditProfile, props: true, beforeEnter: requireIsProfileOwner},
   { path: '/login', name:'Login', component: Login},
   { path: '/register', name:'Register', component: Register},
   { path: '/update-route/:slug-:id(\\d+)', name:'UpdateRoute', component: UpdateRoute, props: true, beforeEnter: requireIsOwner},
@@ -58,9 +74,9 @@ const routes = [
   { path: '/foro', name:'Foro', component: Foro },
   { path: '/map', name:'Map', component: Map },
   { path: '/routes/:slug-:id(\\d+)', name:'RouteDetail', component: RouteDetail, props: true },
-  { path: '/searchroutes', name:'SearchRoute', component: SearchRoutes },
-  { path: '/aboutus', name:'AboutUs', component: AboutUs },
-  { path: '/conditionuse', name:'ConditionUse', component: ConditionUse },
+  { path: '/search-routes', name:'SearchRoute', component: SearchRoutes },
+  { path: '/about-us', name:'AboutUs', component: AboutUs },
+  { path: '/condition-use', name:'ConditionUse', component: ConditionUse },
   { path: '/contact', name:'Contact', component: Contact },
   { path: '/help', name:'Help', component: Help },
   { path: '/privacity', name:'Privacity', component: Privacity },

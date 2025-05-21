@@ -1,6 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import *
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 
 # Registro de conjuntos de vistas REST para que Django genere el CRUD automaticamente
 router = DefaultRouter()
@@ -32,4 +37,15 @@ urlpatterns = [
 
     # Ruta para obtener solamente las rutas para un usuario
     path('routes/user/<int:user_id>/', get_routes_by_user, name='user-routes'),
+
+    # SimpleJWT - Endpoints para login con JWT
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    # Autenticacion y registro
+    path('auth/', include('dj_rest_auth.urls')),
+    path('auth/registration/', include('dj_rest_auth.registration.urls')),
+
+    # Ruta para actualizar un usuario
+    path('edit-profile/<int:user_id>/', update_user_profile, name='update-user-profile'),
 ]

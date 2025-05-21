@@ -5,7 +5,7 @@ from .serializers import (
     RouteCommentsSerializer, ForoThreadSerializer,
     ForoCommentSerializer, FavoriteSerializer,
     RegisterSerializer, UploadRouteSerializer,
-    UpdateRouteSerializer
+    UpdateRouteSerializer, UpdateUserSerializer
 )
 
 from rest_framework.decorators import api_view, permission_classes
@@ -90,6 +90,29 @@ def get_user_rating(request, route_id):
     except RouteRating.DoesNotExist:
         return Response({"detail": "No rating found."}, status=404)
     
+# Clase para establecer la paginacion predeterminada
+class CustomPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+
+# Vista para obtener las rutas de un usuario
+@api_view(['GET'])
+@permission_classes([AllowAny])
+# Si solamente se quiere para el usuario autenticado
+# @permission_classes([IsAuthenticated])
+def get_routes_by_user(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    
+    routes = Route.objects.filter(user=user).order_by('created_date')
+    paginator = CustomPagination()
+    result_page = paginator.paginate_queryset(routes, request)
+    serializer = RouteSerializer(result_page, many=True, context={'request': request})
+    return paginator.get_paginated_response(serializer.data)
+
 # Vista para hacer el registro del usuario
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -130,25 +153,14 @@ def update_route(request, route_id):
         return Response({"message": "Ruta actualizada correctamente"}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Clase para establecer la paginacion predeterminada
-class CustomPagination(PageNumberPagination):
-    page_size = 5
-    page_size_query_param = 'page_size'
-    max_page_size = 50
-
-# Vista para obtener las rutas de un usuario
-@api_view(['GET'])
-@permission_classes([AllowAny])
-# Si solamente se quiere para el usuario autenticado
-# @permission_classes([IsAuthenticated])
-def get_routes_by_user(request, user_id):
+# Vista para actuliazar los datos del usuario
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_user_profile(request):
+    serializer = UpdateUserSerializer(instance=request.user, data=request.data)
     try:
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
-    
-    routes = Route.objects.filter(user=user).order_by('created_date')
-    paginator = CustomPagination()
-    result_page = paginator.paginate_queryset(routes, request)
-    serializer = RouteSerializer(result_page, many=True, context={'request': request})
-    return paginator.get_paginated_response(serializer.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Perfil actualizado correctamente'})
+    except:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

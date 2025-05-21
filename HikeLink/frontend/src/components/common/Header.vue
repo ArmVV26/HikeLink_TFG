@@ -10,7 +10,7 @@
         </router-link>
         <div class="links flex items-center text-center justify-end">
             <router-link class="links-menu" to="/map">Mapa</router-link>
-            <router-link class="links-menu" to="/searchroutes">Buscar Ruta</router-link>    
+            <router-link class="links-menu" to="/search-routes">Buscar Ruta</router-link>    
             <router-link class="links-menu" to="/foro">Foro</router-link>    
             <LoginButton />
         </div>

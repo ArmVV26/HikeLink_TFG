@@ -33,7 +33,7 @@
 
 <script setup>
     import { ref } from 'vue'
-    import { useRoute } from 'vue-router'
+    import { useRouter } from 'vue-router'
     import api from '@/api/api'
 
     const email = ref('')
@@ -57,7 +57,7 @@
         profileImage.value = event.target.files[0]
     }
 
-    const router = useRoute()
+    const router = useRouter()
     
     const register = async () => {
         error.value = ''
