@@ -124,7 +124,7 @@
         }
 
         try {
-            await api.put(`/edit-profile/${router.params.id}/`, formData, {
+            await api.put(`/profile/edit-profile/${router.params.id}/`, formData, {
                 headers: {
                     Authorization: `Bearer ${accessToken.value}`,
                     'Content-Type': 'multipart/form-data'

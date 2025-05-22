@@ -260,6 +260,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         instance.bio = validated_data.get('bio', instance.bio)
         instance.email = validated_data.get('email', instance.email)
 
+        # Imagen
         new_image = validated_data.get('profile_picture')
         if new_image:
             # Eliminar imagen anterior si existe

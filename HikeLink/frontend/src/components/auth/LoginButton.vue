@@ -16,7 +16,7 @@
             <transition name="fade-dropdown">
                 <div v-if="menuOpen" class="dropdown">
                     <h1>{{ authStore.user.username }}</h1>
-                    <router-link :to="`/profile/${authStore.user.id}`"> Mi Perfil </router-link>
+                    <router-link :to="`/profile/${authStore.user.username}-${authStore.user.id}`"> Mi Perfil </router-link>
                     <router-link to="/upload-route"> Subir Ruta </router-link>
                     <router-link @click="authStore.logout" to="/">Cerrar Sesión</router-link>
                 </div>

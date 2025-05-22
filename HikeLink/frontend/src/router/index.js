@@ -65,12 +65,12 @@ const requireIsProfileOwner = (to, from, next) => {
 }
 
 const routes = [
-  { path: '/edit-profile/:id(\\d+)', name:'EditProfile', component: EditProfile, props: true, beforeEnter: requireIsProfileOwner},
+  { path: '/prpfile/edit-profile/:username-:id(\\d+)', name:'EditProfile', component: EditProfile, beforeEnter: requireIsProfileOwner},
   { path: '/login', name:'Login', component: Login},
   { path: '/register', name:'Register', component: Register},
   { path: '/update-route/:slug-:id(\\d+)', name:'UpdateRoute', component: UpdateRoute, props: true, beforeEnter: requireIsOwner},
   { path: '/upload-route', name:'UploadRoute', component: UploadRoute, beforeEnter: requireAuth},
-  { path: '/profile/:id(\\d+)', name:'UserProfile', component: UserProfile, props: true, beforeEnter: requireAuth},
+  { path: '/profile/:username-:id(\\d+)', name:'UserProfile', component: UserProfile, beforeEnter: requireAuth},
   { path: '/foro', name:'Foro', component: Foro },
   { path: '/map', name:'Map', component: Map },
   { path: '/routes/:slug-:id(\\d+)', name:'RouteDetail', component: RouteDetail, props: true },

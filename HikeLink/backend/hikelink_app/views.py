@@ -156,7 +156,13 @@ def update_route(request, route_id):
 # Vista para actuliazar los datos del usuario
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def update_user_profile(request):
+def update_user_profile(request, username, user_id):
+    user_to_edit = get_object_or_404(User, id=user_id, username=username)
+
+    # Comprueba si el usuario es admin o el mismo usuario
+    if request.user != user_to_edit and not request.user.is_staff:
+        return Response({'detail': 'No tienes permiso para editar este perfil.'}, status=status.HTTP_403_FORBIDDEN)
+        
     serializer = UpdateUserSerializer(instance=request.user, data=request.data)
     try:
         if serializer.is_valid():

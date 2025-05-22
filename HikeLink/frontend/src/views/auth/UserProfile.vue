@@ -14,7 +14,7 @@
                 <p class="bio">{{ user.bio }}</p>
                 <CommonButton 
                     :text="'Editar Perfil'"
-                    :route="`/edit-profile/${authStore.user.id}`"
+                    :route="`/profile/edit-profile/${authStore.user.username}-${authStore.user.id}`"
                     :thin="true"
                 />
             </div>
