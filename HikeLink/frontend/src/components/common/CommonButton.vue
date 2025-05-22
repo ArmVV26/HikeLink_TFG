@@ -31,14 +31,6 @@
 
 <script setup>
     const props = defineProps({
-        samePage: {
-            type: Boolean,
-            default: false
-        },
-        header: {
-            type: Boolean,
-            default: false
-        },
         text: {
             type: String,
             required: true
@@ -46,6 +38,14 @@
         route: {
             type: String,
             required: true
+        },
+        samePage: {
+            type: Boolean,
+            default: false
+        },
+        header: {
+            type: Boolean,
+            default: false
         },
         icon: {
             type: String,
@@ -72,10 +72,10 @@
     const scrollToSection = () => {
         const section = document.querySelector(props.route);
         if (section) {
-        section.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start' 
-        });
+            section.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start' 
+            });
         }
     };
 </script>

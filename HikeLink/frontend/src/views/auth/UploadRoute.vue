@@ -53,7 +53,7 @@
 <script setup>
     import { computed, ref } from 'vue'
     import { useAuthStore } from '@/stores/authStore'
-    import { useRoute } from 'vue-router'
+    import { useRouter } from 'vue-router'
     import api from '@/api/api'
 
     const title = ref('')
@@ -64,7 +64,7 @@
     const images = ref([])
     const gpxFile = ref(null)
 
-    const router = useRoute()
+    const router = useRouter()
 
     const authStore = useAuthStore()
     const isAuthenticated = computed(() => authStore.isAuthenticated)

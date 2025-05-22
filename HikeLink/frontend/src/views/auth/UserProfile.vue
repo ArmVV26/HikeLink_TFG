@@ -2,7 +2,8 @@
     <div v-if="user.id" class="main-container">
         <div class="user-container">
             <div>
-                <img :src="getIconUserImg(user)" alt="Imagen del Usuario" class="avatar">
+                <img :src="getIconUserImg" alt="Imagen del Usuario" 
+                    class="avatar" @error="handleImgError" ref="userImg">
                 <h1>{{ user.username }}</h1>
                 <p>Miembro desde el {{ formatDate(user.created_date) }}</p>
             </div>
@@ -57,7 +58,7 @@
                     <p>Todavía no has añadido ninguna ruta a favoritos, dale al botón de abajo para buscar tus rutas favoritas.</p>
                     <CommonButton 
                         :text="'Buscar Ruta'"
-                        :route="'/searchroutes'"
+                        :route="'/search-routes'"
                         :thin="true"
                     />
                 </div>
@@ -75,6 +76,7 @@
     import CommonButton from '@/components/common/CommonButton.vue';
     import RouteCard from '@/components/map/RouteCard.vue';
 
+    const userImg = ref(null)
     const user = ref({})
     const routes = ref([])
     const favorites = ref([])
@@ -90,10 +92,15 @@
     })
 
     // Obtener el icono del usuario
-    const getIconUserImg = (manage) => {
-        return getMediaUrl(`${manage.username}/${manage.profile_picture}`)
+    const getIconUserImg = computed(() => {
+        const user = authStore.user;
+        if (!user) return null
+        return getMediaUrl(`${user.username}/${user.profile_picture}`)
+    })
+    function handleImgError() {
+        userImg.value.src = getMediaUrl('/sample_user_icon.png');
     }
-    
+
     // Transformar la fecha en "10 de marzo de 2026"
     const formatDate = (dateString) => {
         const date = new Date(dateString)
@@ -109,41 +116,6 @@
     const currentPage = ref(1)
     const pageSize = 5
     
-    // Para determinar el numero de paginas que se muestran en el pagination
-    const maxVisiblePages = 5
-    const paginationPages = computed(() => {
-        const pages = []
-        const total = totalPages.value
-        const current = currentPage.value
-
-        if (total <= maxVisiblePages) {
-            for (let i = 1; i <= total; i++) {
-                pages.push(i)
-            }
-        } else {
-            pages.push(1)
-
-            if (current > 3) {
-                pages.push('...')
-            }
-
-            let start = Math.max(2, current - 1)
-            let end = Math.min(total - 1, current + 1)
-
-            for (let i = start; i <= end; i++) {
-                pages.push(i)
-            }
-
-            if (current < total - 2) {
-                pages.push('...')
-            }
-
-            pages.push(total)
-        }
-
-        return pages
-    })
-
     // Para hacer que las rutas se pongan en paginas
     const paginationFetch = async (page = 1) => {
         try {

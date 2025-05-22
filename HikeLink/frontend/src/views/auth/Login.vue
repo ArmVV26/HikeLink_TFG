@@ -3,6 +3,7 @@
         <div class="login-form">
             <h1>Inicia sesión</h1>
             <h2>Para comenzar la aventura</h2>
+            <p class="success" v-if="success">{{ success }}</p>
 
             <form @submit.prevent="login">
                 <input type="text" v-model="inputUserMail" placeholder="Usuario o Correo" required />
@@ -27,15 +28,17 @@
 </template>
   
 <script setup>
-    import { ref } from 'vue'
-    import { useRouter } from 'vue-router'
+    import { ref, computed } from 'vue'
+    import { useRouter, useRoute } from 'vue-router'
     import { useAuthStore } from '@/stores/authStore'
     import api from '@/api/api'
     
     const inputUserMail = ref('')
     const password = ref('')
-    const error = ref('')
     const router = useRouter()
+    const route = useRoute()
+    const error = ref('')
+    const success = computed(() => route.query.message)
     const authStore = useAuthStore()
     
     const showPassword = ref(false)
@@ -101,6 +104,15 @@
             color: var(--color-brown);
             text-shadow: none;
             margin-bottom: 1rem;
+        }
+        
+        .success {
+            color: var(--color-green);
+            font-size: 1rem;
+            font-weight: 900;
+            text-align: center;
+            margin-top: -1rem;
+            margin-bottom: 2rem;
         }
 
         form {

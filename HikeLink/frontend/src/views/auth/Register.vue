@@ -83,7 +83,7 @@
                     'Content-Type': 'multipart/form-data',
                 },
             })
-            router.push('/login')
+            router.push({path: '/login', query: {message: 'Usuario Registrado Correctamente'}})
         } catch (err) {
             console.error(err)
             if (err.response?.data?.username) {

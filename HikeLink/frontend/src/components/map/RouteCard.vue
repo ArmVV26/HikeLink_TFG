@@ -3,9 +3,9 @@
         <div class="route-card" v-for="route in paginatedRoutes" :key="route.id">
             <router-link :to="{name: 'RouteDetail', params: {id: route.id, slug: route.slug } }">
                 <div class="card-left">
-                    <img :src="getImageUrl(route)" alt="Imagen de la Ruta" class="route-img" />
+                    <img :src="getImageUrl(route)" alt="Imagen de la Ruta" class="route-img"/>
                     <div>
-                        <img :src="getIconUserImg(route.user)" alt="Imagen del Usuario" class="avatar-route">
+                        <img :src="getIconUserImg(route.user)" alt="Imagen del Usuario" class="avatar-route"  @error="handleImgError">
                         <p>{{ route.user.username }}</p> 
                     </div>
                 </div>
@@ -132,8 +132,15 @@
     }
 
     // Obtener el icono del usuario
-    const getIconUserImg = (manage) => {
-        return getMediaUrl(`${manage.username}/${manage.profile_picture}`)
+    function getIconUserImg(user) {
+        return getMediaUrl(`${user.username}/${user.profile_picture}`);
+    }
+
+    function handleImgError(event) {
+        const fallbackUrl = getMediaUrl('/sample_user_icon.png');
+        if (event.target.src !== fallbackUrl) {
+            event.target.src = fallbackUrl;
+        }
     }
 
     // Obtener el Origen reformulado de la ruta
@@ -227,6 +234,7 @@
                             height: 5rem;
                             object-fit: cover;
                             border-radius: 25px;
+                            border: 2px solid var(--color-green);
                         }
 
                         p {

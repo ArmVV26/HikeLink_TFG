@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+import logging, shutil, os
 from .models import User, Route, RouteRating, RouteComments, ForoThread, ForoComment, Favorites
 from .serializers import (
     UserSerializer, RouteSerializer, RouteRatingSerializer,
@@ -7,13 +7,16 @@ from .serializers import (
     RegisterSerializer, UploadRouteSerializer,
     UpdateRouteSerializer, UpdateUserSerializer
 )
-
+from rest_framework import viewsets, status
+from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from django.db import IntegrityError
 from rest_framework.pagination import PageNumberPagination
+from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 """Todas las clases heredan de ModelViewSet lo que proporciona automaticamente las operaciones de:
     - GET
@@ -156,17 +159,96 @@ def update_route(request, route_id):
 # Vista para actuliazar los datos del usuario
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def update_user_profile(request, username, user_id):
-    user_to_edit = get_object_or_404(User, id=user_id, username=username)
+def update_user_profile(request, user_id):
+    user_to_edit = get_object_or_404(User, id=user_id)
 
     # Comprueba si el usuario es admin o el mismo usuario
     if request.user != user_to_edit and not request.user.is_staff:
         return Response({'detail': 'No tienes permiso para editar este perfil.'}, status=status.HTTP_403_FORBIDDEN)
+    
+    logout_required = False
+    old_password = request.data.get('old_password')
+    new_password = request.data.get('new_password')
+
+    if old_password and new_password:
+        if not user_to_edit.check_password(old_password):
+            return Response({'detail': 'La contraseña actual es incorrecta.'}, status=status.HTTP_400_BAD_REQUEST)
         
-    serializer = UpdateUserSerializer(instance=request.user, data=request.data)
-    try:
-        if serializer.is_valid():
+        user_to_edit.set_password(new_password)
+        user_to_edit.save()
+        logout_required = True
+
+        if request.user == user_to_edit:
+            for token in OutstandingToken.objects.filter(user=user_to_edit):
+                try:
+                    BlacklistedToken.objects.get_or_create(token=token)
+                except Exception:
+                    pass
+
+    serializer = UpdateUserSerializer(instance=user_to_edit, data=request.data)
+    if serializer.is_valid():
+        try:
             serializer.save()
-            return Response({'message': 'Perfil actualizado correctamente'})
-    except:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Perfil actualizado correctamente', 'logout': logout_required}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Vista para eliminar una Ruta
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_route(request, route_id):
+    try:
+        route = Route.objects.get(id=route_id)
+    except Route.DoesNotExist:
+        return Response({'error': 'Ruta no encontrada'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.user != route.user and not request.user.is_staff:
+        return Response({'error': 'No tienes permiso para eliminar esta ruta.'}, status=status.HTTP_403_FORBIDDEN)
+
+    # Eliminar comentarios, puntuaciones, favoritos (si no tienes on_delete=CASCADE)
+    RouteComments.objects.filter(route=route).delete()
+    RouteRating.objects.filter(route=route).delete()
+    Favorites.objects.filter(route=route).delete()
+
+    # Eliminar carpeta con imágenes y GPX
+    user_folder = os.path.join(settings.MEDIA_ROOT, request.user.username)
+    route_folder = os.path.join(user_folder, route.slug)
+    if os.path.exists(route_folder):
+        shutil.rmtree(route_folder)
+
+    route.delete()
+    return Response({'message': 'Ruta eliminada correctamente.'}, status=status.HTTP_204_NO_CONTENT)
+
+# Vista para eliminar una Cuenta
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_account(request, user_id):
+    user_to_delete = get_object_or_404(User, id=user_id)
+
+    if request.user != user_to_delete and not request.user.is_staff:
+        return Response({'error': 'No tienes permiso para eliminar esta cuenta.'}, status=status.HTTP_403_FORBIDDEN)
+
+    # Eliminar carpeta de usuario
+    user_folder = os.path.join(settings.MEDIA_ROOT, user_to_delete.username)
+    if os.path.exists(user_folder):
+        shutil.rmtree(user_folder)
+
+    # Eliminar comentarios, ratings y favoritos que haya hecho en otras rutas
+    RouteComments.objects.filter(user=user_to_delete).delete()
+    RouteRating.objects.filter(user=user_to_delete).delete()
+    Favorites.objects.filter(user=user_to_delete).delete()
+    ForoThread.objects.filter(user=user_to_delete).delete()
+    ForoComment.objects.filter(user=user_to_delete).delete()
+
+    for token in OutstandingToken.objects.filter(user=user_to_delete):
+        try:
+            BlacklistedToken.objects.get_or_create(token=token)
+        except Exception:
+            pass
+
+    # Eliminar usuario (esto elimina tambien sus rutas por on_delete=CASCADE)
+    user_to_delete.delete()
+
+    return Response({'message': 'Cuenta eliminada correctamente.'}, status=status.HTTP_204_NO_CONTENT)

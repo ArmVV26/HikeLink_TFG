@@ -47,5 +47,11 @@ urlpatterns = [
     path('auth/registration/', include('dj_rest_auth.registration.urls')),
 
     # Ruta para actualizar un usuario
-    path('/profile/edit-profile/<int:user_id>/', update_user_profile, name='update-user-profile'),
+    path('profile/edit-profile/<int:user_id>/', update_user_profile, name='update-user-profile'),
+
+    # Ruta para eliminar una ruta
+    path('delete-route/<int:route_id>/', delete_route, name='delete-route'),
+    
+    # Ruta para eliminar una cuenta
+    path('delete-account/<int:user_id>/', delete_account, name='delete-account'),
 ]

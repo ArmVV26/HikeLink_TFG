@@ -30,13 +30,17 @@
                 <textarea v-model="bio" placeholder="Biografía (Opcional)"></textarea>
 
                 <div class="img-profile">
-                    <img :src="getIconUserImg(username, profile_picture)" alt="Imagen de Perfil del Usuario">
+                    <img :src="getIconUserImg(username, profile_picture)" alt="Imagen de Perfil del Usuario"
+                        @error="handleImgError">
                     <input type="file" @change="handleFiles" accept="image/*" />
                 </div>
 
                 <p class="error" v-if="error">{{ error }}</p>
                 <p class="success" v-if="success">{{ success }}</p>
-                <button type="submit">Guardar Cambios</button>
+                <div class="buttons-container">
+                    <button type="submit">Guardar Cambios</button>
+                    <button type="button" class="deleted" @click="deleteUser">Borrar Cuenta</button> 
+                </div>
             </form>
         </div>
     </div>
@@ -45,12 +49,13 @@
 <script setup>
     import { computed, onMounted, ref } from 'vue'
     import { getMediaUrl } from '@/api/media';
-    import { useRoute } from 'vue-router';
+    import { useRouter, useRoute } from 'vue-router';
     import { useAuthStore } from '@/stores/authStore'
 
     import api from '@/api/api';
 
-    const router = useRoute()
+    const router = useRouter()
+    const route = useRoute()
     const authStore = useAuthStore()
 
     const username = ref('')
@@ -76,7 +81,7 @@
         if (!isAuthenticated.value) return
 
         try {
-            const { data } = await api.get(`users/${router.params.id}`)
+            const { data } = await api.get(`users/${route.params.id}`)
             
             username.value = data.username
             email.value = data.email
@@ -91,6 +96,12 @@
     // Obtener el icono del usuario
     const getIconUserImg = (username, profile_picture) => {
         return getMediaUrl(`${username}/${profile_picture}`)
+    }
+    function handleImgError(event) {
+        const fallbackUrl = getMediaUrl('/sample_user_icon.png');
+        if (event.target.src !== fallbackUrl) {
+            event.target.src = fallbackUrl;
+        }
     }
 
     // Manejo imagen subida
@@ -124,16 +135,46 @@
         }
 
         try {
-            await api.put(`/profile/edit-profile/${router.params.id}/`, formData, {
+            const response = await api.put(`/profile/edit-profile/${route.params.id}/`, formData, {
                 headers: {
                     Authorization: `Bearer ${accessToken.value}`,
                     'Content-Type': 'multipart/form-data'
                 }
             })
+
+            if (response.data.logout) {
+                authStore.logout()
+                router.push('/login')
+                return
+            }
+
             success.value = 'Perfil actualizado correctamente.'
             authStore.fetchUser()
         }catch (err) {
-            error.value = 'Error al actualizar el Usuario'
+            if (err.response && err.response.status === 400 && err.response.data.detail) {
+                error.value = err.response.data.detail
+            } else {
+                error.value = 'Error al actualizar el Usuario'
+            }
+        }
+    }
+
+    // Metodo para eliminar una cuenta
+    const deleteUser = async () => {
+        if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
+            try {
+                await api.delete(`/delete-account/${route.params.id}/`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken.value}`,
+                    }
+                })
+                authStore.logout()
+                alert("Cuenta eliminado correctamente")
+                router.push(`/login`)
+            } catch (error) {
+                console.log(error)
+                alert("Hubo un error al eliminar la cuenta.")
+            }
         }
     }
 </script>
@@ -272,21 +313,39 @@
                 text-align: center;
             }
 
-            button[type="submit"] {
+            .buttons-container {
                 width: 90%;
-                padding: 0.5rem 0.75rem;
+                display: flex;
+                justify-content: space-between;
                 margin: auto;
-                font-size: 1rem;
-                font-weight: 900;
-                color: var(--color-white);
-                background-color: var(--color-green);
-                border-radius: 25px;
-                cursor: pointer;
-                transition: all 0.25s;
+                gap: 2rem;
+                
+                button {
+                    width: 90%;
+                    padding: 0.5rem 0.75rem;
+                    margin: auto;
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--color-white);
+                    background-color: var(--color-green);
+                    border-radius: 25px;
+                    cursor: pointer;
+                    transition: all 0.25s;
+    
+                    &:hover {
+                        background-color: var(--color-light-green);
+                        color: var(--color-green);
+                    }
+                }
 
-                &:hover {
-                    background-color: var(--color-light-green);
-                    color: var(--color-green);
+                .deleted {
+                    background-color: var(--color-red-500);
+                    border: 2px solid var(--color-red-700);
+
+                    &:hover {
+                        background-color: var(--color-red-300);
+                        color: var(--color-black);
+                    }
                 }
             }
         }    

@@ -108,11 +108,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         user_folder = os.path.join(settings.MEDIA_ROOT, username)
         os.makedirs(user_folder, exist_ok=True)
 
-        # Crear un nombre único, limpio y rastreable
-        ext = profile_picture.name.split('.')[-1]
-        filename = f"{slugify(username)}-{uuid.uuid4().hex[:8]}.{ext}"
 
         if profile_picture:
+            # Crear un nombre único, limpio y rastreable
+            ext = profile_picture.name.split('.')[-1]
+            filename = f"{slugify(username)}-{uuid.uuid4().hex[:8]}.{ext}"
+            
             # Guarda la imagen en la carpeta del usuario
             file_path = os.path.join(user_folder, filename)
             with open(file_path, 'wb+') as destination:
@@ -250,6 +251,8 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         - Busca si hay una nueva imagen de perfil.
         - Si hay borra la que hay y añade la nueva.
     """
+    profile_picture = serializers.ImageField(required=False, allow_null=True)
+
     class Meta:
         model = User
         fields = ['full_name', 'bio', 'email', 'profile_picture']

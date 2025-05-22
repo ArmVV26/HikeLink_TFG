@@ -50,7 +50,10 @@
                 <input type="file" @change="handleFiles" accept="image/*" multiple/>
 
                 <p class="error" v-if="error">{{ error }}</p>
-                <button type="submit">Modificar Ruta</button>
+                <div class="buttons-container">
+                    <button type="submit">Modificar Ruta</button>
+                    <button type="button" class="deleted" @click="deleteRoute">Borrar Ruta</button> 
+                </div>
             </form>
         </div>
     </div>
@@ -59,9 +62,9 @@
 <script setup>
     import { computed, onMounted, ref } from 'vue'
     import { getMediaUrl } from '@/api/media';
-    import { useRoute } from 'vue-router';
+    import { useRouter } from 'vue-router';
     import { useAuthStore } from '@/stores/authStore'
-
+    
     import api from '@/api/api';
     
     const props = defineProps({
@@ -78,7 +81,7 @@
     
     const error = ref('')
     const route = ref(null)
-    const router = useRoute()
+    const router = useRouter()
 
     const authStore = useAuthStore()
     const isAuthenticated = computed(() => authStore.isAuthenticated)
@@ -145,6 +148,24 @@
         } catch (err) {
             error.value = 'Error actualizando la ruta'
             console.error(err)
+        }
+    }
+
+    // Metodo para eliminar una ruta
+    const deleteRoute = async () => {
+        if (confirm("¿Estás seguro de que deseas eliminar esta ruta? Esta acción no se puede deshacer.")) {
+            try {
+                await api.delete(`/delete-route/${props.id}/`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken.value}`,
+                    }
+                })
+                alert("Ruta eliminada correctamente")
+                router.push(`/profile/${authStore.user.username}-${authStore.user.id}`)
+            } catch (error) {
+                console.log(error)
+                alert("Hubo un error al eliminar la ruta.")
+            }
         }
     }
 </script>
@@ -284,21 +305,38 @@
                 text-align: center;
             }
 
-            button[type="submit"] {
+            .buttons-container {
                 width: 90%;
-                padding: 0.5rem 0.75rem;
-                margin: auto;
-                font-size: 1rem;
-                font-weight: 900;
-                color: var(--color-white);
-                background-color: var(--color-green);
-                border-radius: 25px;
-                cursor: pointer;
-                transition: all 0.25s;
+                display: flex;
+                justify-content: space-between;
+                gap: 2rem;
+                
+                button {
+                    width: 90%;
+                    padding: 0.5rem 0.75rem;
+                    margin: auto;
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--color-white);
+                    background-color: var(--color-green);
+                    border-radius: 25px;
+                    cursor: pointer;
+                    transition: all 0.25s;
+    
+                    &:hover {
+                        background-color: var(--color-light-green);
+                        color: var(--color-green);
+                    }
+                }
 
-                &:hover {
-                    background-color: var(--color-light-green);
-                    color: var(--color-green);
+                .deleted {
+                    background-color: var(--color-red-500);
+                    border: 2px solid var(--color-red-700);
+
+                    &:hover {
+                        background-color: var(--color-red-300);
+                        color: var(--color-black);
+                    }
                 }
             }
         }    

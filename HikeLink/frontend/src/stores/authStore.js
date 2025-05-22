@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import api from '@/api/api'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
@@ -26,7 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchUser() {
     try {
-      const response = await api.get('/users/me/', {
+      const response = await api.get('user/', {
         headers: {
           Authorization: `Bearer ${accessToken.value}`
         }

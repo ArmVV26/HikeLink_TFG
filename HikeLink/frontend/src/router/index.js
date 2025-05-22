@@ -65,22 +65,77 @@ const requireIsProfileOwner = (to, from, next) => {
 }
 
 const routes = [
-  { path: '/prpfile/edit-profile/:username-:id(\\d+)', name:'EditProfile', component: EditProfile, beforeEnter: requireIsProfileOwner},
-  { path: '/login', name:'Login', component: Login},
-  { path: '/register', name:'Register', component: Register},
-  { path: '/update-route/:slug-:id(\\d+)', name:'UpdateRoute', component: UpdateRoute, props: true, beforeEnter: requireIsOwner},
-  { path: '/upload-route', name:'UploadRoute', component: UploadRoute, beforeEnter: requireAuth},
-  { path: '/profile/:username-:id(\\d+)', name:'UserProfile', component: UserProfile, beforeEnter: requireAuth},
-  { path: '/foro', name:'Foro', component: Foro },
-  { path: '/map', name:'Map', component: Map },
-  { path: '/routes/:slug-:id(\\d+)', name:'RouteDetail', component: RouteDetail, props: true },
-  { path: '/search-routes', name:'SearchRoute', component: SearchRoutes },
-  { path: '/about-us', name:'AboutUs', component: AboutUs },
-  { path: '/condition-use', name:'ConditionUse', component: ConditionUse },
-  { path: '/contact', name:'Contact', component: Contact },
-  { path: '/help', name:'Help', component: Help },
-  { path: '/privacity', name:'Privacity', component: Privacity },
-  { path: '/', name:'Home', component: Home },
+  { 
+    path: '/profile/edit-profile/:username-:id(\\d+)',
+    name:'EditProfile', component: EditProfile, 
+    beforeEnter: requireIsProfileOwner, 
+    meta: { title: 'HikeLink - Perfil' }
+  },
+  { 
+    path: '/login', name:'Login', 
+    component: Login, meta: { title: 'HikeLink - Iniciar Sesión' }
+  },
+  { 
+    path: '/register', name:'Register',
+    component: Register, meta: { title: 'HikeLink - Registrarse' }
+  },
+  { 
+    path: '/update-route/:slug-:id(\\d+)',
+    name:'UpdateRoute', component: UpdateRoute,
+    props: true, beforeEnter: requireIsOwner,
+    meta: { title: 'HikeLink - Actualizar Ruta' }
+  },
+  { 
+    path: '/upload-route', name:'UploadRoute',
+    component: UploadRoute, beforeEnter: requireAuth,
+    meta: { title: 'HikeLink - Subir Ruta' }
+  },
+  { 
+    path: '/profile/:username-:id(\\d+)',
+    name:'UserProfile', component: UserProfile,
+    beforeEnter: requireAuth, meta: { title: 'HikeLink - Perfil' }
+  },
+  { 
+    path: '/foro', name:'Foro', 
+    component: Foro, meta: { title: 'HikeLink - Foro' }
+  },
+  { 
+    path: '/map', name:'Map', 
+    component: Map, meta: { title: 'HikeLink - Mapa' }
+  },
+  { 
+    path: '/routes/:slug-:id(\\d+)',
+    name:'RouteDetail', component: RouteDetail,
+    props: true, meta: { title: 'HikeLink - Ruta' }
+  },
+  { 
+    path: '/search-routes', name:'SearchRoute',
+    component: SearchRoutes, meta: { title: 'HikeLink - Buscar Ruta' }
+  },
+  { 
+    path: '/about-us', name:'AboutUs', 
+    component: AboutUs, meta: { title: 'HikeLink - Sobre Nosotros' }
+  },
+  { 
+    path: '/condition-use', name:'ConditionUse', 
+    component: ConditionUse, meta: { title: 'HikeLink - Uso' }
+  },
+  { 
+    path: '/contact', name:'Contact', 
+    component: Contact, meta: { title: 'HikeLink - Contacto' }
+  },
+  { 
+    path: '/help', name:'Help', 
+    component: Help, meta: { title: 'HikeLink - Ayuda' }
+  },
+  { 
+    path: '/privacity', name:'Privacity',
+    component: Privacity, meta: { title: 'HikeLink - Privacidad' }
+  },
+  { 
+    path: '/', name:'Home', 
+    component: Home, meta: { title: 'HikeLink' }
+  },
 ]
 
 const router = createRouter({
