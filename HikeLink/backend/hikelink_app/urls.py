@@ -1,9 +1,22 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import *
+from .views.users import (
+    UserViewSet, FavoritesViewSet,
+    update_user_profile, delete_account
+)
+from .views.routes import (
+    RouteViewSet, RouteRatingViewSet, RouteCommentsViewSet,
+    get_user_rating, get_routes_by_user, upload_route, update_route,
+    delete_route
+)
+from .views.forum import (
+    ForoThreadViewSet, ForoCommentViewSet
+)
+from .views.auth import (
+    user_info, register_user
+)
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
+    TokenObtainPairView, TokenRefreshView,
 )
 
 
