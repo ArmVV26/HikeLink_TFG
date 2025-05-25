@@ -1,4 +1,4 @@
-import markdown, os, logging
+import markdown, re, logging
 from rest_framework import serializers
 from django.db.models import Avg
 from django.utils.safestring import mark_safe
@@ -57,7 +57,19 @@ class UploadRouteSerializer(serializers.ModelSerializer):
         model = Route
         fields = ['title', 'type', 'description', 'difficulty', 'origin', 'images',
                   'gpxFile', 'start_latitude', 'start_longitude', 'duration', 'distance']
-        
+
+    # VALIDACIONES
+    def validate_title(self, value):
+        title_regex = r"^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s\-.,]+$"
+        if not re.fullmatch(title_regex, value):
+            raise serializers.ValidationError("El título solo puede contener letras, números, espacios, guiones, comas y puntos.")
+        return value
+
+    def validate_gpxFile(self, value):
+        if not value.name.endswith('.gpx'):
+            raise serializers.ValidationError("El archivo debe tener extensión .gpx.")
+        return value
+    
     # Metodo que crea dentro de la carpeta del usuario, una carpeta con el slug
     # de la ruta y dentro las imagenes y el archivo gpx con el slug.
     def create(self, validated_data):
@@ -114,6 +126,13 @@ class UpdateRouteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Route
         fields = ['title', 'type', 'description', 'difficulty', 'origin', 'images']
+
+    # VALIDACIONES
+    def validate_title(self, value):
+        title_regex = r"^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s\-.,]+$"
+        if not re.fullmatch(title_regex, value):
+            raise serializers.ValidationError("El título solo puede contener letras, números, espacios, guiones, comas y puntos.")
+        return value
 
     def update(self, instance, validated_data):
         request = self.context['request']

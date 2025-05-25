@@ -11,7 +11,7 @@
 } */
 
 /* Declara colores */
-@theme {
+:root {
   --color-green: #2E7D32;
   --color-light-green: #81C784;
   --color-brown: #8D6E63;

@@ -30,6 +30,7 @@
 </template>
 
 <script setup>
+    // PROPS
     const props = defineProps({
         text: {
             type: String,
@@ -65,9 +66,11 @@
         }
     });
 
+    // VARIABLES
     // Defino el emit
     defineEmits(['click'])
 
+    // METODOS
     // Método para desplazarse a la sección
     const scrollToSection = () => {
         const section = document.querySelector(props.route);
@@ -80,11 +83,7 @@
     };
 </script>
 
-<style scoped>
-    html {
-       scroll-behavior: smooth;
-    }
-
+<style lang="scss" scoped>
     .common-button {
         font-size: 1.5rem;
         font-family: 'Lato';
@@ -99,14 +98,19 @@
         border-radius: 25px;
 
         transition: all 0.5s;
-    }
+        
+        &:hover {
+            background-color: var(--color-light-green);
+            border: 2px solid var(--color-green);
+            color: var(--color-green);
+        }
 
-    .common-button:hover {
-        background-color: var(--color-light-green);
-        border: 2px solid var(--color-green);
-        color: var(--color-green);
+        &:disabled {
+            pointer-events: none;
+        }
+        
     }
-
+    
     .hero-button {
         font-size: 2rem;
     }
@@ -121,11 +125,7 @@
         color: var(--color-white);
         cursor: not-allowed;
     }
-
-    .common-button:disabled {
-       pointer-events: none;
-    }
-
+    
     i {
         margin-right: 0.5rem;
     }

@@ -59,7 +59,7 @@ El recorrido comienza en el Barranco de San Juan, accesible desde Güéjar Sierr
 u1 = User.objects.create_user(username='Admin', email='admin@admin.com', password='1234', full_name='admin', profile_picture='Admin.jpg', bio='Soy Admin')
 u2 = User.objects.create_user(username='ArmVV26', email='ditovaquero@gmail.com', password='1234', full_name='Armando Vaquero Vargas', profile_picture='ArmVV26.jpg', bio='Amante de la naturaleza')
 u3 = User.objects.create_user(username='AnaCamina', email='anahike1998@gmail.com', password='1234', full_name='Ana Garcia Gomez', profile_picture='AnaCamina.jpg', bio='Exploradora de rutas')
-u4 = User.objects.create_user(username='Jose', email='jose1991@gmail.com', password='1234', full_name='Jose Jose Jose', profile_picture='Jose.jpg', bio='Jose')
+u4 = User.objects.create_user(username='Jose123', email='jose1991@gmail.com', password='1234', full_name='Jose Jose Jose', profile_picture='Jose123.jpg', bio='Jose')
 
 # Rutas
 r1 = Route.objects.create(

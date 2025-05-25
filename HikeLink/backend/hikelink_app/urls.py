@@ -7,7 +7,7 @@ from .views.users import (
 from .views.routes import (
     RouteViewSet, RouteRatingViewSet, RouteCommentsViewSet,
     get_user_rating, get_routes_by_user, upload_route, update_route,
-    delete_route
+    delete_route, get_all_routes, filter_routes
 )
 from .views.forum import (
     ForoThreadViewSet, ForoCommentViewSet
@@ -33,15 +33,27 @@ router.register(r'favorites', FavoritesViewSet)
 urlpatterns = [
     path('', include(router.urls)),
 
+    # USER
     # Ruta que llama a user_info para enviar los datos al Token del Login
     path('user/', user_info),
-
-    # Ruta para obtener el rating del usuario
-    path('ratings/user/<int:route_id>/', get_user_rating, name='user-route-rating'),
 
     # Ruta para personalizar el registro del usuario
     path('register/', register_user, name='register-user'),
 
+     # Autenticacion y registro
+    path('auth/', include('dj_rest_auth.urls')),
+    path('auth/registration/', include('dj_rest_auth.registration.urls')),
+
+    # Ruta para actualizar un usuario
+    path('profile/edit-profile/<int:user_id>/', update_user_profile, name='update-user-profile'),
+
+    # Ruta para eliminar una cuenta
+    path('delete-account/<int:user_id>/', delete_account, name='delete-account'),
+
+    # Ruta para obtener el rating del usuario
+    path('ratings/user/<int:route_id>/', get_user_rating, name='user-route-rating'),
+
+    # ROUTES
     # Ruta para personalizar el registro de una ruta
     path('upload-route/', upload_route, name='upload-route'),
 
@@ -51,20 +63,17 @@ urlpatterns = [
     # Ruta para obtener solamente las rutas para un usuario
     path('routes/user/<int:user_id>/', get_routes_by_user, name='user-routes'),
 
-    # SimpleJWT - Endpoints para login con JWT
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # Ruta para obtener todas las rutas
+    path('all-routes/', get_all_routes, name='all_routes'),
 
-    # Autenticacion y registro
-    path('auth/', include('dj_rest_auth.urls')),
-    path('auth/registration/', include('dj_rest_auth.registration.urls')),
-
-    # Ruta para actualizar un usuario
-    path('profile/edit-profile/<int:user_id>/', update_user_profile, name='update-user-profile'),
+    # Ruta para filtrar las rutas por parametros
+    path('filter-routes/', filter_routes, name='filter_routes'),
 
     # Ruta para eliminar una ruta
     path('delete-route/<int:route_id>/', delete_route, name='delete-route'),
-    
-    # Ruta para eliminar una cuenta
-    path('delete-account/<int:user_id>/', delete_account, name='delete-account'),
+
+    # TOKENS
+    # SimpleJWT - Endpoints para login con JWT
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

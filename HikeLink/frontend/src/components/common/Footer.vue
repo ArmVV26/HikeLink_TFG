@@ -1,6 +1,6 @@
 <template>
-    <footer class="flex flex-col">
-        <div class="first-counter flex justify-center gap-10 py-5 px-10">
+    <footer>
+        <div class="first-counter">
             <router-link to="/">
                 <ResponsiveImage
                     :info="['LogoHikelink', 'logo']"
@@ -10,21 +10,21 @@
                 />
             </router-link>
 
-            <div class="explore flex flex-col">
+            <div class="links">
                 <h2>Explora</h2>
                 <router-link to="/map">Mapa</router-link>
                 <router-link to="/search-routes">Buscar Ruta</router-link>
                 <router-link to="/foro">Foro</router-link>
             </div>
             
-            <div class="about flex flex-col">
+            <div class="links">
                 <h2>Acerca de HikeLink</h2>
                 <router-link to="/about-us">Sobre Nosotros</router-link>
                 <router-link to="/contact">Contacta con Nosotros</router-link>
                 <router-link to="/help">Ayuda</router-link>
             </div>
 
-            <div class="social grid grid-cols-2">
+            <div class="social">
                 <a href="https://www.instagram.com/">
                     <i class="fa-brands fa-instagram"></i>
                 </a>
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="second-counter flex justify-between px-5 py-2">
+        <div class="second-counter">
             <p><span>© HikeLink.</span> Todos los derechos reservados.</p>
 
             <div class="extra-links">
@@ -52,67 +52,91 @@
 </template>
 
 <script setup>
+    // IMPORTS
     import ResponsiveImage from '../images/ResponsiveImage.vue';
 </script>
   
-<style scoped>
-    /* First Counter  */
-    .first-counter {
-        background-color: var(--color-brown);
-    }
-    
-    .logo {
-        width: 13rem;
-        height: auto;
-    }
+<style lang="scss" scoped>
+    footer {
+        display: flex;
+        flex-direction: column;
+        
+        .first-counter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3.5rem;
+            padding: 1rem 0;
+            background-color: var(--color-brown);
+            
+            .logo {
+                width: 13rem;
+                height: auto;
+            }
 
-    .explore h2, .about h2 {
-        color: var(--color-white);
-        text-shadow: 2px 2px 8px var(--color-black);
-        font-size: 2.5rem;
-    }
+            .links {
+                display: flex;
+                flex-direction: column;
 
-    .explore a, .about a {
-        color: var(--color-grey);
-        text-decoration: none;
-        font-size: 1.5rem;
-        font-weight: bold;
-        padding-left: 2rem;
-        transition: all 0.25s;
-    }
+                h2 {
+                    color: var(--color-white);
+                    text-shadow: 2px 2px 8px var(--color-black);
+                    font-size: 2.5rem;
+                }
 
-    .explore a:hover, .about a:hover {
-        color: var(--color-white);
-        text-shadow: 2px 2px 8px var(--color-black);
-    }
+                a {
+                    color: var(--color-grey);
+                    text-decoration: none;
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    padding-left: 2rem;
+                    transition: all 0.25s;
 
-    .fa-brands {
-        color: var(--color-white);
-        font-size: 5rem;
-        transition: all 0.25s;
-    }
+                    &:hover {
+                        color: var(--color-white);
+                        text-shadow: 2px 2px 8px var(--color-black);
+                    }
+                }
+            }
 
-    .fa-brands:hover {
-        color: var(--color-light-green);
-    }
+            .social {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                
+                .fa-brands {
+                    color: var(--color-white);
+                    font-size: 5rem;
+                    transition: all 0.25s;
+                    
+                    &:hover {
+                        color: var(--color-light-green);
+                    }
+                }
+            }
+        }
 
-    /* Second Counter */
-    .second-counter {
-        background-color: var(--color-vanille);
-        color: var(--color-brown);
-    }
-
-    .second-counter span {
-        font-weight: bold;
-    }
-
-    .extra-links a {
-        text-decoration: none;
-        padding: 0 0.5rem;
-    }
-
-    .extra-links a:hover {
-        text-decoration: underline;
-        font-weight: 600;
+        .second-counter {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 1rem;
+            background-color: var(--color-vanille);
+            color: var(--color-brown);
+            
+            span {
+                font-weight: bold;
+            }
+   
+            .extra-links {
+                a {
+                    text-decoration: none;
+                    padding: 0 0.5rem;
+                    
+                    &:hover {
+                        text-decoration: underline;
+                        font-weight: 600;
+                    }
+                }    
+            } 
+        }
     }
 </style>  

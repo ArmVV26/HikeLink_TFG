@@ -1,7 +1,7 @@
 <template>
     <div class="comment-add-container">
         <img v-if="isAuthenticated" :src="getIconUserImg" @error="handleImgError" class="avatar" ref="userImg" />
-        <img v-else :src="getMediaUrl('/sample_user_icon.png')" class="avatar avatar-disabled">
+        <img v-else :src="getMediaUrl('/_common/sample_user_icon.png')" class="avatar avatar-disabled">
         <div class="comment-add" :class="{ 'disabled': !isAuthenticated }">
             <div>
                 <h1>Añade un comentario</h1>
@@ -31,12 +31,15 @@
 </template>
 
 <script setup>
+    // IMPORTS
     import { ref, computed, toRefs } from 'vue';
     import { useAuthStore } from '@/stores/authStore';
-    import { getMediaUrl } from '@/api/media';
+    import { getMediaUrl } from '@/utils/media';
+    import { useUserImage } from '@/composables/useUserImage';
+    import { commentServices } from '@/services/UserServices';
     import CommonButton from '../common/CommonButton.vue';
-    import api from '@/api/api';
 
+    // PROPS
     const props = defineProps({
         routeId: {
             type: Number,
@@ -44,40 +47,25 @@
         },
     })
     
+    // VARIABLES
     const {routeId} = toRefs(props);
     
     const emit = defineEmits(['comment-submitted'])
 
     const authStore = useAuthStore()
-    const commentText = ref('')
-    const userImg = ref(null);
-    const accessToken = computed(() => authStore.accessToken)
-
     const isAuthenticated = computed(() => authStore.isAuthenticated)
+    const commentText = ref('')
 
-    const getIconUserImg = computed(() => {
-        const user = authStore.user;
-        if (!user) return null
-        return getMediaUrl(`/${user.username}/${user.profile_picture}`)
-    });
+    // METODOS
+    // Imagen de usuario
+    const { getIconUserImg, handleImgError, userImg } = useUserImage();
 
-    function handleImgError() {
-        userImg.value.src = getMediaUrl('/sample_user_icon.png');
-    }
-
+    // Metodo que permite guardar el comentario y llamar a la funcion refreshRouteData para actualizar los datos
     async function submitComment() {
         if (!isAuthenticated.value || !commentText.value.trim()) return
         
         try {
-            await api.post('/comments/', {
-                content: commentText.value,
-                route: routeId.value,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken.value}`
-                }
-            })
+            await commentServices({ content: commentText.value, route: routeId.value });
             commentText.value = ''
             emit('comment-submitted')
         } catch (error) {

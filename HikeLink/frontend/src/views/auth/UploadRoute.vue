@@ -5,7 +5,7 @@
             <h2>HikeLink</h2>
             
             <form @submit.prevent="uploadRoute">
-                <input type="text" v-model="title" placeholder="Título" required />
+                <input type="text" v-model="title" placeholder="Título" />
                 
                 <div>
                     <label for="type">Tipo: </label>
@@ -41,9 +41,13 @@
                 </div>
 
                 <input type="file" @change="handleFiles" accept="image/*" multiple/>
-                <input type="file" @change="handleGPX" accept=".gpx" required />
+                <input type="file" @change="handleGPX" accept=".gpx" />
 
+                <ul>
+                    <li class="error" v-for="err in fieldErrors">{{ err }}</li>
+                </ul>
                 <p class="error" v-if="error">{{ error }}</p>
+
                 <button type="submit">Subir Ruta</button>
             </form>
         </div>
@@ -51,11 +55,14 @@
 </template>
 
 <script setup>
+    // IMPORTS
     import { computed, ref } from 'vue'
     import { useAuthStore } from '@/stores/authStore'
     import { useRouter } from 'vue-router'
-    import api from '@/api/api'
+    import { useFormValidation } from '@/composables/useValidation'
+    import { uploadRouteServices } from '@/services/RouteServices'
 
+    // VARIABLES
     const title = ref('')
     const type = ref('Para-Todos')
     const description = ref('')
@@ -68,11 +75,37 @@
 
     const authStore = useAuthStore()
     const isAuthenticated = computed(() => authStore.isAuthenticated)
-    const accessToken = computed(() => authStore.accessToken)
 
     const error = ref('')
     const routeData = ref({})
 
+    const {
+        fieldErrors,
+        resetErrors,
+        validateTitle
+    } = useFormValidation()
+
+    // METODOS
+    // Validacion general
+    const validateUploadRouteForm = () => {
+        resetErrors()
+        let valid = true
+
+        if (!title.value) {
+            fieldErrors.value.title = 'El título es obligatorio.'
+            valid = false
+        } else if (!validateTitle(title.value)) {
+            fieldErrors.value.title = 'El título solo puede contener todas las letras, espacios, numeros, comas y guiones (-).'
+            valid = false
+        }
+
+        if (!gpxFile.value) {
+            fieldErrors.value.gpxFile = 'El archivo GPX es obligatorio.'
+            valid = false
+        }
+
+        return valid
+    }
     // Convierte las imagenes en un array normal
     const handleFiles = (event) => {
         images.value = Array.from(event.target.files)
@@ -146,12 +179,8 @@
     }
 
     const uploadRoute = async () => {
-        if (!gpxFile.value) {
-            error.value = 'Debes subir un archivo GPX.'
-            return
-        }
-
         if (!isAuthenticated.value) return
+        if (!validateUploadRouteForm()) return
 
         const formData = new FormData()
         formData.append('title', title.value)
@@ -168,16 +197,9 @@
         formData.append('distance', routeData.value.distance)
 
         try {
-            const response = await api.post('/upload-route/', formData, {
-                headers: {
-                    Authorization: `Bearer ${accessToken.value}`,
-                    'Content-Type': `multipart/form-data` 
-                }
-            })
-
-            
-            const routeId = response.data.id
-            const routeSlug = response.data.slug
+            const data = await uploadRouteServices(formData)
+            const routeId = data.id
+            const routeSlug = data.slug
             router.push({ 
                 name: 'RouteDetail', 
                 params: { slug: routeSlug, id: routeId } 

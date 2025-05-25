@@ -127,8 +127,8 @@
     import 'leaflet-gpx';
     import 'leaflet.fullscreen';
     import 'leaflet.fullscreen/Control.FullScreen.css';
-    import api from '@/api/api';
-    import { getMediaUrl } from '@/api/media';
+    import api from '@/utils/api';
+    import { getMediaUrl } from '@/utils/media';
 
     export default {
         name: 'MapComponent',

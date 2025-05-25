@@ -8,8 +8,10 @@
 </template>
 
 <script setup>
+    // IMPORTS
     import { computed } from 'vue';
 
+    // PROPS
     const props = defineProps ({
         name: {
             type: String,
@@ -17,6 +19,7 @@
         }
     });
 
+    // VARIABLES
     // Computar la clase CSS automaticamente
     const computedClass = computed(() => `hero-${props.name}`);
 </script>

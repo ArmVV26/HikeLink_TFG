@@ -1,4 +1,4 @@
-import uuid, os, logging
+import uuid, re
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -6,6 +6,8 @@ from django.conf import settings
 from django.utils.text import slugify
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.core.validators import validate_email as django_validate_email
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 from ..models import User
 
@@ -36,6 +38,33 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'username', 'full_name', 'password', 'bio', 'profile_picture')
+
+    # VALIDACIONES
+    def validate_email(self, value):
+        try:
+            django_validate_email(value)
+        except DjangoValidationError:
+            raise serializers.ValidationError("Correo electrónico no válido.")
+        return value
+
+    def validate_full_name(self, value):
+        if not re.fullmatch(r"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$", value):
+            raise serializers.ValidationError("El nombre no puede contener números ni caracteres especiales.")
+        return value
+
+    def validate_username(self, value):
+        if ' ' in value:
+            raise serializers.ValidationError("El nombre de usuario no puede contener espacios.")
+        if not re.fullmatch(r"^[a-zA-Z0-9._-]{5,}$", value):
+            raise serializers.ValidationError("El nombre de usuario debe tener al menos 5 caracteres y solo puede incluir letras, números, puntos, guiones y guiones bajos.")
+        return value
+
+    def validate_password(self, value):
+        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$'
+        if not re.fullmatch(pattern, value):
+            raise serializers.ValidationError("La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.")
+        validate_password(value)  # Aplica validaciones de Django también
+        return value
 
     # Metodo que crea la carpeta y guarda la imagen que ha subido el usuario
     def create(self, validated_data):

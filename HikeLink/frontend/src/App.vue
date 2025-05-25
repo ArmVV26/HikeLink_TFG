@@ -9,29 +9,21 @@
 </template>
 
 <script setup>
-  import Header from './components/common/Header.vue'
-  import Footer from './components/common/Footer.vue'
-
-  import { onBeforeMount } from 'vue'
-  import axios from 'axios'
+  // IMPORTS
+  import Header from '@/components/common/Header.vue'
+  import Footer from '@/components/common/Footer.vue'
+  import { onMounted } from 'vue'
   import { useAuthStore } from './stores/authStore'
 
+  // VARIABLES
   const authStore = useAuthStore()
 
-  onBeforeMount(async () => {
+  // METODOS
+  // Metodo para cargar desde el token las sesion del usuario
+  onMounted(async () => {
     const token = localStorage.getItem('access')
-    if (token && !authStore.user) {
-      try {
-        const response = await axios.get('http://localhost:8000/api/user', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        authStore.login(response.data)
-      } catch (error) {
-        console.error('Error al recuperar el usuario al iniciar:', error)
-        authStore.logout()
-      }
+    if (token) {
+      await authStore.fetchUser()
     } else {
       authStore.setResolved()
     }

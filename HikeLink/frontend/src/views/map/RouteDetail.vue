@@ -31,7 +31,7 @@
             
             <div>
                 <div class="user-container">
-                    <img :src="getIconUserImg(route)" class="avatar" />
+                    <img :src="getUserRouteIcon(route)" class="avatar" />
                     <p>{{ route.user.username }}</p>
                 </div>
                 <div class="route-detail-container">
@@ -86,7 +86,7 @@
                             <RatingButton 
                                 :route-id="route.id"
                                 :route-user-id="route.user.id"
-                                @rating-submitted="refreshRouteData"
+                                @rating-updated="refreshRouteData"
                             />
                             <p>{{ route.average_rating }} / 5</p>
                         </div>
@@ -131,14 +131,17 @@
     </div>
 </template>
   
-<script setup>
+<script setup> 
+    // IMPORTS
     import { computed, onMounted, ref } from 'vue'
     import { DOMParser } from 'xmldom'
     import { gpx } from '@tmcw/togeojson'
-    import { getMediaUrl } from '@/api/media'
+    import { getMediaUrl } from '@/utils/media'
     import { useAuthStore } from '@/stores/authStore'
+    import { useRouteImage } from '@/composables/useRouteImage'
+    import { useUserCommentImage } from '@/composables/useUserImage'
 
-    import api from '@/api/api'
+    import api from '@/utils/api'
     
     import ShowMap from '@/components/map/ShowMap.vue'
     import CommonButton from '@/components/common/CommonButton.vue'
@@ -146,6 +149,7 @@
     import RatingButton from '@/components/auth/RatingButton.vue'
     import AddComment from '@/components/auth/AddComment.vue'
 
+    // PROPS
     const props = defineProps({
         id: {
             type: String,
@@ -155,30 +159,16 @@
             type: String,
             required: true
         }
-    })
-
-    // Funcion que permite actualizar los datos de la Ruta
-    const refreshRouteData = async () => {
-        try {
-            const response = await api.get(`/routes/${props.id}/`)
-            route.value = response.data
-            elevationData.value = await parseGPX(getGPXUrl(route.value))
-            imgRoute.value = await getImgRoute(route.value)
-        } catch (error) {
-            console.error('Error recargando los datos de la ruta:', error)
-        }
-    }
-
-    // Realiza la llamada a la API para obtener los datos de la Ruta
-    onMounted(async () => {
-        await refreshRouteData()
-        await checkIfFavorite()
-    })
-
+    })  
+    
+    // VARIABLES
     const route = ref(null)
     const elevationData = ref(null)
     const lastCoord = ref(null)
     const imgRoute = ref(null)
+
+    const isFavorite = ref(false)
+    const favoriteId = ref(null)
 
     // Compruebo si el usuario es el dueño de la ruta
     const authStore = useAuthStore()
@@ -188,29 +178,10 @@
         return route.value && currentUserId.value === route.value.user.id
     })
 
-    // Obtener las imagenes de las Rutas
-    const getImgRoute = (route) => {
-        const arrayImg = []
-        for (let i = 0; i < route.img.length; i++) {
-            const img = getMediaUrl(`/${route.user.username}/${route.slug}/${route.img?.[i]}`)
-            arrayImg.push(img)
-        }
-        return arrayImg;
-    }
-    
-    // Obtener el icono del usuario de la Ruta
-    const getIconUserImg = (route) => {
-        return getMediaUrl(`/${route.user.username}/${route.user.profile_picture}`)
-    }
+    const { getRouteAllImgURL, getUserRouteIcon } = useRouteImage()
+    const { getIconUserComment, handleImgError } = useUserCommentImage()
 
-    // Obtener el icono del usuario que ha puesto el comentario
-    const getIconUserComment = (comment) => {
-        return getMediaUrl(`${comment.user.username}/${comment.user.profile_picture}`)
-    }
-    function handleImgError(event) {
-        event.target.src = getMediaUrl('/sample_user_icon.png');
-    }
-
+    // METODOS
     // Obtener la URL del GPX de la Ruta
     const getGPXUrl = (route) => {
         return getMediaUrl(`/${route.user.username}/${route.slug}/${route.gpx_file}`)
@@ -225,7 +196,7 @@
             year: 'numeric'
         }).format(date)
     }
-
+    
     // Transformar la fecha en "6h 10min"
     const formatDuration = (seconds) => {
         const h = Math.floor(seconds / 3600)
@@ -249,16 +220,16 @@
     const routeType = (route) =>{
         return `${iconType(route)} <p>${route.type}</p>`;
     }
-
+    
     // Obtener la elevacion positiva y negativa media, las ultimas coordenadas y la elevacion max y min
     const parseGPX = async(gpxUrl) => {
         const response = await fetch(gpxUrl)
         const text = await response.text()
         const xml = new DOMParser().parseFromString(text, 'text/xml')
         const geojson = gpx(xml)
-
+        
         const elevations = []
-
+        
         geojson.features.forEach(feature => {
             if (feature.geometry.type === 'LineString') {
                 const coords = feature.geometry.coordinates
@@ -269,7 +240,7 @@
                         elevations.push(ele)
                     }
                 })
-
+                
                 const last = coords[coords.length - 1]
                 if (last) {
                     lastCoord.value = {
@@ -279,21 +250,21 @@
                 }
             }
         })
-
+        
         return calculateElevationGainLoss(elevations)
     }
-
+    
     // Calcula la elevacion
     const calculateElevationGainLoss = (elevations) => {
         let gain = 0
         let loss = 0
-
+        
         for (let i = 1; i < elevations.length; i++) {
             const diff = elevations[i] - elevations[i -1]
             if (diff > 0) gain += diff
             else if (diff < 0) loss -= diff
         }
-
+        
         return {
             ascent: Math.round(gain),
             descent: Math.round(loss),
@@ -301,10 +272,7 @@
             minElevation: Math.min(...elevations).toFixed(1)
         }
     }
-
-    const isFavorite = ref(false)
-    const favoriteId = ref(null)
-
+    
     // Funcion para guardar una ruta en favoritos
     const toggleFavorite = async () => {
         try {
@@ -314,7 +282,7 @@
                 isFavorite.value = false
                 favoriteId.value = null
             
-            // Añadir a favoritos
+                // Añadir a favoritos
             } else {
                 const response = await api.post(`/favorites/`, {
                     user: currentUserId.value,
@@ -327,11 +295,11 @@
             console.error('Error en toggle de favoritos:', error)
         }
     }
-
+    
     // Funcion que comprueba si una ruta esta en favoritos o no
     const checkIfFavorite = async () => {
         if (!isAuthenticated.value) return
-
+        
         try {
             const response = await api.get(`/favorites/?user=${currentUserId.value}&route=${route.value.id}`)
             if (response.data.length > 0) {
@@ -345,13 +313,31 @@
             console.error('Error comprobando favoritos:', error)
         }
     }
+
+    // Funcion que permite actualizar los datos de la Ruta
+    const refreshRouteData = async () => {
+        try {
+            const response = await api.get(`/routes/${props.id}/`)
+            route.value = response.data
+            elevationData.value = await parseGPX(getGPXUrl(route.value))
+            imgRoute.value = await getRouteAllImgURL(route.value)
+        } catch (error) {
+            console.error('Error recargando los datos de la ruta:', error)
+        }
+    }
+    
+    // Realiza la llamada a la API para obtener los datos de la Ruta
+    onMounted(async () => {
+        await refreshRouteData()
+        await checkIfFavorite()
+    })
 </script>  
 
 <style lang="scss" scoped>
     .main-container {
         margin: 2rem 40rem 0 10rem;    
     }
-
+    
     .map-container-detail {
         margin: 0.25rem 0 0 10rem;
         display: flex;
@@ -474,7 +460,7 @@
     .description-route {
         display: flex;
         flex-direction: column;
-        margin: 0 10rem 2rem;
+        margin: 2rem 10rem 2rem;
         
         h1 {
             font-family: "Montserrat-Bold";

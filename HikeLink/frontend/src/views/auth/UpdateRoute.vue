@@ -5,7 +5,7 @@
             <h2>{{ title }}</h2>
             
             <form @submit.prevent="updateRoute">
-                <input type="text" v-model="title" placeholder="Título" required />
+                <input type="text" v-model="title" placeholder="Título" />
                 
                 <div>
                     <label for="type">Tipo: </label>
@@ -43,13 +43,21 @@
                 <div v-if="images.length > 0" class="image-preview">
                     <p>Imágenes Actuales</p>
                     <div class="image-list">
-                        <img v-for="(img, index) in images" :key="index" :src="getImgRoute(img)" alt="Imagen de la Ruta">
+                        <img v-for="(img, index) in images" :key="index"
+                            :src="getRouteAllImg(route, img)" 
+                            @error="handleImgError"
+                            alt="Imagen de la Ruta"
+                        />
                     </div>
                 </div>
 
                 <input type="file" @change="handleFiles" accept="image/*" multiple/>
 
+                <ul>
+                    <li class="error" v-for="err in fieldErrors">{{ err }}</li>
+                </ul>
                 <p class="error" v-if="error">{{ error }}</p>
+
                 <div class="buttons-container">
                     <button type="submit">Modificar Ruta</button>
                     <button type="button" class="deleted" @click="deleteRoute">Borrar Ruta</button> 
@@ -60,24 +68,31 @@
 </template>
 
 <script setup>
-    import { computed, onMounted, ref } from 'vue'
-    import { getMediaUrl } from '@/api/media';
+    // IMPORTS
+    import { computed, onMounted, ref } from 'vue';
+    import { getMediaUrl } from '@/utils/media';
     import { useRouter } from 'vue-router';
-    import { useAuthStore } from '@/stores/authStore'
+    import { useAuthStore } from '@/stores/authStore';
+    import { useFormValidation } from '@/composables/useValidation';
+    import { useRouteImage } from '@/composables/useRouteImage';
+    import { updateRouteServices, deleteRouteServices } from '@/services/RouteServices';
     
-    import api from '@/api/api';
+    import api from '@/utils/api';
     
+    // PROPS
     const props = defineProps({
         id: String,
         slug: String
     })
     
+    // VARIABLES
     const title = ref('')
     const type = ref('')
     const description = ref('')
     const difficulty = ref('')
     const origin = ref('')
     const images = ref([])
+    const newImages = ref([])
     
     const error = ref('')
     const route = ref(null)
@@ -86,13 +101,43 @@
     const authStore = useAuthStore()
     const isAuthenticated = computed(() => authStore.isAuthenticated)
     const accessToken = computed(() => authStore.accessToken)
+
+    const { getRouteAllImg, handleImgError } = useRouteImage()
+
+    const {
+        fieldErrors,
+        resetErrors,
+        validateTitle
+    } = useFormValidation()
+
+    // METODOS
+    // Validacion general
+    const validateUpdateRouteForm = () => {
+        resetErrors()
+        let valid = true
+
+        if (!title.value) {
+            fieldErrors.value.title = 'El título es obligatorio.'
+            valid = false
+        } else if (!validateTitle(title.value)) {
+            fieldErrors.value.title = 'El título solo puede contener todas las letras, espacios, numeros, comas y guiones (-).'
+            valid = false
+        }
+
+        return valid
+    }
     
+    // Funcion para obtener las nuevas imagenes que sean subido
+    function handleFiles(event) {
+        newImages.value = Array.from(event.target.files)
+    }
+
     // Llamada a la API para obtener los datos de la ruta a modificar
     onMounted(async () => {
         if (!isAuthenticated.value) return
 
         try {
-            const response = await api.get(`/routes/${props.id}/`)
+            const response = await api.get(`/routes/${props.id}/`)  
             route.value = response.data
 
             title.value = route.value.title
@@ -106,20 +151,11 @@
         }
     })
 
-    // Funcion para obtener las URLs de las imagenes
-    const getImgRoute = (img) => {
-        return getMediaUrl(`/${route.value.user.username}/${route.value.slug}/${img}`)
-    } 
-
-    // Funcion para obtener las nuevas imagenes que sean subido
-    const newImages = ref([])
-    function handleFiles(event) {
-        newImages.value = Array.from(event.target.files)
-    }
 
     // Funcion que modifica la ruta con los nuevos datos proporcionados
     const updateRoute = async () => {
         if (!isAuthenticated.value) return
+        if (!validateUpdateRouteForm()) return
 
         const formData = new FormData()
         formData.append('title', title.value)
@@ -134,13 +170,7 @@
         }
 
         try {
-            await api.put(`/update-route/${props.id}/`, formData, {
-                headers: {
-                    Authorization: `Bearer ${accessToken.value}`,
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-
+            await updateRouteServices(props.id, formData)
             router.push({
                 name: 'RouteDetail',
                 params: { slug: route.value.slug, id: route.value.id }
@@ -155,11 +185,7 @@
     const deleteRoute = async () => {
         if (confirm("¿Estás seguro de que deseas eliminar esta ruta? Esta acción no se puede deshacer.")) {
             try {
-                await api.delete(`/delete-route/${props.id}/`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken.value}`,
-                    }
-                })
+                await deleteRouteServices(props.id)
                 alert("Ruta eliminada correctamente")
                 router.push(`/profile/${authStore.user.username}-${authStore.user.id}`)
             } catch (error) {

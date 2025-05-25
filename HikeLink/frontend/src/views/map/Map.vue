@@ -72,10 +72,11 @@
 </template>
 
 <script setup>
+    // IMPORTS
     import ShowMap from '@/components/map/ShowMap.vue';
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     /* Estilo del tutorial del mapa */
     .tutorial-map {
         display: flex;
@@ -85,44 +86,62 @@
 
         background-color: var(--color-vanille-opacity);
         padding: 1rem;
-    }
-    
-    .tutorial-map h1 {
-        font-family: "Monteserrat-Bold";
-        font-size: 1.5rem;
-        font-style: italic;
-        color: var(--color-green);
-        text-shadow: 0px 0px 1px var(--color-black);
-    }
-    
-    .tutorial-map p {
-        font-weight: 900;
-        color: var(--color-brown);
-        text-align: center;
+        
+        h1 {
+            font-family: "Monteserrat-Bold";
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--color-green);
+            text-shadow: 0px 0px 1px var(--color-black);
+        }
+
+        p {
+            font-weight: 900;
+            color: var(--color-brown);
+            text-align: center;
+        }
+        
+        .cards-map {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap ;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            
+            div {
+                width: 20rem;
+                text-align: center;
+                
+                .icon-wrapper {
+                    height: 9rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    
+                    .legend-map {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        width: 10rem !important;
+                
+                        padding: 0.5rem;
+                        background-color: var(--color-white);
+                        border: 2px solid var(--color-light-green);
+                        border-radius: 25px;
+                        
+                        div {
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                        }
+                    }
+                }
+            }
+        }
     }
     
     .tutorial-map > p:nth-child(2) {
         width: 50%;
-    }
-
-    .cards-map {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap ;
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .cards-map div {
-        width: 20rem;
-        text-align: center;
-    }
-
-    .icon-wrapper {
-        height: 9rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 
     .icon-wrapper > i {
@@ -132,23 +151,5 @@
         border: 2px solid var(--color-light-green);
         border-radius: 10rem;
         padding: 1rem;
-    }
-
-    .legend-map {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 10rem !important;
-
-        padding: 0.5rem;
-        background-color: var(--color-white);
-        border: 2px solid var(--color-light-green);
-        border-radius: 25px;
-    }
-    
-    .legend-map div {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
     }
 </style>

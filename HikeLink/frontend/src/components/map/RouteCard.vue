@@ -3,9 +3,17 @@
         <div class="route-card" v-for="route in paginatedRoutes" :key="route.id">
             <router-link :to="{name: 'RouteDetail', params: {id: route.id, slug: route.slug } }">
                 <div class="card-left">
-                    <img :src="getImageUrl(route)" alt="Imagen de la Ruta" class="route-img"/>
+                    <img :src="getRouteImg(route)"
+                        @error="handleImgError" 
+                        class="route-img"
+                        alt="Imagen de la Ruta"
+                    />
                     <div>
-                        <img :src="getIconUserImg(route.user)" alt="Imagen del Usuario" class="avatar-route"  @error="handleImgError">
+                        <img :src="getIconRouteImg(route.user)"
+                            @error="handleImgUserError"
+                            class="avatar-route" 
+                            alt="Imagen del Usuario"    
+                        />
                         <p>{{ route.user.username }}</p> 
                     </div>
                 </div>
@@ -34,19 +42,19 @@
             </router-link>
         </div>
 
-        <div v-if="paginated && totalPages > 1" class="pagination">
-            <button @click="currentPage--" :disabled="currentPage === 1" class="nav-btn">
+        <div class="pagination">
+            <button @click="emit('change-page', props.currentPage - 1)" :disabled="props.currentPage === 1" class="nav-btn">
                 <i class="fa-solid fa-less-than"></i>
             </button>
 
             <button v-for="page in paginationPages" :key="page"
                 :disabled="page === '...'"
-                :class="['page-btn', {'active': page === currentPage}]"
-                @click="typeof page === 'number' && (currentPage = page)">
+                :class="['page-btn', {'active': page === props.currentPage}]"
+                @click="typeof page === 'number' && emit('change-page', page)">
                 {{ page }}
             </button>
 
-            <button @click="currentPage++" :disabled="currentPage === totalPages" class="nav-btn">
+            <button @click="emit('change-page', props.currentPage + 1)" :disabled="props.currentPage === props.totalPages" class="nav-btn">
                 <i class="fa-solid fa-greater-than"></i>
             </button>
         </div>
@@ -54,49 +62,50 @@
 </template>
 
 <script setup>
-    import { computed, ref, watch } from 'vue'
-    import { getMediaUrl } from '@/api/media';
+    // IMPORTS
+    import { computed, watch } from 'vue'
+    import { useRouteImage } from '@/composables/useRouteImage' 
+    import { useUserRouteImage } from '@/composables/useUserImage'
 
+    // PROPS
     const props = defineProps({
         routes: {
             type: Array,
             required: true
         },
-        paginated: {
-            type: Boolean,
-            default: false
-        },
-        pageSize: {
+        currentPage: {
             type: Number,
-            default: 5
+            required: true
+        },
+        totalPages: {
+            type: Number,
+            required: true
         }
     })
 
-    // Paginar
-    const currentPage = ref(1)
+    // VARIABLES
+    const maxVisiblePages = 5   
 
-    watch(() => props.routes, () => {
-        currentPage.value = 1
-    })
+    const emit = defineEmits(['change-page'])
 
-    const totalPages = computed(() => {
-        return Math.ceil(props.routes.length / props.pageSize) || 1
-    })
-
+    const { getIconRouteImg, handleImgUserError } = useUserRouteImage()
+    const { getRouteImg, handleImgError } = useRouteImage()
+    
     // Paginas a mostrar en una pagina
-    const paginatedRoutes = computed(() => {
-        if (!props.paginated) return props.routes
-        const start = (currentPage.value - 1) * props.pageSize
-        const end = start + props.pageSize
-        return props.routes.slice(start, end)
-    })
+    const paginatedRoutes = computed(() => props.routes )
 
-    // Para determinar el numero de paginas que se muestran en el pagination
-    const maxVisiblePages = 5
+    // WATCHER
+    watch(() => props.routes.length, () => {
+        const page = Math.min(props.currentPage, props.totalPages)
+        emit('change-page', page < 1 ? 1 : page)
+    });
+
+    // METODOS
+    // Funcion para determinar el numero de paginas que se muestran en el pagination
     const paginationPages = computed(() => {
         const pages = []
-        const total = totalPages.value
-        const current = currentPage.value
+        const total = props.totalPages
+        const current = props.currentPage
 
         if (total <= maxVisiblePages) {
             for (let i = 1; i <= total; i++) {
@@ -125,23 +134,6 @@
 
         return pages
     })
-
-    // Obtener la URl de la imagen de la ruta
-    const getImageUrl = (route) => {
-        return getMediaUrl(`/${route.user.username}/${route.slug}/${route.img?.[1] || route.img?.[0]}`)
-    }
-
-    // Obtener el icono del usuario
-    function getIconUserImg(user) {
-        return getMediaUrl(`${user.username}/${user.profile_picture}`);
-    }
-
-    function handleImgError(event) {
-        const fallbackUrl = getMediaUrl('/sample_user_icon.png');
-        if (event.target.src !== fallbackUrl) {
-            event.target.src = fallbackUrl;
-        }
-    }
 
     // Obtener el Origen reformulado de la ruta
     const getColorByOrigin = (origin) => {
@@ -221,7 +213,7 @@
                         height: 12rem;
                         object-fit: cover;
                         border-radius: 25px;
-                        border-bottom: 5px solid var(--color-green);                            
+                        border: 2px solid var(--color-green);                            
                     }
 
                     div {

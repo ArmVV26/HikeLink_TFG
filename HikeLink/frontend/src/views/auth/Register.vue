@@ -5,14 +5,13 @@
             <h2>HikeLink</h2>
             
             <form @submit.prevent="register">
-                <input type="email" v-model="email" placeholder="Correo electrónico" required />
-                <input type="text" v-model="fullName" placeholder="Nombre y Apellidos" required />
-                <input type="text" v-model="username" placeholder="Nombre de usuario" @input="removeSpaces" required />
+                <input type="text" v-model="email" placeholder="Correo electrónico" />
+                <input type="text" v-model="fullName" placeholder="Nombre y Apellidos" />
+                <input type="text" v-model="username" placeholder="Nombre de usuario"  />
                 <div class="password-wrapper">
                     <input :type="showPassword ? 'text' : 'password'"
                         v-model="password" 
                         placeholder="Contraseña" 
-                        required 
                     />
                     <span class="toggle-password" @click="togglePassword">
                         <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
@@ -21,7 +20,11 @@
                 <textarea v-model="bio" placeholder="Biografía (Opcional)"></textarea>
                 <input type="file" @change="handleFile" accept="image/*" />
                 
+                <ul>
+                    <li class="error" v-for="err in fieldErrors">{{ err }}</li>
+                </ul>
                 <p class="error" v-if="error">{{ error }}</p>
+               
                 <button type="submit">Registrarse</button>
             </form>
 
@@ -32,42 +35,89 @@
 </template>
 
 <script setup>
+    // IMPORTS
     import { ref } from 'vue'
     import { useRouter } from 'vue-router'
-    import api from '@/api/api'
+    import { registerUserServices } from '@/services/UserServices'
+    import { useFormValidation } from '@/composables/useValidation'
 
+    // VARIABLES
     const email = ref('')
     const fullName = ref('')
     const username = ref('')
     const password = ref('')
     const bio = ref('')
     const profileImage = ref(null)
+    
     const error = ref('')
+    const router = useRouter()
 
+    const {
+        fieldErrors,
+        resetErrors,
+        validateEmail,
+        validatePassword,
+        validateName,
+        validateUsername,
+    } = useFormValidation()
+
+    // METODOS
+    // Validacion general
+    const validateRegisterForm = () => {
+        resetErrors()
+        let valid = true
+
+        if (!email.value) {
+            fieldErrors.value.email = 'El correo electrónico es obligatorio.'
+            valid = false
+        } else if (!validateEmail(email.value)) {
+            fieldErrors.value.email = 'Correo electrónico no válido.'
+            valid = false
+        }
+
+        if (!fullName.value.trim()) {
+            fieldErrors.value.full_name = 'El nombre es obligatorio.'
+            valid = false
+        } else if (!validateName(fullName.value)) {
+            fieldErrors.value.full_name = 'El nombre no puede contener números ni caracteres especiales.'
+            valid = false
+        }
+
+        if (!username.value) {
+            fieldErrors.value.username = 'El username es obligatorio.'
+            valid = false
+        } else if (!validateUsername(username.value)) {
+            fieldErrors.value.username = 'El username no puede contener espacios ni caracteres muy raros y debe ser mayor a 5 caracteres.'
+            valid = false
+        }
+
+        if (!password.value) {
+            fieldErrors.value.password = 'La contraseña es obligatoria.'
+            valid = false
+        } else if (!validatePassword(password.value)) {
+            fieldErrors.value.password = 'La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.'
+            valid = false
+        }
+
+        return valid
+    }
+
+    // Para mostrar el contenido de la contraseña
     const showPassword = ref(false)
     const togglePassword = () => {
         showPassword.value = !showPassword.value
     }
     
-    const removeSpaces = () => {
-        username.value = username.value.replace(/\s+/g, '')
-    }
-    
+    // Funcion que maneja la imagen de perfil del usuario
     const handleFile = (event) =>  {
         profileImage.value = event.target.files[0]
     }
 
-    const router = useRouter()
-    
+    // Funcion que gestiona el registro de un usuario
     const register = async () => {
         error.value = ''
 
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/
-        if (!passwordRegex.test(password.value)) {
-            error.value =
-            'La contraseña debe tener al menos 8 caracteres, incluyendo mayúscula, minúscula, número y símbolo.'
-            return
-        }
+        if (!validateRegisterForm()) return
 
         const formData = new FormData()
         formData.append('email', email.value)
@@ -78,11 +128,7 @@
         if (profileImage.value) formData.append('profile_picture', profileImage.value)
 
         try {
-            await api.post('/register/', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+           await registerUserServices(formData)
             router.push({path: '/login', query: {message: 'Usuario Registrado Correctamente'}})
         } catch (err) {
             console.error(err)
@@ -207,6 +253,7 @@
             }
 
             .error {
+                text-align: center;
                 color: var(--color-red-400);
                 font-size: 1rem;
                 font-weight: 900;

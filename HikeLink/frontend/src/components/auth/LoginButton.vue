@@ -26,32 +26,28 @@
 </template>
 
 <script setup>
-    import { ref, computed, watch } from 'vue';
+    // IMPORTS
+    import { ref, watch } from 'vue';
     import { useAuthStore } from '@/stores/authStore';
-    import CommonButton from '../common/CommonButton.vue';
-    import { getMediaUrl } from '@/api/media';
     import { useRoute } from 'vue-router';
+    import { useUserImage } from '@/composables/useUserImage';
+    import CommonButton from '../common/CommonButton.vue';
 
+    // VARIABLES
     const authStore = useAuthStore()
     const menuOpen = ref(false)    
-    const userImg = ref(null)
     const route = useRoute()
 
+    // METODOS
     // Si cambia de pagina se cierra el menu
     watch(() => route.fullPath, () => {
         menuOpen.value = false;
     });
 
-    const getIconUserImg = computed(() => {
-        const user = authStore.user;
-        if (!user) return null
-        return getMediaUrl(`/${user.username}/${user.profile_picture}`)
-    });
-    
-    function handleImgError() {
-        userImg.value.src = getMediaUrl('/sample_user_icon.png');
-    }
+    // Imagen de usuario
+    const { getIconUserImg, handleImgError, userImg } = useUserImage();
 
+    // Para abrir o cerrar el menu
     const toggleMenu = () => {
         menuOpen.value = !menuOpen.value
     }

@@ -20,10 +20,12 @@
 </template>
 
 <script setup>
+    // IMPORTS
     import { ref, computed, onMounted, toRefs, watch } from 'vue'
     import { useAuthStore } from '@/stores/authStore'
-    import api from '@/api/api'
+    import { ratingUserServices, createRatingServices, updateRatingServices } from '@/services/UserServices'
 
+    // PROPS
     const props = defineProps({
         routeId: { 
             type: Number, 
@@ -35,6 +37,7 @@
         },
     })
 
+    // VARIABLES
     const {routeId, routeUserId} = toRefs(props);
 
     const emit = defineEmits(['rating-updated'])
@@ -43,13 +46,14 @@
     const isAuthenticated = computed(() => authStore.isAuthenticated)
     const currentUserId = computed(() => authStore.user?.id ?? null)
     const isOwner = computed(() => currentUserId.value === routeUserId.value)
-    const accessToken = computed(() => authStore.accessToken)
     const userRatingId = ref(null)
 
     const rating = ref(0)
     const hoverRating = ref(null)
     const displayRating = computed(() => hoverRating.value ?? rating.value)
 
+    // METODOS
+    // Metodo que hace una llamada despues de montar el componente
     onMounted(async () => {
         if (!isOwner.value) {
             watch([isAuthenticated, currentUserId], ([auth, userId]) => {
@@ -60,25 +64,43 @@
         }
     })
 
+    // Metodo para obtener si un usuario tiene un rating puesto a la ruta o no
     const fetchUserRating = async () => {
         try {
-            const response = await api.get(`/ratings/user/${routeId.value}/`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken.value}`
-                }
-            })
-            rating.value = response.data.rating
-            userRatingId.value = response.data.id
+            const data = await ratingUserServices(routeId.value);
+            rating.value = data.rating
+            userRatingId.value = data.id
         } catch (error) {
-            if (error.response?.status === 404) {
-                rating.value = 0
-                userRatingId.value = null
-            } else {
-                console.error('Error obteniendo valoracion del usuario:', error)
-            }
+            console.error('Error obteniendo valoracion del usuario:', error)
         }
     } 
 
+    // Metodo para añadir o cambiar el rating de un Usuario sobre la ruta indicada
+    const handleClick = async () => {
+        if (!isAuthenticated.value || isOwner.value || hoverRating.value == null) return
+
+        rating.value = hoverRating.value
+        const payload = {
+            rating: rating.value,
+            user: currentUserId.value,
+            route: routeId.value
+        }
+
+        try {
+            if (userRatingId.value) {
+                await updateRatingServices(userRatingId.value, payload)
+            } else {
+                const data = await createRatingServices(payload)
+                userRatingId.value = data.id
+            }
+
+            emit('rating-updated')
+        } catch (error) {
+            console.error('Error guardando valoración: ', error)
+        }
+    }
+    
+    // Funcion que detecta el hover del rating
     const handleMouseMove = (event) => {
         if (!isAuthenticated.value) return
 
@@ -88,42 +110,12 @@
         hoverRating.value = Math.round(percent * 10) / 2
     }
 
-    const handleClick = async () => {
-        if (!isAuthenticated.value || isOwner.value || hoverRating.value == null) return
-
-        rating.value = hoverRating.value
-
-        const payload = {
-            rating: rating.value,
-            user: currentUserId.value,
-            route: routeId.value
-        }
-
-        try {
-            if (userRatingId.value) {
-                await api.put(`/ratings/${userRatingId.value}/`, payload, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken.value}`
-                    }
-                })
-            } else {
-                const response = await api.post(`/ratings/`, payload, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken.value}`
-                    }
-                })
-                userRatingId.value = response.data.id
-            }
-            emit('rating-updated')
-        } catch (error) {
-            console.error('Error guardando valoración: ', error)
-        }
-    }
-    
+    // Funcion que elimina el efecto del hover
     const resetHover = () => {
         hoverRating.value = null
     }
 
+    // Funcion que muetra las rutas en funciondel rating asignado
     const getStarClass = (index) => {
         const value = displayRating.value
         if (value >= index + 1) return 'fa-solid fa-star'
@@ -132,37 +124,39 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .rating-container {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 0.5rem;
         user-select: none;
-    }
+        
+        .rating {
+            display: inline-flex;
+            font-size: 2rem;
+            color: gold;
+            cursor: pointer;
+            transition: 0.3s;
+            
+            &.disabled {
+                pointer-events: none;
+                color: var(--color-grey);
+            }
 
-    .rating {
-        display: inline-flex;
-        font-size: 2rem;
-        color: gold;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+            i {
+                margin-right: 0.1rem;
+                transition: color 0.2s;
+            }
 
-    .rating.disabled {
-        pointer-events: none;
-        opacity: 0.5;
-    }
+            .value {
+                font-size: 1.2rem;
+                color: var(--color-dark-grey);
+            }
+        }
 
-    .rating i {
-        margin-right: 0.1rem;
-        transition: color 0.2s;
     }
-
-    .value {
-        font-size: 1.2rem;
-        color: var(--color-dark-grey);
-    }
+    
     .rating-disabled {
         font-size: 1.25rem;
         font-weight: 900;

@@ -37,7 +37,7 @@ def get_user_rating(request, route_id):
         serializer = RouteRatingSerializer(rating)
         return Response(serializer.data)
     except RouteRating.DoesNotExist:
-        return Response({"detail": "No rating found."}, status=404)
+        return Response({"detail": "No rating found."}, status=status.HTTP_404_NOT_FOUND)
     
 # Clase para establecer la paginacion predeterminada
 class CustomPagination(PageNumberPagination):
@@ -59,6 +59,54 @@ def get_routes_by_user(request, user_id):
     routes = Route.objects.filter(user=user).order_by('created_date')
     paginator = CustomPagination()
     result_page = paginator.paginate_queryset(routes, request)
+    serializer = RouteSerializer(result_page, many=True, context={'request': request})
+    return paginator.get_paginated_response(serializer.data)
+
+# Vista para obtener todas las rutas paginadas
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_all_routes(request):
+    routes = Route.objects.all().order_by('-created_date')
+    paginator = CustomPagination()
+    result_page = paginator.paginate_queryset(routes, request)
+    serializer = RouteSerializer(result_page, many=True, context={'request': request})
+    return paginator.get_paginated_response(serializer.data)
+
+# Vista para filtrar las rutas por parametros
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def filter_routes(request):
+    routes = Route.objects.all()
+
+    title = request.GET.get('title')
+    type_ = request.GET.get('type')
+    difficulty = request.GET.get('difficulty')
+    origin = request.GET.get('origin')
+    duration_min = request.GET.get('duration_min')
+    duration_max = request.GET.get('duration_max')
+    distance_min = request.GET.get('distance_min')
+    distance_max = request.GET.get('distance_max')
+
+    if title:
+        routes = routes.filter(title__icontains=title)  # 🔍 búsqueda parcial
+
+    if type_ and type_ != 'Todas':
+        routes = routes.filter(type=type_)
+
+    if difficulty and difficulty != 'Todas':
+        routes = routes.filter(difficulty=difficulty)
+
+    if origin and origin != 'Todos':
+        routes = routes.filter(origin=origin)
+
+    if duration_min and duration_max and not (duration_min == '0' and duration_max == '24'):
+        routes = routes.filter(duration__gte=duration_min, duration__lte=duration_max)
+
+    if distance_min and distance_max and not (distance_min == '0' and distance_max == '1000'):
+        routes = routes.filter(distance__gte=distance_min, distance__lte=distance_max)
+        
+    paginator = CustomPagination()
+    result_page = paginator.paginate_queryset(routes.order_by('-created_date'), request)
     serializer = RouteSerializer(result_page, many=True, context={'request': request})
     return paginator.get_paginated_response(serializer.data)
 

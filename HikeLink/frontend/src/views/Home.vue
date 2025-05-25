@@ -45,7 +45,7 @@
       <h1>Crea tu cuenta</h1>
       <p>
         Regístrate gratis, crea tu perfil y únete a una comunidad de amantes de la
-         montaña. Podrás explorar rutas subidas por otros usuarios y comenzar tu colección.
+         montaña. Podrás explorar rutas subidas por otros usuarios y guardarlas en favoritos.
       </p>
     </div>
 
@@ -53,7 +53,7 @@
       <i class="fa-solid fa-file-arrow-up"></i>
       <h1>Sube tus rutas</h1>
       <p>
-        Guarda tus recorridos subiendo archivos GPX desde tu reloj o app favorita. Añade 
+        Guarda tus recorridos subiendo archivos GPX desde tu app favorita. Añade 
          descripciones, fotos y deja tu huella en el mapa.
       </p>
     </div>
@@ -71,18 +71,22 @@
 </template>  
 
 <script setup>
+  // IMPORTS
   import { ref, onMounted, computed } from 'vue';
   import HeroImage from '@/components/images/HeroImage.vue';
   import CommonButton from '@/components/common/CommonButton.vue';
   import RouteCarousel from '@/components/images/RouteCarousel.vue';
   import ResponsiveImage from '@/components/images/ResponsiveImage.vue';
-  import api from '@/api/api';
+  import api from '@/utils/api';
 
+  // VARIABLES
   const routes = ref(null)
   const topRoutes = computed(() => {
     return routes.value ? routes.value.slice(0, 5) : []
   })
 
+  // METODOS
+  // Funcion para obtener ordenadas por mayor rating
   onMounted(async () => {
     try {
       const response = await api.get('/routes/')
@@ -94,11 +98,7 @@
   })
 </script>
 
-<style scoped>
-  figure a {
-    font-style: italic;
-  }
-
+<style lang="scss" scoped>
   .history {
     width: 100%;
     background-color: var(--color-vanille);
@@ -107,40 +107,40 @@
     gap: 5rem;
     padding: 3rem 20%;
     margin-bottom: 48px;
-  }
-
-  .history-img-container {
-    flex: 1;
-  }
-
-  .history-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .history-content h1 {
-    font-family: "Montserrat-Bold";
-    font-size: 2rem;
-    font-weight: bolder;
-    font-style: italic;
-    text-align: left;
-    color: var(--color-green);
-  }
-
-  .history-content p {
-    font-size: 1.25rem;
-    font-weight: 900;
-    text-align: justify;
-    margin-top: 1.25rem;
-    color: var(--color-brown);
-  }
-  
-  .history-content div {
-    justify-self: end;
-    align-self: flex-start;
-    margin-top: auto;
-    margin-bottom: 0.75rem;
+ 
+    .history-img-container {
+      flex: 1;
+    }
+    
+    .history-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      
+      h1 {
+        font-family: "Montserrat-Bold";
+        font-size: 2rem;
+        font-weight: bolder;
+        font-style: italic;
+        text-align: left;
+        color: var(--color-green);
+      }
+      
+      p {
+        font-size: 1.25rem;
+        font-weight: 900;
+        text-align: justify;
+        margin-top: 1.25rem;
+        color: var(--color-brown);
+      }
+      
+      div {
+        justify-self: end;
+        align-self: flex-start;
+        margin-top: auto;
+        margin-bottom: 0.75rem;
+      }
+    }
   }
 
   .tutorial {
@@ -149,46 +149,44 @@
     gap: 2rem;
     padding: 0 20%;
     margin-bottom: 48px;
-  }
-
-  .tutorial div {
-    width: 45rem;
-    height: 25rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-vanille-opacity);
-    padding: 2rem 1rem;
-    border-radius: 25px;
-    border: 2px solid var(--color-green);
-    box-shadow: 0px 0px 5px 0px var(--color-black);
-  }
-
-  .tutorial div i {
-    color: var(--color-light-green);
-    font-size: 8rem;
-  }
-
-  .tutorial div h1 {
-    color: var(--color-green);
-    font-size: 1.75rem;
-    padding: 1rem 0 0.25rem;
-    font-family: "Montserrat-Bold";
-  }
-
-  .tutorial div p {
-    text-align: center;
-    color: var(--color-brown);
-    font-weight: bolder;
-  }
-  
-  .account, .find-person {
-    margin-top: 2rem;
-  }
-
-  .upload {
-    margin-bottom: 2rem;
+    
+    div {
+      width: 45rem;
+      height: 28rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--color-vanille-opacity);
+      padding: 2rem 1rem;
+      border-radius: 25px;
+      box-shadow: 0px 0px 0px 2px var(--color-green),
+                  0px 0px 5px 0px var(--color-black);
+                  
+      i {
+        color: var(--color-light-green);
+        font-size: 8rem;
+      }
+      
+      h1 {
+        color: var(--color-green);
+        font-size: 1.75rem;
+        padding: 1rem 0 0.25rem;
+        font-family: "Montserrat-Bold";
+      }
+      
+      p {
+        text-align: center;
+        color: var(--color-brown);
+        font-weight: bolder;
+      }
+    }
+    .account, .find-person {
+      margin-top: 2rem;
+    }
+    .upload {
+      margin-bottom: 2rem;
+    }
   }
 </style>
 

@@ -7,6 +7,8 @@ from django.utils.text import slugify
 from django.contrib.auth.password_validation import validate_password
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.core.validators import validate_email as django_validate_email
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 from ..models import User, Favorites
 
@@ -37,6 +39,25 @@ class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['full_name', 'bio', 'email', 'profile_picture', 'old_password', 'new_password']
+    
+    # VALIDACIONES 
+    def validate_email(self, value):
+        try:
+            django_validate_email(value)
+        except DjangoValidationError:
+            raise serializers.ValidationError("Correo electrónico inválido.")
+        return value
+
+    def validate_full_name(self, value):
+        if any(char.isdigit() for char in value):
+            raise serializers.ValidationError("El nombre no puede contener números.")
+        return value
+
+    def validate(self, data):
+        new_password = data.get('new_password')
+        if new_password:
+            validate_password(new_password, user=self.instance)
+        return data
 
     def update(self, instance, validated_data):
         self.logout_required = False
@@ -48,7 +69,6 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         if old_password and new_password:
             if not instance.check_password(old_password):
                 raise ValidationError({'detail': 'La contraseña actual es incorrecta.'})
-            validate_password(new_password, user=instance)
             instance.set_password(new_password)
             self.logout_required = True
 
@@ -69,8 +89,11 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         if new_image:
             # Eliminar imagen anterior si existe
             if instance.profile_picture:
-                old_path = instance.profile_picture.path
-                default_storage.delete(old_path)
+                try:
+                    old_path = default_storage.path(instance.profile_picture.name)
+                    default_storage.delete(old_path)
+                except Exception:
+                    pass 
 
             # Guardar nueva imagen con nombre personalizado
             ext = new_image.name.split('.')[-1]

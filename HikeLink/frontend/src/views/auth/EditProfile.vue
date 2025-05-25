@@ -5,8 +5,8 @@
             <h2>{{ username }}</h2>
             
             <form @submit.prevent="updateProfile">
-                <input type="email" v-model="email" placeholder="Correo Electrónico" required />
-                <input type="text" v-model="full_name" placeholder="Nombre y Apellidos" required />
+                <input type="text" v-model="email" placeholder="Correo Electrónico" />
+                <input type="text" v-model="full_name" placeholder="Nombre y Apellidos" />
                 
                 <div class="password-wrapper">
                     <input :type="showOldPassword ? 'text' : 'password'"
@@ -30,13 +30,19 @@
                 <textarea v-model="bio" placeholder="Biografía (Opcional)"></textarea>
 
                 <div class="img-profile">
-                    <img :src="getIconUserImg(username, profile_picture)" alt="Imagen de Perfil del Usuario"
-                        @error="handleImgError">
+                    <img :src="getIconUserImg(username, profile_picture)"
+                        @error="handleImgError"
+                        alt="Imagen de Perfil del Usuario"
+                    />
                     <input type="file" @change="handleFiles" accept="image/*" />
                 </div>
 
+                <ul>
+                    <li class="error" v-for="err in fieldErrors">{{ err }}</li>
+                </ul>
                 <p class="error" v-if="error">{{ error }}</p>
                 <p class="success" v-if="success">{{ success }}</p>
+
                 <div class="buttons-container">
                     <button type="submit">Guardar Cambios</button>
                     <button type="button" class="deleted" @click="deleteUser">Borrar Cuenta</button> 
@@ -47,13 +53,17 @@
 </template>
 
 <script setup>
+    // IMPORTS
     import { computed, onMounted, ref } from 'vue'
-    import { getMediaUrl } from '@/api/media';
     import { useRouter, useRoute } from 'vue-router';
     import { useAuthStore } from '@/stores/authStore'
+    import { useUserSpecificImage } from '@/composables/useUserImage';
+    import { updateUserServices, deleteUserServices } from '@/services/UserServices';
+    import { useFormValidation } from '@/composables/useValidation';
 
-    import api from '@/api/api';
+    import api from '@/utils/api';
 
+    // VARIABLES
     const router = useRouter()
     const route = useRoute()
     const authStore = useAuthStore()
@@ -73,10 +83,63 @@
     const showOldPassword = ref(false)
     const showNewPassword = ref(false)
 
-    const isAuthenticated = computed(() => authStore.isAuthenticated)
-    const accessToken = computed(() => authStore.accessToken)
+    const { 
+        fieldErrors,
+        resetErrors,
+        validateEmail,
+        validatePassword,
+        validateName,
+    } = useFormValidation()
 
-    // Obtener los datos del usuario
+    // Imagen de usuario
+    const { getIconUserImg, handleImgError } = useUserSpecificImage();
+
+    const isAuthenticated = computed(() => authStore.isAuthenticated)
+
+    // METODOS
+    // Validacion general
+    const validateProfileForm = () => {
+        resetErrors()
+        let valid = true
+
+        if (!email.value) {
+            fieldErrors.value.email = 'El correo electrónico es obligatorio.'
+            valid = false
+        } else if (!validateEmail(email.value)) {
+            fieldErrors.value.email = 'Correo electrónico no válido.'
+            valid = false
+        }
+
+        if (!full_name.value.trim()) {
+            fieldErrors.value.full_name = 'El nombre es obligatorio.'
+            valid = false
+        } else if (!validateName(full_name.value)) {
+            fieldErrors.value.full_name = 'El nombre no puede contener números ni caracteres especiales.'
+            valid = false
+        }
+
+        if (new_password.value && !validatePassword(new_password.value)) {
+            fieldErrors.value.new_password = 'La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.'
+            valid = false
+        }
+
+        if (new_password.value && !old_password.value) {
+            fieldErrors.value.old_password = 'Introduce tu contraseña actual para cambiarla.'
+            valid = false
+        }
+
+        return valid
+    }
+
+    // Funcion que manejo imagen subida
+    const handleFiles = (e) => {
+        const file = e.target.files[0]
+        if (file) {
+            new_image.value = file
+        }
+    }
+
+    // Funcion para obtener los datos del usuario
     onMounted( async () => {
         if (!isAuthenticated.value) return
 
@@ -93,31 +156,13 @@
         }
     })
 
-    // Obtener el icono del usuario
-    const getIconUserImg = (username, profile_picture) => {
-        return getMediaUrl(`${username}/${profile_picture}`)
-    }
-    function handleImgError(event) {
-        const fallbackUrl = getMediaUrl('/sample_user_icon.png');
-        if (event.target.src !== fallbackUrl) {
-            event.target.src = fallbackUrl;
-        }
-    }
-
-    // Manejo imagen subida
-    const handleFiles = (e) => {
-        const file = e.target.files[0]
-        if (file) {
-            new_image.value = file
-        }
-    }
-
-    // Metodo para actualizar los datos del usuario
+    // Funcion para actualizar los datos del usuario
     const updateProfile = async () => {
         error.value = ''
         success.value = ''
 
         if (!isAuthenticated) return
+        if (!validateProfileForm()) return
 
         const formData = new FormData()
         formData.append('email', email.value)
@@ -135,25 +180,21 @@
         }
 
         try {
-            const response = await api.put(`/profile/edit-profile/${route.params.id}/`, formData, {
-                headers: {
-                    Authorization: `Bearer ${accessToken.value}`,
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
+            const data = await updateUserServices(route.params.id, formData)
 
-            if (response.data.logout) {
+            if (data.logout) {
                 authStore.logout()
-                router.push('/login')
+                router.push({path: '/login', query: {message: 'Contraseña Cambiada Correctamente'}})
                 return
             }
 
             success.value = 'Perfil actualizado correctamente.'
             authStore.fetchUser()
         }catch (err) {
-            if (err.response && err.response.status === 400 && err.response.data.detail) {
+            if (err.response?.status === 400 && err.response.data.detail) {
                 error.value = err.response.data.detail
             } else {
+                console.error(err)
                 error.value = 'Error al actualizar el Usuario'
             }
         }
@@ -163,14 +204,10 @@
     const deleteUser = async () => {
         if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
             try {
-                await api.delete(`/delete-account/${route.params.id}/`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken.value}`,
-                    }
-                })
+                await deleteUserServices(route.params.id)
                 authStore.logout()
                 alert("Cuenta eliminado correctamente")
-                router.push(`/login`)
+                router.push({path: '/login', query: {message: 'Cuenta Eliminada Correctamente'}})
             } catch (error) {
                 console.log(error)
                 alert("Hubo un error al eliminar la cuenta.")

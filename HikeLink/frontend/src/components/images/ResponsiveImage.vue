@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, onBeforeUnmount, computed} from 'vue';
+    import { ref, onMounted, onBeforeUnmount} from 'vue';
 
     // Defino las propiedades del componente
     const props = defineProps({

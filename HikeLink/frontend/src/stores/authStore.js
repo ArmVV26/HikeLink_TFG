@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import api from '@/api/api'
+import { apiWithAuth} from '@/utils/api'
+import api from '@/utils/api'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
@@ -9,9 +10,22 @@ export const useAuthStore = defineStore('auth', () => {
   const accessToken = computed(() => localStorage.getItem('access'))
   const refreshToken = computed(() => localStorage.getItem('refresh'))
 
-  function login(userData) {
-    user.value = userData
-    isAuthResolved.value = true
+  async function login(username, password) {
+    try {
+      const { data: token } = await api.post('/token/', {
+        username,
+        password
+      })
+
+      localStorage.setItem('access', token.access)
+      localStorage.setItem('refresh', token.refresh)
+
+      const userRes = await apiWithAuth().get('/user/')
+      user.value = userRes.data
+      isAuthResolved.value = true
+    } catch(error) {
+      throw error
+    }
   }
 
   function logout() {
@@ -27,15 +41,13 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchUser() {
     try {
-      const response = await api.get('user/', {
-        headers: {
-          Authorization: `Bearer ${accessToken.value}`
-        }
-      })
+      const response = await apiWithAuth().get('/user/')
       user.value = response.data
     } catch (error) {
       console.error('Error al obtener el usuario:', error)
       logout() 
+    } finally {
+      isAuthResolved.value = true
     }
   }
   return { user, isAuthResolved, isAuthenticated, login, logout, 

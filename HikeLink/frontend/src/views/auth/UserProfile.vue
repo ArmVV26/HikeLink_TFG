@@ -32,13 +32,17 @@
                 <RouteCard 
                     v-if="view === 'myRoutes'"
                     :routes="displayedRoutes"
-                    :paginated="true"
+                    :current-page="currentPage"
+                    :total-pages="totalPages"
+                    @change-page="paginationFetch"
                 />
                 
                 <RouteCard
                     v-else
                     :routes="favorites" 
-                    :paginated="true"
+                    :current-page="currentPage"
+                    :total-pages="totalPages"
+                    @change-page="paginationFetch"
                 />
             </div>
 
@@ -68,39 +72,38 @@
 </template>
 
 <script setup>
+    // IMPORTS
     import { computed, onMounted, ref } from 'vue';
-    import { getMediaUrl } from '@/api/media';
     import { useAuthStore } from '@/stores/authStore';
-
-    import api from '@/api/api';
+    import { useUserImage } from '@/composables/useUserImage';
+    
+    import api from '@/utils/api';
     import CommonButton from '@/components/common/CommonButton.vue';
     import RouteCard from '@/components/map/RouteCard.vue';
 
-    const userImg = ref(null)
-    const user = ref({})
+    // VARIABLES
     const routes = ref([])
     const favorites = ref([])
     const view = ref('myRoutes')
     const allRoutes = computed(() => routes.value.length)
-
+    
     const authStore = useAuthStore()
+    const user = computed(() => authStore.user)
     const isAuthenticated = computed(() => authStore.isAuthenticated)
     const accessToken = computed(() => authStore.accessToken)
+
+    const { getIconUserImg, handleImgError, userImg } = useUserImage();
 
     const displayedRoutes = computed(() => {
         return view.value === 'myRoutes' ? routes.value : favorites.value
     })
+    
+    // Paginar
+    const totalPages = ref(1)
+    const currentPage = ref(1)
+    const pageSize = 5
 
-    // Obtener el icono del usuario
-    const getIconUserImg = computed(() => {
-        const user = authStore.user;
-        if (!user) return null
-        return getMediaUrl(`${user.username}/${user.profile_picture}`)
-    })
-    function handleImgError() {
-        userImg.value.src = getMediaUrl('/sample_user_icon.png');
-    }
-
+    // METODOS
     // Transformar la fecha en "10 de marzo de 2026"
     const formatDate = (dateString) => {
         const date = new Date(dateString)
@@ -111,11 +114,6 @@
         }).format(date)
     }
 
-    // Paginar
-    const totalPages = ref(1)
-    const currentPage = ref(1)
-    const pageSize = 5
-    
     // Para hacer que las rutas se pongan en paginas
     const paginationFetch = async (page = 1) => {
         try {
@@ -145,24 +143,10 @@
         }
     }
 
-    // Para obtener los datos del usuario y las rutas del usuario
+    // Funcion que se llama al cargar todo
     onMounted(async () => {
         if (!isAuthenticated.value) return
-
-        try {
-            // Obtener datos del usuario
-            const userRes = await api.get('/user/', {
-                headers: {
-                    Authorization: `Bearer ${accessToken.value}`
-                }
-            })
-            user.value = userRes.data
-
-            // Obtener rutas del usuario paginadas
-            await paginationFetch(1)
-        } catch (error) {
-            console.error("Error cargando datos del perfil:", error)
-        }
+        await paginationFetch(1)
     })
 </script>
 
