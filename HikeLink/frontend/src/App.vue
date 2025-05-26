@@ -44,4 +44,11 @@
   .main-content {
     flex: 1;
   }
+  
+  .fade-page-enter-active, .fade-page-leave-active {
+    transition: opacity 0.3s ease;
+  }
+  .fade-page-enter-from, .fade-page-leave-to {
+    opacity: 0;
+  }
 </style>

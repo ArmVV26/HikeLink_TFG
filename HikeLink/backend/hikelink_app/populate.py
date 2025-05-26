@@ -56,14 +56,13 @@ El recorrido comienza en el Barranco de San Juan, accesible desde Güéjar Sierr
 """
 
 # Usuarios
-u1 = User.objects.create_user(username='Admin', email='admin@admin.com', password='1234', full_name='admin', profile_picture='Admin.jpg', bio='Soy Admin')
-u2 = User.objects.create_user(username='ArmVV26', email='ditovaquero@gmail.com', password='1234', full_name='Armando Vaquero Vargas', profile_picture='ArmVV26.jpg', bio='Amante de la naturaleza')
-u3 = User.objects.create_user(username='AnaCamina', email='anahike1998@gmail.com', password='1234', full_name='Ana Garcia Gomez', profile_picture='AnaCamina.jpg', bio='Exploradora de rutas')
-u4 = User.objects.create_user(username='Jose123', email='jose1991@gmail.com', password='1234', full_name='Jose Jose Jose', profile_picture='Jose123.jpg', bio='Jose')
+u1 = User.objects.create_user(username='ArmVV26', email='armvv26@gmail.com', password='1234', full_name='Armando Vaquero Vargas', profile_picture='ArmVV26.jpg', bio='Amante de la naturaleza')
+u2 = User.objects.create_user(username='AnaCamina', email='anahike1998@gmail.com', password='1234', full_name='Ana Garcia Gomez', profile_picture='AnaCamina.jpg', bio='Exploradora de rutas')
+u3 = User.objects.create_user(username='Jose123', email='jose15101991@gmail.com', password='1234', full_name='Jose Jose Jose', profile_picture='Jose123.jpg', bio='Jose')
 
 # Rutas
 r1 = Route.objects.create(
-    user=u2,
+    user=u1,
     title='Canal de la Espartera - Trevenque',
     type='Senderismo',
     description=descriptionR1,
@@ -78,7 +77,7 @@ r1 = Route.objects.create(
 )
 
 r2 = Route.objects.create(
-    user=u2,
+    user=u1,
     title='Circular Refugio Tello Lanjarón',
     type='Senderismo',
     description=descriptionR2,
@@ -93,7 +92,7 @@ r2 = Route.objects.create(
 )
 
 r3 = Route.objects.create(
-    user=u2,
+    user=u1,
     title='Cruz de Alfacar - Cruz de Viznar - Cueva del Agua',
     type='Senderismo',
     description=descriptionR3,
@@ -108,7 +107,7 @@ r3 = Route.objects.create(
 )
 
 r4 = Route.objects.create(
-    user=u2,
+    user=u1,
     title='Guejar Sierra - Sendero del Tranvia',
     type='Senderismo',
     description=descriptionR4,
@@ -123,7 +122,7 @@ r4 = Route.objects.create(
 )
 
 r5 = Route.objects.create(
-    user=u2,
+    user=u1,
     title='Ruta Vereda de la Estrella',
     type='Senderismo',
     description=descriptionR5,
@@ -138,16 +137,16 @@ r5 = Route.objects.create(
 )
 
 # Valoraciones
-RouteRating.objects.create(user=u3, route=r1, rating=5)
-RouteRating.objects.create(user=u3, route=r2, rating=4)
-RouteRating.objects.create(user=u3, route=r3, rating=3.5)
-RouteRating.objects.create(user=u3, route=r4, rating=5)
-RouteRating.objects.create(user=u3, route=r5, rating=2.5)
+RouteRating.objects.create(user=u2, route=r1, rating=5)
+RouteRating.objects.create(user=u2, route=r2, rating=4)
+RouteRating.objects.create(user=u2, route=r3, rating=3.5)
+RouteRating.objects.create(user=u2, route=r4, rating=5)
+RouteRating.objects.create(user=u2, route=r5, rating=2.5)
 
 # Comentarios de rutas
-RouteComments.objects.create(user=u3, route=r1, content='Impresionante pero dura. ¡Recomiendo llevar bastones!')
-RouteComments.objects.create(user=u4, route=r1, content='Ruta espectacular, pero hay que venir preparado. La subida al mirador se hace dura, aunque las vistas desde arriba lo compensan con creces. Muy recomendable para quienes buscan un reto')
-RouteComments.objects.create(user=u3, route=r2, content='Muy bonita y accesible para todos.')
+RouteComments.objects.create(user=u2, route=r1, content='Impresionante pero dura. ¡Recomiendo llevar bastones!')
+RouteComments.objects.create(user=u3, route=r1, content='Ruta espectacular, pero hay que venir preparado. La subida al mirador se hace dura, aunque las vistas desde arriba lo compensan con creces. Muy recomendable para quienes buscan un reto')
+RouteComments.objects.create(user=u2, route=r2, content='Muy bonita y accesible para todos.')
 
 # Hilos del foro
 thread1 = ForoThread.objects.create(user=u1, title='Lista básica de equipamiento para rutas de nivel medio',

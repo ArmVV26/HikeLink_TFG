@@ -31,7 +31,7 @@
             
             <div>
                 <div class="user-container">
-                    <img :src="getUserRouteIcon(route)" class="avatar" />
+                    <img :src="getUserRouteIcon(route)" @error="handleImgError" class="avatar" />
                     <p>{{ route.user.username }}</p>
                 </div>
                 <div class="route-detail-container">

@@ -57,26 +57,37 @@
                     <li class="error" v-for="err in fieldErrors">{{ err }}</li>
                 </ul>
                 <p class="error" v-if="error">{{ error }}</p>
+                <p class="success-deleted" v-if="successMessage">{{ successMessage }}</p>
 
                 <div class="buttons-container">
                     <button type="submit">Modificar Ruta</button>
-                    <button type="button" class="deleted" @click="deleteRoute">Borrar Ruta</button> 
+                    <button type="button" class="deleted" @click="showDeleteModal = true">Borrar Ruta</button> 
                 </div>
             </form>
         </div>
+
+        <transition name="fade">
+            <DeleteModal
+                v-if="showDeleteModal"
+                :title="'¿Quieres eliminar esta Ruta?'"
+                :message="'Si eliminas esta Ruta se borrará de la web. Piensatelo 2 veces.'"
+                @confirm="confirmDeleteRoute"
+                @cancel="showDeleteModal = false"
+            />
+        </transition>
     </div>
 </template>
 
 <script setup>
     // IMPORTS
     import { computed, onMounted, ref } from 'vue';
-    import { getMediaUrl } from '@/utils/media';
     import { useRouter } from 'vue-router';
     import { useAuthStore } from '@/stores/authStore';
     import { useFormValidation } from '@/composables/useValidation';
     import { useRouteImage } from '@/composables/useRouteImage';
     import { updateRouteServices, deleteRouteServices } from '@/services/RouteServices';
     
+    import DeleteModal from '@/components/modal/DeleteModal.vue';
     import api from '@/utils/api';
     
     // PROPS
@@ -86,6 +97,9 @@
     })
     
     // VARIABLES
+    const showDeleteModal = ref(false)
+    const successMessage = ref('')
+
     const title = ref('')
     const type = ref('')
     const description = ref('')
@@ -100,7 +114,6 @@
 
     const authStore = useAuthStore()
     const isAuthenticated = computed(() => authStore.isAuthenticated)
-    const accessToken = computed(() => authStore.accessToken)
 
     const { getRouteAllImg, handleImgError } = useRouteImage()
 
@@ -182,16 +195,16 @@
     }
 
     // Metodo para eliminar una ruta
-    const deleteRoute = async () => {
-        if (confirm("¿Estás seguro de que deseas eliminar esta ruta? Esta acción no se puede deshacer.")) {
-            try {
-                await deleteRouteServices(props.id)
-                alert("Ruta eliminada correctamente")
+    const confirmDeleteRoute = async () => {
+        try {
+            await deleteRouteServices(props.id)
+            successMessage.value = 'Tu ruta ha sido eliminada correctamente.'
+            showDeleteModal.value = false
+            setTimeout(() => {
                 router.push(`/profile/${authStore.user.username}-${authStore.user.id}`)
-            } catch (error) {
-                console.log(error)
-                alert("Hubo un error al eliminar la ruta.")
-            }
+            }, 2000)
+        } catch (error) {
+            error.value = 'Error al eliminar la cuenta.'
         }
     }
 </script>
@@ -327,6 +340,13 @@
             .error {
                 color: var(--color-red-400);
                 font-size: 1rem;
+                font-weight: 900;
+                text-align: center;
+            }
+
+            .success-deleted {
+                color: var(--color-green);
+                font-size: 1.5rem;
                 font-weight: 900;
                 text-align: center;
             }

@@ -10,11 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os, environ
 from pathlib import Path
-import os
 from datetime import timedelta
-import environ
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,7 +49,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.google',
     
     # Terceros
     'corsheaders',
@@ -184,20 +182,29 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
+# Servicio SMTP
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
 # Google Login
-SITE_ID = 1
+# SITE_ID = 1
 
-REST_USE_JWT = True
-ACCOUNT_LOGIN_METHODS = {'email', 'username'} 
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*'] 
-SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+# REST_USE_JWT = True
+# ACCOUNT_LOGIN_METHODS = {'email', 'username'} 
+# ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*'] 
+# SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': env('GOOGLE_CLIENT_ID'),
-            'secret': env('GOOGLE_SECRET'),
-            'key': ''
-        }
-    }
-}
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'APP': {
+#             'client_id': env('GOOGLE_CLIENT_ID'),
+#             'secret': env('GOOGLE_SECRET'),
+#             'key': ''
+#         }
+#     }
+# }

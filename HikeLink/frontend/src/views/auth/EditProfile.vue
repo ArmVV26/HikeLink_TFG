@@ -42,13 +42,24 @@
                 </ul>
                 <p class="error" v-if="error">{{ error }}</p>
                 <p class="success" v-if="success">{{ success }}</p>
+                <p class="success-deleted" v-if="successMessage">{{ successMessage }}</p>
 
                 <div class="buttons-container">
                     <button type="submit">Guardar Cambios</button>
-                    <button type="button" class="deleted" @click="deleteUser">Borrar Cuenta</button> 
+                    <button type="button" class="deleted" @click="showDeleteModal = true">Borrar Cuenta</button> 
                 </div>
             </form>
         </div>
+
+        <transition name="fade">
+            <DeleteModal
+                v-if="showDeleteModal"
+                :title="'¿Quieres eliminar el Usuario?'"
+                :message="'Si eliminas el Usuario no podras acceder más a esta web con esta cuenta. Piensatelo 2 veces.'"
+                @confirm="confirmDeleteUser"
+                @cancel="showDeleteModal = false"
+            />
+        </transition>
     </div>
 </template>
 
@@ -60,10 +71,14 @@
     import { useUserSpecificImage } from '@/composables/useUserImage';
     import { updateUserServices, deleteUserServices } from '@/services/UserServices';
     import { useFormValidation } from '@/composables/useValidation';
-
+    
+    import DeleteModal from '@/components/modal/DeleteModal.vue';
     import api from '@/utils/api';
 
     // VARIABLES
+    const showDeleteModal = ref(false)
+    const successMessage = ref('')
+
     const router = useRouter()
     const route = useRoute()
     const authStore = useAuthStore()
@@ -201,17 +216,17 @@
     }
 
     // Metodo para eliminar una cuenta
-    const deleteUser = async () => {
-        if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
-            try {
-                await deleteUserServices(route.params.id)
+    const confirmDeleteUser = async () => {
+        try {
+            await deleteUserServices(route.params.id)
+            successMessage.value = 'Tu cuenta ha sido eliminada correctamente.'
+            showDeleteModal.value = false
+            setTimeout(() => {
                 authStore.logout()
-                alert("Cuenta eliminado correctamente")
                 router.push({path: '/login', query: {message: 'Cuenta Eliminada Correctamente'}})
-            } catch (error) {
-                console.log(error)
-                alert("Hubo un error al eliminar la cuenta.")
-            }
+            }, 2000)
+        } catch (error) {
+            error.value = 'Error al eliminar la cuenta.'
         }
     }
 </script>
@@ -223,6 +238,13 @@
         justify-content: center;
         align-items: center;
         padding: 2rem 0 2rem;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity 0.3s ease;
+    }
+    .fade-enter-from, .fade-leave-to {
+        opacity: 0;
     }
 
     .route-form {
@@ -346,6 +368,13 @@
             .success {
                 color: var(--color-green);
                 font-size: 1rem;
+                font-weight: 900;
+                text-align: center;
+            }
+
+            .success-deleted {
+                color: var(--color-green);
+                font-size: 1.5rem;
                 font-weight: 900;
                 text-align: center;
             }

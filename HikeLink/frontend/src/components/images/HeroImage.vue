@@ -59,7 +59,7 @@
     /* Estilos generales de todas las hero images */
     .hero-image {
         width: 100%;
-        height: 50rem;
+        height: 55rem;
         position: relative;
         overflow: hidden;
         margin-top: -10rem;
