@@ -56,5 +56,3 @@ export async function registerUserServices(formData) {
     }
   })
 }
-
-// USER

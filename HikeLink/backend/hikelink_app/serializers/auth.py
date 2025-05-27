@@ -1,4 +1,4 @@
-import uuid, re
+import uuid, re, logging
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -8,6 +8,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core.validators import validate_email as django_validate_email
 from django.core.exceptions import ValidationError as DjangoValidationError
+from ..utils.email import send_welcome_email
 
 from ..models import User
 
@@ -90,5 +91,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             # Validación tras guardar
             if not default_storage.exists(user.profile_picture):
                 raise Exception("Fallo al guardar la imagen de perfil")
-            
+        
+        # Mandar el correo de bienvenida
+        send_welcome_email(user.email, user.full_name)
+
         return user
