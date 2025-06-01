@@ -22,7 +22,7 @@
     <router-link
         v-else 
         :to="route" 
-        :class="['common-button', {'hero-button': header}, {'thin-button': thin}]"
+        :class="['common-button', {'hero-button': header, 'thin-button': thin, 'disabled-a': disabled}]"
     >
         <i v-if="icon != ''" :class="icon"></i>
         {{ text }}
@@ -119,11 +119,17 @@
         padding: 0.25rem 1rem;
     }
 
+    .disabled-a {
+        background-color: var(--color-grey);
+        border-color: var(--color-black);
+        color: var(--color-white);
+        pointer-events: none;
+    }
+
     .disabled-button {
         background-color: var(--color-grey);
         border-color: var(--color-black);
         color: var(--color-white);
-        cursor: not-allowed;
     }
     
     i {

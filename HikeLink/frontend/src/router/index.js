@@ -2,15 +2,19 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import api from '@/utils/api'
 import EditProfile from '@/views/auth/EditProfile.vue'
+import ForgotPassword from '@/views/auth/ForgotPassword.vue'
 import Login from '@/views/auth/Login.vue'
 import Register from '@/views/auth/Register.vue'
-import UpdateRoute from '@/views/auth/UpdateRoute.vue'
-import UploadRoute from '@/views/auth/UploadRoute.vue'
+import ResetPassword from '@/views/auth/ResetPassword.vue'
 import UserProfile from '@/views/auth/UserProfile.vue'
 import Foro from '@/views/foro/Foro.vue'
+import NewThread from '@/views/foro/NewThread.vue'
+import ThreadDetail from '@/views/foro/ThreadDetail.vue'
 import Map from '@/views/map/Map.vue'
 import RouteDetail from '@/views/map/RouteDetail.vue'
 import SearchRoutes from '@/views/map/SearchRoutes.vue'
+import UpdateRoute from '@/views/map/UpdateRoute.vue'
+import UploadRoute from '@/views/map/UploadRoute.vue'
 import AboutUs from '@/views/static/AboutUs.vue'
 import ConditionUse from '@/views/static/ConditionUse.vue'
 import Contact from '@/views/static/Contact.vue'
@@ -69,7 +73,18 @@ const routes = [
     path: '/profile/edit-profile/:username-:id(\\d+)',
     name:'EditProfile', component: EditProfile, 
     beforeEnter: requireIsProfileOwner, 
-    meta: { title: 'HikeLink - Perfil' }
+    meta: { title: 'HikeLink - Editar Perfil' }
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword', component: ForgotPassword,
+    meta: { title: 'HikeLink - Recuperar Contraseña' }
+  },
+  {
+    path: '/reset-password/:uidb64/:token',
+    name: 'ResetPassword', component: ResetPassword,
+    props: true,
+    meta: { title: 'HikeLink - Restablecer Contraseña' }
   },
   { 
     path: '/login', name:'Login', 
@@ -80,17 +95,6 @@ const routes = [
     component: Register, meta: { title: 'HikeLink - Registrarse' }
   },
   { 
-    path: '/update-route/:slug-:id(\\d+)',
-    name:'UpdateRoute', component: UpdateRoute,
-    props: true, beforeEnter: requireIsOwner,
-    meta: { title: 'HikeLink - Actualizar Ruta' }
-  },
-  { 
-    path: '/upload-route', name:'UploadRoute',
-    component: UploadRoute, beforeEnter: requireAuth,
-    meta: { title: 'HikeLink - Subir Ruta' }
-  },
-  { 
     path: '/profile/:username-:id(\\d+)',
     name:'UserProfile', component: UserProfile,
     beforeEnter: requireAuth, meta: { title: 'HikeLink - Perfil' }
@@ -98,6 +102,16 @@ const routes = [
   { 
     path: '/foro', name:'Foro', 
     component: Foro, meta: { title: 'HikeLink - Foro' }
+  },
+  { 
+    path: '/new-thread', name:'NewThread', 
+    component: NewThread, beforeEnter: requireAuth, 
+    meta: { title: 'HikeLink - Nuevo Hilo' }
+  },
+  { 
+    path: '/thread/:slug-:id(\\d+)', 
+    name:'ThreadDetail', component: ThreadDetail,
+    props: true, meta: { title: 'HikeLink - Hilo' }
   },
   { 
     path: '/map', name:'Map', 
@@ -111,6 +125,17 @@ const routes = [
   { 
     path: '/search-routes', name:'SearchRoute',
     component: SearchRoutes, meta: { title: 'HikeLink - Buscar Ruta' }
+  },
+  { 
+    path: '/update-route/:slug-:id(\\d+)',
+    name:'UpdateRoute', component: UpdateRoute,
+    props: true, beforeEnter: requireIsOwner,
+    meta: { title: 'HikeLink - Actualizar Ruta' }
+  },
+  { 
+    path: '/upload-route', name:'UploadRoute',
+    component: UploadRoute, beforeEnter: requireAuth,
+    meta: { title: 'HikeLink - Subir Ruta' }
   },
   { 
     path: '/about-us', name:'AboutUs', 

@@ -37,7 +37,7 @@
                             {{ route.average_rating }}
                         </p>
                     </div>
-                    <p class="created_date">{{ formatDate(route.created_date) }}</p>
+                    <p class="created-date">{{ formatDate(route.created_date) }}</p>
                 </div>
             </router-link>
         </div>
@@ -239,6 +239,7 @@
                     position: relative;
                     display: flex;
                     flex-direction: column;
+
                     h1 {
                         font-family: "Montserrat-Bold";
                         color: var(--color-green);
@@ -282,7 +283,7 @@
                         }
                     }
 
-                    .created_date {
+                    .created-date {
                         position: absolute;
                         font-weight: 900;
                         bottom: 1rem;

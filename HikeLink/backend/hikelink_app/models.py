@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import AbstractUser
@@ -70,8 +71,18 @@ class RouteComments(models.Model):
 class ForoThread(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
+    slug = models.SlugField(max_length=300, unique=True, blank=True)
     content = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            clean_title = re.sub(r'[^\w\s-]', '', self.title)
+            self.slug = slugify(clean_title)
+        super().save(*args, **kwargs)
 
 class ForoComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

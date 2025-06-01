@@ -36,19 +36,23 @@
     import { useAuthStore } from '@/stores/authStore';
     import { getMediaUrl } from '@/utils/media';
     import { useUserImage } from '@/composables/useUserImage';
-    import { commentServices } from '@/services/UserServices';
+    import { commentRouteServices, commentThreadServices } from '@/services/UserServices';
     import CommonButton from '../common/CommonButton.vue';
 
     // PROPS
     const props = defineProps({
         routeId: {
             type: Number,
-            required: true
+            required: false
         },
+        threadId: {
+            type: Number,
+            required: false
+        }
     })
     
     // VARIABLES
-    const {routeId} = toRefs(props);
+    const { routeId, threadId } = toRefs(props);
     
     const emit = defineEmits(['comment-submitted'])
 
@@ -65,7 +69,12 @@
         if (!isAuthenticated.value || !commentText.value.trim()) return
         
         try {
-            await commentServices({ content: commentText.value, route: routeId.value });
+            if (props.routeId) {
+                await commentRouteServices({ content: commentText.value, route: routeId.value });
+            } else if (props.threadId) {
+                await commentThreadServices({ content: commentText.value, thread: threadId.value });
+            } 
+
             commentText.value = ''
             emit('comment-submitted')
         } catch (error) {

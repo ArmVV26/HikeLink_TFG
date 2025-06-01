@@ -13,6 +13,7 @@
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@tailwindcss/vite": "^4.1.4",
     "@tmcw/togeojson": "^7.1.1",
+    "@vueform/slider": "^2.1.10",
     "axios": "^1.8.4",
     "leaflet": "^1.9.4",
     "leaflet-gpx": "^2.2.0",

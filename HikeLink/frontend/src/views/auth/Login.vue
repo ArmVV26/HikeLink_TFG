@@ -15,6 +15,9 @@
                     <span class="toggle-password" @click="togglePassword">
                         <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
                     </span>
+                    <p class="forgot-password">
+                        <router-link to="/forgot-password">¿Olvidaste tu contraseña?</router-link>
+                    </p>
                 </div>
 
                 <ul>
@@ -131,7 +134,6 @@
         h2 {
             font-family: "Montserrat-Bold";
             font-size: 1.5rem;
-            font-style: 900;
             color: var(--color-brown);
             text-shadow: none;
             margin-bottom: 1rem;
@@ -178,7 +180,7 @@
 
                 .toggle-password {
                     position: absolute;
-                    top: 50%;
+                    top: 35%;
                     right: 0.75rem;
                     color: var(--color-brown);
                     transform: translateY(-50%);
@@ -188,6 +190,13 @@
                     &:hover {
                         color: var(--color-green);
                     }
+                }
+
+                .forgot-password {
+                    padding: 0;
+                    margin: 0;
+                    text-align: left;
+                    font-size: 0.85rem;
                 }
             }
 

@@ -128,7 +128,7 @@
         if (profileImage.value) formData.append('profile_picture', profileImage.value)
 
         try {
-           await registerUserServices(formData)
+            await registerUserServices(formData)
             router.push({path: '/login', query: {message: 'Usuario Registrado Correctamente'}})
         } catch (err) {
             console.error(err)
@@ -174,7 +174,6 @@
         h2 {
             font-family: "Montserrat-Bold";
             font-size: 1.5rem;
-            font-style: 900;
             color: var(--color-brown);
             text-shadow: none;
             margin-bottom: 1rem;

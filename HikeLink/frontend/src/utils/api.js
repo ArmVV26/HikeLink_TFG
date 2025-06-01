@@ -16,4 +16,8 @@ export function apiWithAuth() {
   });
 }
 
+export function validateResetToken(uidb64, token) {
+  return api.get(`auth/validate-reset/${uidb64}/${token}`)
+}
+
 export default api;

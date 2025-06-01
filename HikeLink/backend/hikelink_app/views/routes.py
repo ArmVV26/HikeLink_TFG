@@ -88,7 +88,7 @@ def filter_routes(request):
     distance_max = request.GET.get('distance_max')
 
     if title:
-        routes = routes.filter(title__icontains=title)  # 🔍 búsqueda parcial
+        routes = routes.filter(title__icontains=title)  
 
     if type_ and type_ != 'Todas':
         routes = routes.filter(type=type_)

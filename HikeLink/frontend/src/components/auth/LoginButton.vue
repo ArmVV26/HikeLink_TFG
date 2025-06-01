@@ -64,9 +64,11 @@
         .avatar {
             width: 5rem;
             height: 5rem;
+            border: 2px solid transparent;
             border-radius: 25px;
-            cursor: pointer;
             margin: 0 5rem 0 1rem;
+            cursor: pointer;
+            transition: all 0.15s;
         }
         .avatar:hover {
             border: 2px solid var(--color-light-green);

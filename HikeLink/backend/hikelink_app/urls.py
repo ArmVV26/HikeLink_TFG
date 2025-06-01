@@ -10,10 +10,11 @@ from .views.routes import (
     delete_route, get_all_routes, filter_routes
 )
 from .views.forum import (
-    ForoThreadViewSet, ForoCommentViewSet
+    ForoThreadViewSet, ForoCommentViewSet, get_all_threads,
+    filter_threads
 )
 from .views.auth import (
-    user_info, register_user
+    user_info, register_user, forgot_password, reset_password, validate_reset_token
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView, TokenRefreshView,
@@ -43,6 +44,11 @@ urlpatterns = [
      # Autenticacion y registro
     path('auth/', include('dj_rest_auth.urls')),
     path('auth/registration/', include('dj_rest_auth.registration.urls')),
+    
+    # RECOVER PASSWORD
+    path('auth/forgot-password/', forgot_password, name='forgot-password'),
+    path('auth/reset-password/', reset_password, name='reset-password'),
+    path('auth/validate-reset/<str:uidb64>/<str:token>/', validate_reset_token, name='validate-reset-token'),
 
     # Ruta para actualizar un usuario
     path('profile/edit-profile/<int:user_id>/', update_user_profile, name='update-user-profile'),
@@ -72,6 +78,13 @@ urlpatterns = [
     # Ruta para eliminar una ruta
     path('delete-route/<int:route_id>/', delete_route, name='delete-route'),
 
+    # FORO
+    # Ruta para obtener todos los hilos del foro
+    path('all-threads/', get_all_threads, name='all_threads'),
+
+    # Ruta para filtrar los hilos por titulo
+    path('filter-threads/', filter_threads, name='filter_threads'),
+    
     # TOKENS
     # SimpleJWT - Endpoints para login con JWT
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

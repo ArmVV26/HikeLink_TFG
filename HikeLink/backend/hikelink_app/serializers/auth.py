@@ -1,9 +1,11 @@
-import uuid, re, logging
+import uuid, re, environ, logging
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
-from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
 from django.utils.text import slugify
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core.validators import validate_email as django_validate_email
@@ -93,6 +95,38 @@ class RegisterSerializer(serializers.ModelSerializer):
                 raise Exception("Fallo al guardar la imagen de perfil")
         
         # Mandar el correo de bienvenida
-        send_welcome_email(user.email, user.full_name)
+        env = environ.Env()
+        url = env('URL_MAIN')
+        send_welcome_email(user.email, user.full_name, url)
 
         return user
+    
+class ResetPasswordSerializer(serializers.Serializer):
+    uidb64 = serializers.CharField()
+    token = serializers.CharField()
+    new_password = serializers.CharField(write_only=True)
+
+    def validate_new_password(self, value):
+        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$'
+        if not re.fullmatch(pattern, value):
+            raise serializers.ValidationError("La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.")
+        validate_password(value)
+        return value
+
+    def validate(self, data):
+        try:
+            uid = force_str(urlsafe_base64_decode(data['uidb64']))
+            user = User.objects.get(pk=uid)
+        except (User.DoesNotExist, ValueError):
+            raise serializers.ValidationError("Token o usuario inválido.")
+
+        if not default_token_generator.check_token(user, data['token']):
+            raise serializers.ValidationError("El token no es válido o ha expirado.")
+
+        data['user'] = user
+        return data
+
+    def save(self):
+        user = self.validated_data['user']
+        user.set_password(self.validated_data['new_password'])
+        user.save()

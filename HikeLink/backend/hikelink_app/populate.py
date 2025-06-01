@@ -127,7 +127,7 @@ r5 = Route.objects.create(
     type='Senderismo',
     description=descriptionR5,
     img=['1_img.jpg', '2_img.jpg', '3_img.jpg', '4_img.jpg', '5_img.jpg', '6_img.jpg'],
-    difficulty='Difícl',
+    difficulty='Difícil',
     duration=30240,
     distance=23800,
     origin='Komoot',
@@ -157,6 +157,7 @@ thread2 = ForoThread.objects.create(user=u2, title='Animales peligrosos en rutas
 # Comentarios del foro
 ForoComment.objects.create(user=u1, thread=thread2, content='Hola no hay animales peligrosos.')
 ForoComment.objects.create(user=u2, thread=thread1, content='Hey si o no.')
+ForoComment.objects.create(user=u2, thread=thread1, content='No lo se bro.')
 
 # Favoritos
 # Favorites.objects.create(user=u2, route=r1)

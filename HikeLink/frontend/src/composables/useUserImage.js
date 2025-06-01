@@ -59,7 +59,7 @@ export function useUserSpecificImage() {
     }
 }
 
-// Icono del usuario que a puesto un comentario
+// Usuario que a puesto un comentario en una ruta
 export function useUserCommentImage() {
   function getIconUserComment(comment) {
     return getMediaUrl(`${comment.user.username}/${comment.user.profile_picture}`)
@@ -71,6 +71,22 @@ export function useUserCommentImage() {
 
   return {
     getIconUserComment,
+    handleImgError
+  }
+}
+
+// Usuario que es dueño de un hilo del foro
+export function useUserThreadImage() {
+  function getIconUserThread(user) {
+    return getMediaUrl(`${user.username}/${user.profile_picture}`)
+  }
+
+  function handleImgError(event) {
+    event.target.src = getMediaUrl('/_common/sample_user_icon.png')
+  }
+
+  return {
+    getIconUserThread,
     handleImgError
   }
 }

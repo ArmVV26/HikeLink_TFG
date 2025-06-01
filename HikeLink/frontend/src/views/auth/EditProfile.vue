@@ -269,7 +269,6 @@
         h2 {
             font-family: "Montserrat-Bold";
             font-size: 1.5rem;
-            font-style: 900;
             color: var(--color-brown);
             text-shadow: none;
             margin-bottom: 1rem;

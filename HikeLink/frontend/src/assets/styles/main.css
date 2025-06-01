@@ -14,6 +14,7 @@
 :root {
   --color-green: #2E7D32;
   --color-light-green: #81C784;
+  --color-light-green-opacity: rgba(129, 199, 132, 0.5);
   --color-brown: #8D6E63;
   --color-vanille: #F6D7B0;
   --color-vanille-opacity: #F6D7B080;

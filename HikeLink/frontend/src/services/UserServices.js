@@ -2,9 +2,14 @@
 import { apiWithAuth } from "@/utils/api";
 import api from "@/utils/api";
 
-// COMMENTS
-export async function commentServices({ content, route }) {
+// COMMENTS_ROUTE
+export async function commentRouteServices({ content, route }) {
   return apiWithAuth().post('/comments/', { content, route });
+}
+
+// COMMENTS_FORO
+export async function commentThreadServices({ content, thread }) {
+  return apiWithAuth().post('/foro-comments/', { content, thread });
 }
 
 // RATINGS
@@ -54,5 +59,21 @@ export async function registerUserServices(formData) {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
+  })
+}
+
+// USER_FORGOT_PASSWORD
+export async function forgotPasswordServices(email) {
+  await api.post('/auth/forgot-password/', {
+    email: email
+  })
+}
+
+// USER_RECOVER_PASSWORD
+export async function resetPasswordServices(uidb64, token, password) {
+  await api.post('/auth/reset-password/', {
+    uidb64,
+    token,
+    new_password: password
   })
 }
