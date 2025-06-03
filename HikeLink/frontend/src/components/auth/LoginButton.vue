@@ -38,18 +38,26 @@
     const menuOpen = ref(false)    
     const route = useRoute()
 
+    const emit = defineEmits(['toggle-user-menu'])
+    
     // METODOS
     // Si cambia de pagina se cierra el menu
     watch(() => route.fullPath, () => {
         menuOpen.value = false;
     });
-
+    
     // Imagen de usuario
     const { getIconUserImg, handleImgError, userImg } = useUserImage();
-
+    
     // Para abrir o cerrar el menu
     const toggleMenu = () => {
         menuOpen.value = !menuOpen.value
+        
+        if (menuOpen.value) {
+            emit('toggle-user-menu', true); 
+        } else {
+            emit('toggle-user-menu', false); 
+        }
     }
 </script>
 

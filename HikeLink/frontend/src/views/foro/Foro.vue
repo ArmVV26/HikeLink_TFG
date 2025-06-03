@@ -133,6 +133,7 @@
             padding: 1rem;
             border-radius: 25px;
             background-color: var(--color-vanille-opacity);
+            box-shadow: 2px 2px 5px 1px var(--color-black); 
         }
     }
 

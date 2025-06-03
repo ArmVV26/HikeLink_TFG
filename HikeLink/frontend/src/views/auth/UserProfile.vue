@@ -90,7 +90,6 @@
     const authStore = useAuthStore()
     const user = computed(() => authStore.user)
     const isAuthenticated = computed(() => authStore.isAuthenticated)
-    const accessToken = computed(() => authStore.accessToken)
 
     const { getIconUserImg, handleImgError, userImg } = useUserImage();
 
@@ -138,6 +137,8 @@
             const routeDetails = await Promise.all(promises)
 
             favorites.value = routeDetails.map(r => r.data)
+            totalPages.value = Math.ceil(favorites.value.length / pageSize);
+            currentPage.value = 1;
         } catch (error) {
             console.error("Error obteniendo favoritos:", error)
         }

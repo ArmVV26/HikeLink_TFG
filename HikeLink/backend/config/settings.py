@@ -182,6 +182,9 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
+# Para el admin
+SITE_ID = 1
+
 # Servicio SMTP
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -193,7 +196,6 @@ SIMPLE_JWT = {
 # DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 
 # Google Login
-# SITE_ID = 1
 
 # REST_USE_JWT = True
 # ACCOUNT_LOGIN_METHODS = {'email', 'username'} 

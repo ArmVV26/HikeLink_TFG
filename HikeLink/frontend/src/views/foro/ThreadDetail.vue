@@ -16,6 +16,10 @@
                     <h1>{{ thread.title }}</h1>
                     <p>{{ thread.content }}</p>
                 </div>
+
+                <div v-if="isOwner" class="delete-button">
+                    <p @click="showDeleteModal = true">Eliminar Hilo</p>
+                </div>
             </div>
     
             <div class="comment-wrapper">
@@ -44,6 +48,16 @@
             :thread-id="thread.id"
             @comment-submitted="refreshThreadData"
         />
+
+        <transition name="fade">
+            <DeleteModal
+                v-if="showDeleteModal"
+                :title="'¿Quieres eliminar el Hilo?'"
+                :message="'Si eliminas el Hilo no podras acceder más a este hilo. Piensatelo 2 veces.'"
+                @confirm="confirmDeleteThread"
+                @cancel="showDeleteModal = false"
+            />
+        </transition>
     </div>
 
     <div v-else>
@@ -55,8 +69,12 @@
     // IMPORTS
     import { computed, onMounted, ref } from 'vue'
     import { useUserThreadImage } from '@/composables/useUserImage'
+    import { useAuthStore } from '@/stores/authStore'
+    import { deleteThreadServices } from '@/services/ThreadServices'
+    import { useRouter } from 'vue-router'
+
+    import DeleteModal from '@/components/modal/DeleteModal.vue'
     import AddComment from '@/components/auth/AddComment.vue'
-    
     import api from '@/utils/api'
 
     // PROPS
@@ -72,9 +90,19 @@
     })  
 
     // VARIABLES
+    const showDeleteModal = ref(false)
+    const router = useRouter()
+
     const thread = ref(null)
 
     const { getIconUserThread, handleImgError } = useUserThreadImage()
+
+    // Compruebo si el usuario es el dueño deL hilo
+    const authStore = useAuthStore()
+    const currentUserId = computed(() => authStore.user?.id ?? null)
+    const isOwner = computed(() => {
+        return thread.value && currentUserId.value === thread.value.user.id
+    })
 
     // METODOS
     // Transformar la fecha en "10 de marzo de 2026"
@@ -86,7 +114,18 @@
             year: 'numeric'
         }).format(date)
     }
-    
+
+    // Funcion para eliminar el hilo
+    const confirmDeleteThread = async () => {
+        try {
+            await deleteThreadServices(props.id)
+            showDeleteModal.value = false
+            router.push('/foro')
+        } catch (error) {
+            console.error('Error al eliminar el hilo:', error)
+        }
+    }
+
     // Funcion que permite actualizar los datos del Hilo
     const refreshThreadData = async () => {
         try {
@@ -97,6 +136,7 @@
         }
     }
 
+
     // Realiza la llamada a la API para obtener los datos del Hilo
     onMounted(async () => {
         await refreshThreadData()
@@ -104,6 +144,13 @@
 </script>
 
 <style lang="scss" scoped>
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity 0.3s ease;
+    }
+    .fade-enter-from, .fade-leave-to {
+        opacity: 0;
+    }
+
     .main-container {
         width: 70%;
         margin: auto;
@@ -119,6 +166,7 @@
             box-shadow: 2px 2px 5px 1px var(--color-black); 
 
             .thread-main {
+                position: relative;
                 display: grid;
                 grid-template-columns: 6rem 1fr;
                 gap: 1rem;
@@ -172,6 +220,27 @@
                         -webkit-box-orient: vertical;
                         overflow: hidden;
                         text-overflow: ellipsis;
+                    }
+                }
+
+                .delete-button {
+                    position: absolute;
+                    top: 0.5rem;
+                    right: 1rem;
+                    background-color: var(--color-red-500);
+                    border: 2px solid var(--color-red-700);
+                    border-radius: 25px;
+                    padding: 0.5rem 1rem;
+                    cursor: pointer;
+                    transition: all 0.25s;
+
+                    &:hover {
+                        background-color: var(--color-red-400);
+                    }
+
+                    p {
+                        font-weight: 900;
+                        color: var(--color-white);
                     }
                 }
             }

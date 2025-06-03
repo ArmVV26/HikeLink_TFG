@@ -17,11 +17,11 @@ import UpdateRoute from '@/views/map/UpdateRoute.vue'
 import UploadRoute from '@/views/map/UploadRoute.vue'
 import AboutUs from '@/views/static/AboutUs.vue'
 import ConditionUse from '@/views/static/ConditionUse.vue'
-import Contact from '@/views/static/Contact.vue'
 import Help from '@/views/static/Help.vue'
 import Privacity from '@/views/static/Privacity.vue'
 import Home from '@/views/Home.vue'
 
+// Para asegurar que el usuario esta con la sesion iniciada
 const requireAuth = (to, from, next) => {
   const authStore = useAuthStore()
   if (!authStore.isAuthenticated) {
@@ -31,6 +31,7 @@ const requireAuth = (to, from, next) => {
   }
 }
 
+// Para aseguara que el usuario es el dueño
 const requireIsOwner = async (to, from, next) => {
   const authStore = useAuthStore()
   const isAuthenticated = authStore.isAuthenticated
@@ -52,6 +53,7 @@ const requireIsOwner = async (to, from, next) => {
   }
 }
 
+// Para verificar si el usuario es el dueño del perfil
 const requireIsProfileOwner = (to, from, next) => {
   const authStore = useAuthStore()
   const isAuthenticated = authStore.isAuthenticated
@@ -97,7 +99,8 @@ const routes = [
   { 
     path: '/profile/:username-:id(\\d+)',
     name:'UserProfile', component: UserProfile,
-    beforeEnter: requireAuth, meta: { title: 'HikeLink - Perfil' }
+    beforeEnter: requireIsProfileOwner,
+    meta: { title: 'HikeLink - Perfil' }
   },
   { 
     path: '/foro', name:'Foro', 
@@ -146,10 +149,6 @@ const routes = [
     component: ConditionUse, meta: { title: 'HikeLink - Uso' }
   },
   { 
-    path: '/contact', name:'Contact', 
-    component: Contact, meta: { title: 'HikeLink - Contacto' }
-  },
-  { 
     path: '/help', name:'Help', 
     component: Help, meta: { title: 'HikeLink - Ayuda' }
   },
@@ -163,9 +162,13 @@ const routes = [
   },
 ]
 
+// Crear el router, el historial y al cambiar de pagina mueve el scroll al top
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }
+  }
 })
 
 router.beforeEach(async (to, from, next) => {

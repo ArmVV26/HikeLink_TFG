@@ -11,7 +11,7 @@ from .views.routes import (
 )
 from .views.forum import (
     ForoThreadViewSet, ForoCommentViewSet, get_all_threads,
-    filter_threads
+    filter_threads, delete_thread
 )
 from .views.auth import (
     user_info, register_user, forgot_password, reset_password, validate_reset_token
@@ -84,6 +84,9 @@ urlpatterns = [
 
     # Ruta para filtrar los hilos por titulo
     path('filter-threads/', filter_threads, name='filter_threads'),
+
+    # Ruta para eliminar un hilo
+    path('delete-thread/<int:thread_id>/', delete_thread, name='delete-filter'),
     
     # TOKENS
     # SimpleJWT - Endpoints para login con JWT

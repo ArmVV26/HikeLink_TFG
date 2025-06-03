@@ -112,4 +112,8 @@
     .hero-PaginaPrincipal .background-layer {
         @include hero-background('PaginaPrincipal');
     }
+
+    .hero-SobreNosotros .background-layer {
+        @include hero-background('SobreNosotros');
+    }
 </style>

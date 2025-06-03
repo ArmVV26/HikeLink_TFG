@@ -1,7 +1,8 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
 from ..models import ForoThread, ForoComment
 from ..serializers.forum import ForoThreadSerializer, ForoCommentSerializer
@@ -54,3 +55,23 @@ def filter_threads(request):
     result_page = paginator.paginate_queryset(thread.order_by('-created_date'), request)
     serializer = ForoThreadSerializer(result_page, many=True, context={'request': request})
     return paginator.get_paginated_response(serializer.data)
+
+# Vista para eliminar un Hilo
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_thread(request, thread_id):
+    try:
+        thread = ForoThread.objects.get(id=thread_id)
+    except ForoThread.DoesNotExist:
+        return Response({'error': 'Hilo no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Permitir solo al autor o admin
+    if request.user != thread.user and not request.user.is_staff:
+        return Response({'error': 'No tienes permiso para eliminar este hilo.'}, status=status.HTTP_403_FORBIDDEN)
+
+    # Eliminar comentarios asociados
+    ForoComment.objects.filter(thread=thread).delete()
+
+    # Eliminar hilo
+    thread.delete()
+    return Response({'message': 'Hilo eliminado correctamente.'}, status=status.HTTP_204_NO_CONTENT)

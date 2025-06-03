@@ -20,7 +20,7 @@
             <div class="links">
                 <h2>Acerca de HikeLink</h2>
                 <router-link to="/about-us">Sobre Nosotros</router-link>
-                <router-link to="/contact">Contacta con Nosotros</router-link>
+                <a href="mailto:hikelink.soporte@gmail.com">Contacta con Nosotros</a>
                 <router-link to="/help">Ayuda</router-link>
             </div>
 
@@ -137,6 +137,86 @@
                     }
                 }    
             } 
+        }
+    }
+
+    @media (max-width: 1110px) {
+        footer {
+            .first-counter {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+                gap: 1rem;
+    
+                .links {
+                    a {
+                        text-align: center;
+                        padding: 0;
+                    }
+                    
+                    &:first-of-type {
+                        grid-column: 1;
+                        grid-row: 1;
+                    }
+    
+                    &:nth-of-type(2) {
+                        grid-column: 2;
+                        grid-row: 1;
+                    }
+                }
+    
+                .logo {
+                    grid-column: 1;
+                    grid-row: 2;
+                    justify-self: center;
+                }
+    
+                .social {
+                    grid-column: 2;
+                    grid-row: 2;
+                    justify-self: center;
+                }
+            }
+        }
+    }
+
+    
+    @media (max-width: 800px) { 
+        footer {
+            .first-counter {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto;
+                gap: 1rem;
+    
+                .links {
+                    a {
+                        text-align: center;
+                        padding: 0;
+                    }
+                    
+                    &:first-of-type {
+                        grid-column: 1;
+                        grid-row: 1;
+                    }
+    
+                    &:nth-of-type(2) {
+                        grid-column: 1;
+                        grid-row: 2;
+                    }
+                }
+    
+                .logo {
+                    grid-column: 1;
+                    grid-row: 3;
+                    justify-self: center;
+                }
+    
+                .social {
+                    grid-column: 1;
+                    grid-row: 4;
+                    justify-self: center;
+                }
+            }
         }
     }
 </style>  

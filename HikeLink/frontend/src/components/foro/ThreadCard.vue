@@ -236,6 +236,7 @@
             font-size: 1.25rem;
             padding: 0.35rem 0.85rem;
             border: 2px solid var(--color-green);
+            background-color: var(--color-white);
             border-radius: 25rem;
             cursor: pointer;
             transition: all 0.25s;

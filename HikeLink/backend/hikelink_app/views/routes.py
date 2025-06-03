@@ -149,6 +149,7 @@ def delete_route(request, route_id):
     except Route.DoesNotExist:
         return Response({'error': 'Ruta no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
+    # Permitir solo al autor o admin
     if request.user != route.user and not request.user.is_staff:
         return Response({'error': 'No tienes permiso para eliminar esta ruta.'}, status=status.HTTP_403_FORBIDDEN)
 

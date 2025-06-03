@@ -85,3 +85,92 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .main-container {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem 0 2rem;
+
+        .thread-form {
+            width: 25rem;
+            padding: 2rem 1.5rem;
+            background-color: var(--color-white);
+            border-radius: 25px;
+            box-shadow: 0px 0px 10px 0px var(--color-black);
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            h1 {
+                font-family: "Montserrat-Bold";
+                font-size: 2rem;
+                color: var(--color-green);
+                text-shadow: none;
+                line-height: 1;
+            }
+
+            h2 {
+                font-family: "Montserrat-Bold";
+                font-size: 1.5rem;
+                color: var(--color-brown);
+                text-shadow: none;
+                margin-bottom: 1rem;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                font-family: "Lato";
+
+                input[type="text"], textarea {
+                    width: 90%;
+                    padding: 0.5rem 0.75rem;
+                    margin: auto;
+                    font-size: 1rem;
+                    color: var(--color-black);
+                    border: 2px solid var(--color-brown);
+                    border-radius: 10px;
+
+                    &:hover {
+                        border: 2px solid var(--color-green);
+                    }
+                }
+
+                textarea {
+                    resize: none;
+                    min-height: 9rem;
+                }
+
+                .error {
+                    text-align: center;
+                    color: var(--color-red-400);
+                    font-size: 1rem;
+                    font-weight: 900;
+                }
+
+                button[type="submit"] {
+                    width: 90%;
+                    padding: 0.5rem 0.75rem;
+                    margin: auto;
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--color-white);
+                    background-color: var(--color-green);
+                    border-radius: 25px;
+                    cursor: pointer;
+                    transition: all 0.25s;
+
+                    &:hover {
+                        background-color: var(--color-light-green);
+                        color: var(--color-green);
+                    }
+                }
+            }
+        }
+    }
+</style>
