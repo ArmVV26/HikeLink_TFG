@@ -117,6 +117,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 2rem 0;
   }
 
   .reset-form {
@@ -229,6 +230,16 @@
       font-size: 1.5rem;
       color: var(--color-red-400);
       text-shadow: none;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .reset-form {
+      width: 100%;
+      padding: 1rem 0;
+      border-top: 5px solid var(--color-green);
+      border-bottom: 5px solid var(--color-green);
+      border-radius: 0;
     }
   }
 </style>

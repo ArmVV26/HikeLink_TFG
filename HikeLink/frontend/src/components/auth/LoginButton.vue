@@ -27,37 +27,27 @@
 
 <script setup>
     // IMPORTS
-    import { ref, watch } from 'vue';
     import { useAuthStore } from '@/stores/authStore';
-    import { useRoute } from 'vue-router';
     import { useUserImage } from '@/composables/useUserImage';
     import CommonButton from '../common/CommonButton.vue';
 
+    // PROPS
+    const props = defineProps({
+        menuOpen: Boolean
+    });
+
     // VARIABLES
     const authStore = useAuthStore()
-    const menuOpen = ref(false)    
-    const route = useRoute()
 
     const emit = defineEmits(['toggle-user-menu'])
-    
-    // METODOS
-    // Si cambia de pagina se cierra el menu
-    watch(() => route.fullPath, () => {
-        menuOpen.value = false;
-    });
     
     // Imagen de usuario
     const { getIconUserImg, handleImgError, userImg } = useUserImage();
     
+    // METODOS
     // Para abrir o cerrar el menu
     const toggleMenu = () => {
-        menuOpen.value = !menuOpen.value
-        
-        if (menuOpen.value) {
-            emit('toggle-user-menu', true); 
-        } else {
-            emit('toggle-user-menu', false); 
-        }
+        emit('toggle-user-menu', !props.menuOpen); 
     }
 </script>
 
@@ -140,5 +130,24 @@
     .fade-dropdown-leave-from {
         opacity: 1;
         transform: translateY(0);
+    }
+
+    @media (max-width: 550px) {
+        .login-button {
+            font-size: 1.25rem;
+            margin: 0 1rem 0 0.5rem;
+        }
+
+        .user-menu {
+            .avatar {
+                margin: 0.25rem 1rem 0.25rem 0.5rem;
+            }
+        }
+    }
+
+    @media(max-width: 350px) {
+        .login-button {
+            font-size: 1rem;
+        }
     }
 </style>

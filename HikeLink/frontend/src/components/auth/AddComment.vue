@@ -155,4 +155,23 @@
             }
         }
     }
+
+    @media (max-width: 1024px) {
+        .comment-add-container {
+            margin: 0 2rem 2rem;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .comment-add-container {
+            margin: 0 0.5rem 2rem;
+
+            .comment-add {
+                h1 {
+                    font-size: 1rem;
+                    line-height: 1;
+                }
+            }
+        }
+    }
 </style>

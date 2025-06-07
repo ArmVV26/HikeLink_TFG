@@ -1,69 +1,81 @@
 <template>
     <div class="main-container">
-        <div class="filter-container">
-            <h1>Filtrar Por</h1>
-            <form @submit.prevent="filterRoutes">
-                <input type="text" v-model="title" placeholder="Buscar Ruta" />
-                
-                <div class="type">
-                    <label for="type">Tipo </label>
-                    <select id="type" name="type" v-model="type">
-                        <option value="Todas">Todas</option>
-                        <option value="Para-Todos">Para Todos</option>
-                        <option value="Senderismo">Senderismo</option>
-                        <option value="Ciclismo">Ciclismo</option>
-                        <option value="Trail-Running">Trail-Running</option>
-                        <option value="Alpinismo">Alpinismo</option>
-                    </select>
-                </div>
-
-                <div class="difficulty">
-                    <label for="difficulty">Dificultad </label>
-                    <select id="difficulty" name="difficulty" v-model="difficulty">
-                        <option value="Todas">Todas</option>
-                        <option value="Fácil">Fácil</option>
-                        <option value="Moderada">Moderada</option>
-                        <option value="Difícil">Difícil</option>
-                    </select>
-                </div>
-
-                <div class="origin">
-                    <label for="origin">Origen </label>
-                    <select id="origin" name="origin" v-model="origin">
-                        <option value="Todos">Todos</option>
-                        <option value="Wikiloc">Wikiloc</option>
-                        <option value="Strava">Strava</option>
-                        <option value="OutdoorActive">OutdoorActive</option>
-                        <option value="AllTrails">AllTrails</option>
-                        <option value="Komoot">Komoot</option>
-                    </select>
-                </div>
-
-                <div class="slider">
-                    <label>Duración (horas):</label>
-                    <Slider 
-                        class="slider-component"    
-                        v-model="durationRange" 
-                        :min="0" :max="24" 
-                        :step="1" :range="true" 
-                    />
-                    <span>{{ durationRange[0] }}h - {{ durationRange[1] }}h</span>
-                </div>
-
-                <div class="slider">
-                    <label>Longitud (km):</label>
-                    <Slider 
-                        class="slider-component"    
-                        v-model="distanceRange"
-                        :min="0" :max="100"
-                        :step="1" :range="true"
-                    />
-                    <span>{{ distanceRange[0] }}km - {{ distanceRange[1] }}km</span>
-                </div>
-
-                <button type="submit">Buscar</button>
-            </form> 
+        <div class="filter-toggle-wrapper">
+            <button class="filter-toggle" @click="toggleFilters">
+                <i class="fa-solid fa-filter"></i> Filtrar Rutas
+            </button>
         </div>
+
+        <transition name="fade-slide">
+            <div class="filter-container" 
+                :class="{ 'active': showFilters }"
+                ref="filterRef"
+                v-show="showFilters"
+            >
+                <h1>Filtrar Por</h1>
+                <form @submit.prevent="filterRoutes">
+                    <input type="text" v-model="title" placeholder="Buscar Ruta" />
+                    
+                    <div class="type">
+                        <label for="type">Tipo </label>
+                        <select id="type" name="type" v-model="type">
+                            <option value="Todas">Todas</option>
+                            <option value="Para-Todos">Para Todos</option>
+                            <option value="Senderismo">Senderismo</option>
+                            <option value="Ciclismo">Ciclismo</option>
+                            <option value="Trail-Running">Trail-Running</option>
+                            <option value="Alpinismo">Alpinismo</option>
+                        </select>
+                    </div>
+    
+                    <div class="difficulty">
+                        <label for="difficulty">Dificultad </label>
+                        <select id="difficulty" name="difficulty" v-model="difficulty">
+                            <option value="Todas">Todas</option>
+                            <option value="Fácil">Fácil</option>
+                            <option value="Moderada">Moderada</option>
+                            <option value="Difícil">Difícil</option>
+                        </select>
+                    </div>
+    
+                    <div class="origin">
+                        <label for="origin">Origen </label>
+                        <select id="origin" name="origin" v-model="origin">
+                            <option value="Todos">Todos</option>
+                            <option value="Wikiloc">Wikiloc</option>
+                            <option value="Strava">Strava</option>
+                            <option value="OutdoorActive">OutdoorActive</option>
+                            <option value="AllTrails">AllTrails</option>
+                            <option value="Komoot">Komoot</option>
+                        </select>
+                    </div>
+    
+                    <div class="slider">
+                        <label>Duración (horas):</label>
+                        <Slider 
+                            class="slider-component"    
+                            v-model="durationRange" 
+                            :min="0" :max="24" 
+                            :step="1" :range="true" 
+                        />
+                        <span>{{ durationRange[0] }}h - {{ durationRange[1] }}h</span>
+                    </div>
+    
+                    <div class="slider">
+                        <label>Longitud (km):</label>
+                        <Slider 
+                            class="slider-component"    
+                            v-model="distanceRange"
+                            :min="0" :max="100"
+                            :step="1" :range="true"
+                        />
+                        <span>{{ distanceRange[0] }}km - {{ distanceRange[1] }}km</span>
+                    </div>
+    
+                    <button type="submit">Buscar</button>
+                </form> 
+            </div>
+        </transition>
 
         <div v-if="routes.length" class="routes-container">
             <RouteCard 
@@ -84,7 +96,7 @@
 
 <script setup>
     // IMPORTS
-    import { onMounted, ref } from 'vue';
+    import { onMounted, onBeforeUnmount, ref } from 'vue';
     import api from '@/utils/api';
     import RouteCard from '@/components/map/RouteCard.vue';
     import Slider from '@vueform/slider'
@@ -100,6 +112,9 @@
     
     const routes = ref([])
 
+    const showFilters = ref(false);
+    const filterRef = ref(null)
+
     // Paginar
     const totalPages = ref(1)
     const currentPage = ref(1)
@@ -109,6 +124,33 @@
     const currentFilters = ref({})
 
     // METODOS
+    // Funcion que detecta la redimension de la pagina para mostrar el menu de los filtros
+    const handleResize = () => {
+        if (window.innerWidth > 1440) {
+            showFilters.value = true
+        }
+    };
+
+    // Funcion para detectar si se clica fuera del contenedor
+    const handleClickOutside = (event) => {
+        const filterEl = filterRef.value
+        const toggleEl = document.querySelector('.filter-toggle')
+
+        if (
+            filterEl &&
+            !filterEl.contains(event.target) &&
+            toggleEl &&
+            !toggleEl.contains(event.target)
+        ) {
+            showFilters.value = false
+        }
+    };
+
+    // Funcion para mostrar o ocultar las rutas
+    const toggleFilters = () => {
+        showFilters.value = !showFilters.value
+    };
+
     // Funcion que recarga las rutas si hay filtro o si no hay filtro
     const loadRoutes = async (page = 1) => {
         try {
@@ -127,6 +169,8 @@
             routes.value = response.data.results
             totalPages.value = Math.ceil(response.data.count / pageSize)
             currentPage.value = page
+            
+            if (window.innerWidth < 1440) showFilters.value = false
         } catch (error) {
             console.error("Error al cargar las rutas:", error)
         }
@@ -154,21 +198,72 @@
     
     // Para cargar todas las rutas al principio o al recargar la pagina
     onMounted(async () => {
+        window.addEventListener('resize', handleResize)
+        document.addEventListener('click', handleClickOutside)
+
         try {   
             loadRoutes()
         } catch (error) {
             console.error("Error al cargar las rutas: ", error)
         }
     })
+
+    // Funcion para detectar si se clica fuera del menu de filtros
+    onBeforeUnmount(() => {
+        window.removeEventListener('resize', handleResize)
+        document.removeEventListener('click', handleClickOutside)
+    });
 </script>
 
 <style lang="scss" scoped>
+    .fade-slide-enter-active,
+    .fade-slide-leave-active {
+        transition: all 0.3s ease;
+    }
+    .fade-slide-enter-from,
+    .fade-slide-leave-to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    .fade-slide-enter-to,
+    .fade-slide-leave-from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     .main-container {
         width: 95%;
         margin: 2rem auto;
         display: grid;
         grid-template-columns: 20rem 1fr;
         gap: 2rem;
+    }
+
+    .filter-toggle-wrapper {
+        display: none;
+        border-bottom: 5px solid var(--color-green);
+        
+        .filter-toggle {
+            font-family: "Montserrat-Bold";
+            font-size: 1rem;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--color-green);
+            border-top-right-radius: 25px;
+            border-top-left-radius: 25px;
+            color: var(--color-white);
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            
+            i {
+                font-size: 1.5rem;
+            }
+
+            &:hover {
+                color: var(--color-light-green);
+            }
+        }
     }
 
     .filter-container {
@@ -312,13 +407,54 @@
             margin-bottom: 1rem;
         }
     }
+
+    @media (max-width: 1440px) {
+        .main-container {
+            width: 100%;
+            margin: 2rem 0;
+            padding: 0 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-toggle-wrapper {
+            display: flex;
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        .filter-container {
+            position: absolute;
+            top: 12.55rem;
+            left: 1rem;
+            width: 20rem;
+            background-color: var(--color-vanille);
+            border-bottom: none;
+            border-radius: 0 0 25px 25px;
+            box-shadow: 0 5px 15px var(--color-black-opacity);
+            z-index: 10;
+            height: auto;
+            padding: 1rem;
+
+            &.active {
+                display: block;
+            }
+        }
+    }
+
+    @media (max-width: 352px) {
+        .filter-container {
+            padding: 0.5rem;
+            width: 18rem;
+        }
+    }
 </style>
 
 <style lang="scss">
     .slider-tooltip {
-        background-color: var(--color-green) !important;
+        background-color: var(--color-green);
         border-color: var(--color-green);
-        color: var(--color-white) !important;
+        color: var(--color-white);
         padding: 1px 5px;
         border-radius: 5px;
         font-weight: bold;
@@ -330,12 +466,12 @@
     }
 
     .slider-connect {
-        background-color: var(--color-light-green) !important;
+        background-color: var(--color-light-green);
     }
 
     .slider-handle {
-        border: 2px solid var(--color-green) !important;
-        background-color: var(--color-white) !important;
+        border: 2px solid var(--color-green);
+        background-color: var(--color-white);
 
         &:hover, &:focus, &:active {
             .slider-tooltip {

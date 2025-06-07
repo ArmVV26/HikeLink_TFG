@@ -33,26 +33,26 @@
 
     /* Mixin que genera todas las medias para una imagen */
     @mixin hero-background($name) {
-        $next-res: 0;
+        $res-count: list.length($resolutions);
 
-        @each $resolution in $resolutions {
-            @if (list.index($resolutions, $resolution) == 1) {
-                @media (min-width: 0px) {
-                    background-image: 
-                    url("/images/hero-image/avif/hero-#{$name}-#{$resolution}.avif"),
-                    url("/images/hero-image/webp/hero-#{$name}-#{$resolution}.webp"),
-                    url("/images/hero-image/jpg/hero-#{$name}-#{$resolution}.jpg");
-                }   
-            } @else {
-                @media (min-width: $next-res) {
-                    background-image: 
-                    url("/images/hero-image/avif/hero-#{$name}-#{$resolution}.avif"),
-                    url("/images/hero-image/webp/hero-#{$name}-#{$resolution}.webp"),
-                    url("/images/hero-image/jpg/hero-#{$name}-#{$resolution}.jpg");
-                }
+        @for $i from 1 through $res-count - 2 {
+            $min-width: list.nth($resolutions, $i);
+            $target-image-resolution: list.nth($resolutions, $i + 2);
+
+            @media (min-width: $min-width) {
+                background-image:
+                    url("/images/hero-image/avif/hero-#{$name}-#{$target-image-resolution}.avif"),
+                    url("/images/hero-image/webp/hero-#{$name}-#{$target-image-resolution}.webp"),
+                    url("/images/hero-image/jpg/hero-#{$name}-#{$target-image-resolution}.jpg");
             }
+        }
 
-            $next-res: $resolution;
+        // Fallback para tamaños menores al primer valor
+        @media (max-width: list.nth($resolutions, 1)) {
+            background-image:
+                url("/images/hero-image/avif/hero-#{$name}-#{list.nth($resolutions, 3)}.avif"),
+                url("/images/hero-image/webp/hero-#{$name}-#{list.nth($resolutions, 3)}.webp"),
+                url("/images/hero-image/jpg/hero-#{$name}-#{list.nth($resolutions, 3)}.jpg");
         }
     }
 
@@ -101,7 +101,7 @@
                 font-family: 'Lato';
                 font-style: italic;
                 font-weight: normal;
-                line-height: 0.5;
+                line-height: 1;
                 margin-bottom: 2rem;
                 text-shadow: 2px 4px 2px var(--color-black);
             }

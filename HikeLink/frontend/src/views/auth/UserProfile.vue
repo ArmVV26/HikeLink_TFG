@@ -255,55 +255,6 @@
         }
     }
 
-    .routes-container {
-        flex: 1;
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 1rem 0;
-
-            .nav-btn, .page-btn {
-                font-size: 1.25rem;
-                padding: 0.35rem 0.85rem;
-                border: 2px solid var(--color-green);
-                border-radius: 25rem;
-                cursor: pointer;
-                transition: all 0.25s;
-
-                &:hover {
-                    background-color: var(--color-green);
-                    color: var(--color-white);
-                }
-
-            }
-            
-            .nav-btn:disabled {
-                display: none;
-            }
-
-            .page-btn:disabled {
-                border: 0px;
-                padding: 0;
-                color: var(--color-brown);
-                font-weight: 900;
-                cursor: default;
-
-                &:hover {
-                    background-color: transparent;
-                    color: var(--color-brown);
-                }
-            }
-
-            .active {
-                background-color: var(--color-green);
-                color: var(--color-white);
-            }
-        }
-    }
-
     .no-routes {
         display: flex;
         flex-direction: column;
@@ -331,6 +282,66 @@
 
         p {
             margin-bottom: 1rem;
+        }
+    }
+
+    @media (max-width: 1300px) {
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .user-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            width: 30rem;
+            height: 20rem;
+            
+            div:first-child {
+                border-bottom: none;
+                border-right: 2px solid var(--color-brown);
+                padding: 0;
+            }
+        }
+
+        .no-routes {
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .main-container {
+            width: 100%;
+            margin: 2rem 0;
+        }
+
+        .user-container {
+            width: 100%;
+            height: 100%;
+            padding: 1rem 0;
+            border-radius: 0;
+            box-shadow: none;
+            border-top: 5px solid var(--color-brown);
+            border-bottom: 5px solid var(--color-brown);
+
+            flex-direction: column;
+            gap: 0;
+
+            div:first-child {
+                width: 100%;
+                border-right: 0;
+                border-bottom: 5px solid var(--color-brown);
+                padding-bottom: 1rem;
+            }
+
+            div:last-child {
+                p {
+                    text-align: center;
+                }
+            }
         }
     }
 </style>

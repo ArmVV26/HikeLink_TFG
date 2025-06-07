@@ -343,4 +343,14 @@
             }
         }    
     }
+
+    @media (max-width: 400px) {
+        .route-form {
+            width: 100%;
+            padding: 1rem 0;
+            border-top: 5px solid var(--color-green);
+            border-bottom: 5px solid var(--color-green);
+            border-radius: 0;
+        }
+    }
 </style>

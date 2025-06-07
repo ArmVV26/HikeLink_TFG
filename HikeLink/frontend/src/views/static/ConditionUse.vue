@@ -72,7 +72,7 @@
 
 <style lang="scss" scoped>
     .condition-use {
-        width: 50%;
+        width: 50rem;
         margin: 2rem auto;
         padding: 2rem 4rem;
         box-shadow: 0px 0px 10px 0px var(--color-black);
@@ -124,6 +124,32 @@
 
             &:hover {
                 color: var(--color-vanille);
+            }
+        }
+    }
+
+    @media (max-width: 800px) {
+        .condition-use {
+            width: 100%;
+            padding: 1rem;
+            border-top: 5px solid var(--color-green);
+            border-bottom: 5px solid var(--color-green);
+            border-radius: 0;
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            p, li {
+                font-size: 0.85rem;
+            }
+
+            h3 {
+                font-size: 1.25rem;
+            }
+
+            li {
+                margin-left: 1rem;
             }
         }
     }

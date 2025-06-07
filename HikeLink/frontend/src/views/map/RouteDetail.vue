@@ -1,129 +1,133 @@
 <template>
     <div v-if="route">
-        <div class="header-info main-container">
-            <div class="route-type" v-html="routeType(route)"></div>
-            <h1>{{ route.title }}</h1>
-            <div>
-                <p>{{ formatDate(route.created_date) }}</p>
-                <CommonButton 
-                    :text="isFavorite ? 'Quitar Favorito' : 'Añadir a Favoritos'"
-                    :icon="'fa-solid fa-bookmark'"
-                    :thin="true"
-                    :route="''"
-                    :asButton="true"
-                    :disabled="!isAuthenticated"
-                    @click="toggleFavorite"
-                />
-                <CommonButton 
-                    v-if="isOwner"
-                    :text="'Modificar'"
-                    :icon="'fa-solid fa-pen-to-square'"
-                    :thin="true"
-                    :route="`/update-route/${route.slug}-${route.id}`"
-                />
+        <div class="main-container">
+            <div class="map-container">
+                <div class="route-type" v-html="routeType(route)"></div>
+                <h1>{{ route.title }}</h1>
+                <div class="date-buttons">
+                    <p>{{ formatDate(route.created_date) }}</p>
+                    <CommonButton 
+                        :text="isFavorite ? 'Quitar Favorito' : 'Añadir a Favoritos'"
+                        :icon="'fa-solid fa-bookmark'"
+                        :thin="true"
+                        :route="''"
+                        :asButton="true"
+                        :disabled="!isAuthenticated"
+                        @click="toggleFavorite"
+                    />
+                    <CommonButton 
+                        v-if="isOwner"
+                        :text="'Modificar'"
+                        :icon="'fa-solid fa-pen-to-square'"
+                        :thin="true"
+                        :route="`/update-route/${route.slug}-${route.id}`"
+                    />
+                </div>
+                
+                <ShowMap
+                    :detailed-map="false"
+                ></ShowMap>
             </div>
-        </div>
-
-        <div class="map-container-detail">
-            <ShowMap
-                :detailed-map="false"
-            ></ShowMap>
             
-            <div>
-                <div class="user-container">
-                    <img :src="getUserRouteIcon(route)" @error="handleImgError" class="avatar" />
-                    <p>{{ route.user.username }}</p>
-                </div>
-                <div class="route-detail-container">
-                    <h1 class="route-head">Estadísticas de la ruta</h1>
-                    <div class="table">
-                        <div class="row">
-                            <div>
-                                <h1>Distancia</h1>
-                                <p>{{ (route.distance / 1000).toFixed(1) }} km</p>
+            <div class="user-container">
+                <div class="user-wrapper">
+                    <div class="user-detail">
+                        <img :src="getUserRouteIcon(route)" @error="handleImgError" class="avatar" />
+                        <p :title="route.user.username">{{ route.user.username }}</p>
+                    </div>
+                    <div class="route-detail-container">
+                        <h1 class="route-head">Estadísticas de la ruta</h1>
+                        <div class="table">
+                            <div class="row">
+                                <div>
+                                    <h1>Distancia</h1>
+                                    <p>{{ (route.distance / 1000).toFixed(1) }} km</p>
+                                </div>
+                                 <div>
+                                    <h1>Dificultad</h1>
+                                    <p>{{ route.difficulty }}</p>
+                                </div>
                             </div>
-                             <div>
-                                <h1>Dificultad</h1>
-                                <p>{{ route.difficulty }}</p>
+                            <div class="row">
+                                <div>
+                                    <h1>Desnivel Positivo</h1>
+                                    <p v-if="elevationData">{{ elevationData.ascent }} m</p>
+                                </div>
+                                <div>
+                                    <h1>Desnivel Negativo</h1>
+                                    <p v-if="elevationData">{{ elevationData.descent }} m</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div>
-                                <h1>Desnivel Positivo</h1>
-                                <p v-if="elevationData">{{ elevationData.ascent }} m</p>
+                            <div class="row">
+                                <div>
+                                    <h1>Altitud Max.</h1>
+                                    <p v-if="elevationData">{{ elevationData.maxElevation }} m</p>
+                                </div>
+                                <div>
+                                    <h1>Altitud Min.</h1>
+                                    <p v-if="elevationData">{{ elevationData.minElevation }} m</p>
+                                </div>
                             </div>
-                            <div>
-                                <h1>Desnivel Negativo</h1>
-                                <p v-if="elevationData">{{ elevationData.descent }} m</p>
+                            <div class="row-single">
+                                <h1>Coordenadas Salida</h1>
+                                <p><strong>Lat: </strong>{{ route.start_latitude }}</p>
+                                <p><strong>Lon: </strong>{{ route.start_longitude }}</p>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div>
-                                <h1>Altitud Max.</h1>
-                                <p v-if="elevationData">{{ elevationData.maxElevation }} m</p>
+                            <div class="row-single">
+                                <h1>Coordenadas Llegada</h1>
+                                <p v-if="lastCoord"><strong>Lat: </strong>{{ lastCoord.lat }}</p>
+                                <p v-if="lastCoord"><strong>Lon: </strong>{{ lastCoord.lon }}</p>
                             </div>
-                            <div>
-                                <h1>Altitud Min.</h1>
-                                <p v-if="elevationData">{{ elevationData.minElevation }} m</p>
+                            <div class="row-single">
+                                <h1>Tiempo</h1>
+                                <p>{{ formatDuration(route.duration) }}</p>
                             </div>
-                        </div>
-                        <div class="row-single">
-                            <h1>Coordenadas Salida</h1>
-                            <p><strong>Lat: </strong>{{ route.start_latitude }}</p>
-                            <p><strong>Lon: </strong>{{ route.start_longitude }}</p>
-                        </div>
-                        <div class="row-single">
-                            <h1>Coordenadas Llegada</h1>
-                            <p v-if="lastCoord"><strong>Lat: </strong>{{ lastCoord.lat }}</p>
-                            <p v-if="lastCoord"><strong>Lon: </strong>{{ lastCoord.lon }}</p>
-                        </div>
-                        <div class="row-single">
-                            <h1>Tiempo</h1>
-                            <p>{{ formatDuration(route.duration) }}</p>
-                        </div>
-                        <div class="row-single">
-                            <h1>Valorar Ruta</h1>
-                            <RatingButton 
-                                :route-id="route.id"
-                                :route-user-id="route.user.id"
-                                @rating-updated="refreshRouteData"
-                            />
-                            <p>{{ route.average_rating }} / 5</p>
+                            <div class="row-single">
+                                <h1>Valorar Ruta</h1>
+                                <RatingButton 
+                                    :route-id="route.id"
+                                    :route-user-id="route.user.id"
+                                    @rating-updated="refreshRouteData"
+                                />
+                                <p>{{ route.average_rating }} / 5</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <RouteCarousel 
-            :img-carousel="true"
-            :img-urls="imgRoute"
-        />
-
-        <div class="description-route">
-            <h1>Descripción del Itinerario</h1>
-            <div v-html="route.description_html"></div>
-        </div>
-
-        <div class="comment-container">
-            <h1>Comentarios</h1>
-            <div class="comment-card" v-for="comment in route.comments" :key="comment">
-                <img :src="getIconUserComment(comment)" @error="handleImgError" class="avatar" ref="userImg" />
-                <div class="comment">
-                    <div>
-                        <h1>{{ comment.user.username }}</h1>
-                        <p>{{ formatDate(comment.created_date) }}</p>
-                    </div>
-                    <p>{{ comment.content }}</p>
-                </div>
+        <div class="content-wrapper">
+            <RouteCarousel 
+                :img-carousel="true"
+                :img-urls="imgRoute"
+            />
+    
+            <div class="description-route">
+                <h1>Descripción del Itinerario</h1>
+                <div class="description-text" v-html="route.description_html"></div>
             </div>
-
+    
+            <div class="comment-container">
+                <h1>Comentarios</h1>
+                <div class="comment-card" v-for="comment in route.comments" :key="comment">
+                    <img :src="getIconUserComment(comment)" @error="handleImgError" class="avatar" ref="userImg" />
+                    <div class="comment">
+                        <div>
+                            <h1>{{ comment.user.username }}</h1>
+                            <p>{{ formatDate(comment.created_date) }}</p>
+                        </div>
+                        <p>{{ comment.content }}</p>
+                    </div>
+                </div>
+    
+            </div>
+            
+            <AddComment 
+                :route-id="route.id"
+                @comment-submitted="refreshRouteData"
+            />
         </div>
-        
-        <AddComment 
-            :route-id="route.id"
-            @comment-submitted="refreshRouteData"
-        />
     </div>
     
     <div v-else>
@@ -335,184 +339,375 @@
 
 <style lang="scss" scoped>
     .main-container {
-        margin: 2rem 40rem 0 10rem;    
-    }
-    
-    .map-container-detail {
-        margin: 0.25rem 0 0 10rem;
-        display: flex;
-        align-items: center;
-        gap: 4rem;
-    }
-
-    .header-info {
-        .route-type {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: var(--color-dark-grey);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }        
-
-        h1 {
-            font-size: 1.75rem;
-            font-family: "Montserrat-Bold";
-            font-weight: 900;
-            text-align: left;
-        }
-
-        div:last-child {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-
-            p {
-                flex: 1;
-                font-size: 1rem;
+        display: grid;
+        grid-template-columns: 1fr 25rem;
+        gap: 1rem;
+        margin: 2rem 10rem;
+        
+        .map-container {
+            .route-type {
+                font-size: 1.5rem;
                 font-weight: 900;
                 color: var(--color-dark-grey);
-            }
-        }
-    }
-
-    .user-container {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-        padding: 0.5rem;
-        background-color: var(--color-vanille);
-        border-radius: 25px;
-
-        img {
-            width: auto;
-            height: 8rem;
-            border-radius: 25px;
-        }
-
-        p {
-            font-weight: 900;
-            font-size: 1.25rem;
-        }
-    }
-
-    .route-detail-container {
-        .route-head {
-            font-size: 1.25rem;
-            text-align: left;
-            margin: 1rem 0 0.25rem;
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            border-top: 2px solid var(--color-grey);
-            text-align: center;
-
-            div {
-                width: 10rem;
-                padding-top: 0.5rem;
-                margin: 0 1rem;
-            }
-
-            div:first-child {
-                border-right: 2px solid var(--color-grey);
-            }
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }        
 
             h1 {
-                font-size: 1rem;
-                color: var(--color-green);
-                line-height: 1;
-            }
-
-            p {
+                font-size: 1.75rem;
+                font-family: "Montserrat-Bold";
                 font-weight: 900;
+                text-align: left;
             }
 
-            strong {
-                color: var(--color-green);
-            }
-        }
+            .date-buttons {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 0.25rem;
 
-        .row-single {
-            display: grid;
-            grid-template-columns: 1fr;
-            border-top: 2px solid var(--color-grey);
-            text-align: center;
-            padding-top: 0.5rem;
-
-            h1 {
-                font-size: 1rem;
-                color: var(--color-green);
-                line-height: 1;
-            }
-
-            p {
-                font-weight: 900;
-            }
-
-            strong {
-                color: var(--color-green);
+                p {
+                    flex: 1;
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--color-dark-grey);
+                }
             }
         }
-    }
 
-    .description-route {
-        display: flex;
-        flex-direction: column;
-        margin: 2rem 10rem 2rem;
-        
-        h1 {
-            font-family: "Montserrat-Bold";
-            font-size: 1.5rem;
-            color: var(--color-green);
-            text-align: left;
-        }
-    }
-
-    .comment-container {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin: 0 10rem 2rem;
-        padding-top: 1rem;
-        border-top: 3px solid var(--color-light-green);
-
-        h1 {
-            font-family: "Montserrat-Bold";
-            font-size: 1.5rem;
-            color: var(--color-green);
-            text-align: left;
-        }
-
-        .comment-card {
-            display: flex;
-            gap: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 5px dotted var(--color-grey);
-
-            img {
-                width: 4rem;
-                height: 4rem;
+        .user-container {
+            align-self: flex-end;
+            
+            .user-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 0.5rem;
+                background-color: var(--color-vanille-opacity);
                 border-radius: 25px;
-                object-fit: cover;
-                border: 2px solid var(--color-light-green);
-            }
-
-            .comment {
-                div {
+                box-shadow: 2px 2px 5px 1px var(--color-black); 
+                
+                .user-detail {
                     display: flex;
                     align-items: center;
-                    gap: 1rem;
-
-                    h1 {
-                        font-size: 1.25rem;
-                        color: var(--color-light-green);
+                    gap: 1rem;                
+    
+                    img {
+                        max-width: 10rem;
+                        height: 8rem;
+                        border-radius: 25px;
+                        border: 2px solid var(--color-green);
                     }
-                    
+            
                     p {
+                        font-family: "Montserrat-Bold";
                         font-weight: 900;
-                        color: var(--color-grey);
+                        font-size: 1.25rem;
+                    }
+    
+                }
+    
+                .route-detail-container {
+                    .route-head {
+                        font-size: 1.25rem;
+                        text-align: left;
+                        margin: 1rem 0 0.25rem;
+                    }
+    
+                    .row {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        border-top: 2px solid var(--color-grey);
+                        text-align: center;
+    
+                        div {
+                            width: 10rem;
+                            padding-top: 0.5rem;
+                            margin: 0 1rem;
+                        }
+    
+                        div:first-child {
+                            border-right: 2px solid var(--color-grey);
+                        }
+    
+                        h1 {
+                            font-size: 1rem;
+                            color: var(--color-green);
+                            line-height: 1;
+                        }
+    
+                        p {
+                            font-weight: 900;
+                        }
+    
+                        strong {
+                            color: var(--color-green);
+                        }
+                    }
+    
+                    .row-single {
+                        display: grid;
+                        grid-template-columns: 1fr;
+                        border-top: 2px solid var(--color-grey);
+                        text-align: center;
+                        padding-top: 0.5rem;
+    
+                        h1 {
+                            font-size: 1rem;
+                            color: var(--color-green);
+                            line-height: 1;
+                        }
+    
+                        p {
+                            font-weight: 900;
+                        }
+    
+                        strong {
+                            color: var(--color-green);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .content-wrapper {  
+        margin: 0 10rem;
+
+        .description-route {
+            display: flex;
+            flex-direction: column;
+            margin-top: 1rem;
+            
+            h1 {
+                font-family: "Montserrat-Bold";
+                font-size: 1.5rem;
+                color: var(--color-green);
+                text-align: left;
+            }
+        }
+    
+        .comment-container {
+            display: flex;
+            flex-direction: column;
+            margin: 1rem 0;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 3px solid var(--color-light-green);
+    
+            h1 {
+                font-family: "Montserrat-Bold";
+                font-size: 1.5rem;
+                color: var(--color-green);
+                text-align: left;
+            }
+    
+            .comment-card {
+                display: flex;
+                gap: 1rem;
+                padding-bottom: 1rem;
+                border-bottom: 5px dotted var(--color-grey);
+    
+                img {
+                    width: 4rem;
+                    height: 4rem;
+                    border-radius: 25px;
+                    object-fit: cover;
+                    border: 2px solid var(--color-light-green);
+                }
+    
+                .comment {
+                    div {
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
+    
+                        h1 {
+                            font-size: 1.25rem;
+                            color: var(--color-light-green);
+                        }
+                        
+                        p {
+                            font-weight: 900;
+                            color: var(--color-grey);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 1450px) {
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            margin: 2rem;
+
+            .user-container {
+                align-self: center;
+
+                .user-wrapper {
+                    flex-direction: row;
+
+                    .user-detail {
+                        width: 12rem;
+                        flex-direction: column;
+
+                        p {
+                            white-space: nowrap;         
+                            overflow: hidden;             
+                            text-overflow: ellipsis; 
+                            max-width: 100%;
+                            display: block;
+                        }
+                    }
+
+                    .route-detail-container {
+                        max-width: 30rem;
+                        
+                        .table {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            grid-template-rows: repeat(3, 5rem);
+
+                            
+                            .row {
+                                grid-template-columns: 1fr 1fr;
+                                align-items: center;
+                                
+                                div {
+                                    height: 100%;
+                                    border-right: 2px solid var(--color-grey);
+                                    width: auto;
+                                    margin: 0;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+
+                                }
+
+                                &:nth-child(3) {
+                                    border-bottom: 2px solid var(--color-grey);
+                                }
+                            }
+                            
+                            .row-single {
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                align-items: center;
+                                padding: 0.25rem 0;
+                                
+                                &:nth-child(4) {
+                                    grid-column: 2/3;
+                                    grid-row: 1/2;
+                                }
+    
+                                &:nth-child(5) {
+                                    grid-column: 2/3;
+                                    grid-row: 2/3;
+                                }
+
+                                &:nth-child(6) {
+                                    border-bottom: 2px solid var(--color-grey);       
+                                }
+
+                                &:nth-child(7) {
+                                    border: 0;
+                                    grid-column: 1/3;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        .content-wrapper {
+            margin: 0 2rem;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .main-container {
+            margin: 2rem 0;
+
+            .map-container {
+                .route-type, h1, .date-buttons {
+                    margin: 0.25rem 1rem;
+                }
+
+                h1 {
+                    text-align: center;
+                    font-size: 1.5rem;
+                    line-height: 1;
+                }
+
+                .date-buttons {
+                    justify-content: center;
+                    margin: 0.25rem 0;
+                    position: relative;
+                    padding-top: 1.5rem;
+                    gap: 0.15rem;
+
+                    p {
+                        position: absolute;
+                        top: 0;
+                    }
+                }
+            }
+
+            .user-container {
+                .user-wrapper {
+                    flex-direction: column;
+                    margin: 0 1rem;
+                }
+
+                .route-detail-container {
+                    h1 {
+                        font-size: 0.95rem;
+                    }
+
+                    p {
+                        font-size: 0.85rem;
+                    }
+                }
+            }
+        }
+
+        .content-wrapper {
+            margin: 0 1rem;
+
+            .description-route {
+                h1 {
+                    font-size: 1.25rem;
+                }
+
+                .description-text {
+                    font-size: 0.95 rem;
+                }
+            }
+
+            .comment-container {
+                .comment-card {
+                    .comment {
+                        div {
+                            align-items: flex-start;
+                            flex-direction: column;
+                            gap: 0;
+                            margin-bottom: 0.5rem;
+
+                            h1 {
+                                line-height: 1;
+                                font-size: 1.25rem;
+                            }
+
+                        }
+
+                        p {
+                            font-size: 0.95rem;
+                        }
                     }
                 }
             }

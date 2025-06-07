@@ -4,11 +4,15 @@
     <h2>Más que rutas, compartimos experiencias. Así nació HikeLink.</h2>
   </HeroImage>
 
-  <div class="links">
-    <h1>Sobre Nosotros</h1>
-    <a href="#aboutus">Quiénes Somos</a>
-    <a href="#values">Nuestros Valores</a>
-    <a href="#living">Nuestros Forma de Vivir</a>
+  <div class="links-container">
+    <div class="links">
+      <h1>Sobre Nosotros</h1>
+      <nav>
+        <a href="#aboutus">Quiénes Somos</a>
+        <a href="#values">Nuestros Valores</a>
+        <a href="#living">Nuestros Forma de Vivir</a>
+      </nav>
+    </div>
   </div>
 
   <div id="aboutus" class="about-us">
@@ -78,31 +82,42 @@
 </script>
 
 <style lang="scss" scoped>
-  .links {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    margin: 2rem 30% 0;
-    border-bottom: 3px solid var(--color-black);
+  .links-container {
+    text-align: center;
 
-    h1 {
-      font-family: "Montserrat-Bold";
-      font-size: 2rem;
-      font-style: italic;
-      color: var(--color-green);
-      margin: 0;
-      padding-bottom: 1rem;
-      line-height: 0;
-    }
-
-    a {
-      padding-bottom: 0.5rem;
-      border-bottom: 3px solid transparent;
-      transition: all 0.25s;
-
-      &:hover {
-        font-weight: 900;
-        border-bottom-color: var(--color-green);
+    .links {
+      display: inline-flex;   
+      align-items: center;
+      gap: 2rem;
+      margin: 2rem auto 0;
+      border-bottom: 3px solid var(--color-black);
+  
+      h1 {
+        font-family: "Montserrat-Bold";
+        font-size: 2rem;
+        font-style: italic;
+        color: var(--color-green);
+        margin: 0;
+        padding-bottom: 1rem;
+        line-height: 0;
+        white-space: nowrap;
+      }
+      
+      nav {
+        display: flex;
+        gap: 2rem;
+        
+        a {
+          padding-bottom: 0.5rem;
+          border-bottom: 3px solid transparent;
+          white-space: nowrap;
+          transition: all 0.25s;
+    
+          &:hover {
+            font-weight: 900;
+            border-bottom-color: var(--color-green);
+          }
+        }
       }
     }
   }
@@ -227,6 +242,154 @@
 
     .about-us-img-container {
       margin: 2rem auto;
+    }
+  }
+
+  @media (max-width: 1440px) {
+    .about-us {
+      p {
+        width: 70%;
+      }
+
+      .collage {
+        width: 80%;
+      }
+    }
+
+    .living {
+      p {
+        width: 70%;
+      }
+
+      .about-us-img-container {
+        margin: 2rem 5rem;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .links-container {
+      .links {
+        flex-direction: column;
+        gap: 1rem;
+
+        h1 {
+          padding-bottom: 0;
+        }
+
+        nav {
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+
+    .about-us {
+      .collage {
+        display: flex;
+        flex-direction: column;
+
+        img {
+          width: 100%;
+          height: 20rem;
+        }
+
+        .img1, .img2, .img3 {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 470px) {
+    .links-container {
+        .links {
+          h1 {
+            font-size: 1.5rem;
+          }
+
+          nav {
+            gap: 1rem;
+
+            a {
+              font-size: 0.85rem;
+            }
+          }
+        }
+    }
+
+    .about-us {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      p {
+        width: 90%;
+        font-size: 0.85rem;
+      }
+
+      .collage {
+        width: 90%;
+      }
+    }
+
+    .values {
+      margin-top: 0.5rem;
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      div {
+        .value-card {
+          h1 {
+            font-size: 1.25rem;
+          }
+
+          p {
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+
+    .living {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1rem;
+      }
+
+      p {
+        font-size: 0.85rem;
+      }
+
+      .about-us-img-container {
+        margin: 2rem 1rem;
+      }
+    }
+  }
+
+  @media (max-width: 370px) {
+    .links-container {
+      .links {
+        width: 100%;
+        margin: 2rem 0;
+
+        nav {
+          gap: 0;
+          flex-direction: column;
+
+          a {
+            padding-bottom: 0;
+          }
+        }
+      }
     }
   }
 </style>

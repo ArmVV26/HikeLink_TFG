@@ -135,4 +135,32 @@
     i {
         margin-right: 0.5rem;
     }
+
+    @media (max-width: 500px) {
+        .common-button {
+            font-size: 1.25rem;
+            padding: 1rem;
+        }
+
+        .hero-button {
+            padding: 1rem 2rem;
+            font-size: 2rem;
+        }
+
+        .thin-button {
+            padding: 0.25rem 1rem;
+        }
+    }
+
+    @media (max-width: 350px) {
+        .common-button {
+            font-size: 1rem;
+            padding: 0.5rem;
+        }
+
+        .hero-button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+        }
+    }
 </style>

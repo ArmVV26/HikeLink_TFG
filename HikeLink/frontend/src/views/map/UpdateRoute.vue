@@ -219,7 +219,7 @@
     }
 
     .route-form {
-        width: 45%;
+        width: 50rem;
         padding: 2rem 1.5rem;
         background-color: var(--color-white);
         border-radius: 25px;
@@ -385,5 +385,25 @@
                 }
             }
         }    
+    }
+
+    @media (max-width: 800px) {
+        .route-form {
+            width: 100%;
+            padding: 1rem 0;
+            border-top: 5px solid var(--color-green);
+            border-bottom: 5px solid var(--color-green);
+            border-radius: 0;
+        }
+
+        .route-form {
+            form {
+                .buttons-container {
+                    button {
+                        padding: 0.25rem 0.5rem;
+                    }
+                }
+            }
+        }
     }
 </style>

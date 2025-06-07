@@ -100,21 +100,28 @@
 
 <style lang="scss" scoped>
   .history {
-    width: 100%;
-    background-color: var(--color-vanille);
     display: flex;
-    justify-content: center;
-    gap: 5rem;
-    padding: 3rem 20%;
-    margin-bottom: 48px;
- 
+    justify-content: space-around;
+    align-items: stretch;
+    background-color: var(--color-vanille);
+    width: 100%;
+    gap: 2rem;
+    padding: 3rem 15%;
+    margin-bottom: 2rem;
+    
+    .history-img-container,
+    .history-content {
+      flex: 1 1 0;
+      max-width: 80rem;
+      display: flex;
+    }
+
     .history-img-container {
-      flex: 1;
+      align-items: stretch;
     }
     
     .history-content {
-      flex: 1;
-      display: flex;
+      width: 80rem;
       flex-direction: column;
       
       h1 {
@@ -130,14 +137,11 @@
         font-size: 1.25rem;
         font-weight: 900;
         text-align: justify;
-        margin-top: 1.25rem;
         color: var(--color-brown);
       }
       
       div {
-        justify-self: end;
-        align-self: flex-start;
-        margin-top: auto;
+        margin-top: 2rem;
         margin-bottom: 0.75rem;
       }
     }
@@ -147,8 +151,8 @@
     display: flex;
     flex-direction: row;
     gap: 2rem;
-    padding: 0 20%;
-    margin-bottom: 48px;
+    padding: 0 15%;
+    margin-bottom: 2rem;
     
     div {
       width: 45rem;
@@ -188,6 +192,66 @@
       margin-bottom: 2rem;
     }
   }
+
+  @media (max-width: 1150px) {
+    .history {
+      flex-direction: column;
+      padding: 3rem;
+      
+      .history-img-container {
+        width: 100%;
+      }
+
+      .history-content {
+        width: 100%;
+
+        h1 {
+          text-align: center;
+        }
+
+        p {
+          text-align: center;
+        }
+
+        div {
+          align-self: center;
+          margin-top: 2rem;
+        }
+      }
+    }
+
+    .tutorial {
+      padding: 0 1rem;
+    }
+  }
+  
+  @media (max-width: 750px) {
+    .tutorial {
+      flex-direction: column;
+      align-items: center;
+
+      div {
+        width: 25rem;
+      }
+
+      .account, .find-person, .upload {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  @media (max-width: 450px) {
+    .tutorial {
+      padding: 0;
+
+      div {
+        width: 100%;
+        border-radius: 0;
+        padding: 1rem;
+      }
+    }
+  }  
 </style>
 
 

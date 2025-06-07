@@ -133,6 +133,7 @@
                             display: flex;
                             align-items: center;
                             gap: 0.5rem;
+                            width: 100%;
                         }
                     }
                 }
@@ -151,5 +152,11 @@
         border: 2px solid var(--color-light-green);
         border-radius: 10rem;
         padding: 1rem;
+    }
+
+    @media (max-width: 1250px) {
+        .tutorial-map > p:nth-child(2) {
+            width: 100%;
+        }
     }
 </style>

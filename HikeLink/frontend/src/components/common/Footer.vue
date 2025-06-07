@@ -149,6 +149,10 @@
                 gap: 1rem;
     
                 .links {
+                    h2 {
+                        line-height: 1;
+                    }
+
                     a {
                         text-align: center;
                         padding: 0;
@@ -196,25 +200,75 @@
                     
                     &:first-of-type {
                         grid-column: 1;
-                        grid-row: 1;
+                        grid-row: 2;
                     }
     
                     &:nth-of-type(2) {
                         grid-column: 1;
-                        grid-row: 2;
+                        grid-row: 3;
                     }
                 }
     
                 .logo {
                     grid-column: 1;
-                    grid-row: 3;
+                    grid-row: 1;
                     justify-self: center;
                 }
     
                 .social {
+                    display: flex;
+                    gap: 1rem;
                     grid-column: 1;
                     grid-row: 4;
                     justify-self: center;
+
+                    .fa-brands {
+                        font-size: 3rem;
+                    }
+                }
+            }
+
+            .second-counter {
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+                gap: 0.25rem;
+                text-align: center;
+
+                p {
+                    grid-row: 2;
+                }
+
+                .extra-links {
+                    grid-row: 1;
+                    display: flex;
+                    justify-content: center;
+                    gap: 2rem;
+                    padding: 0;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 400px) {
+        footer {
+            .first-counter {
+                .links {
+                    h2 {
+                        font-size: 1.5rem;
+                    }
+
+                    a {
+                        font-size: 1.25rem;
+                    }
+                }
+            }
+
+            .second-counter {
+                font-size: 0.85rem;
+
+                .extra-links {
+                    gap: 0.5rem;
                 }
             }
         }

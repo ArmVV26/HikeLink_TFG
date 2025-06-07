@@ -46,6 +46,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 2rem 0;
     }
 
     .email-form {
@@ -125,6 +126,17 @@
             color: var(--color-red-400);
             font-size: 1rem;
             font-weight: 900;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .email-form {
+            width: 100%;
+            max-width: 100%;
+            padding: 1rem 0.25rem;
+            border-top: 5px solid var(--color-green);
+            border-bottom: 5px solid var(--color-green);
+            border-radius: 0;
         }
     }
 </style>

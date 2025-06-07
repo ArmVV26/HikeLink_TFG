@@ -58,8 +58,7 @@
 
 <style lang="scss" scoped>
     .faq {
-        width: 50%;
-        height: 90%;
+        width: 50rem;
         margin: 2rem auto;
         padding: 2rem 4rem;
         box-shadow: 0px 0px 10px 0px var(--color-black);
@@ -109,6 +108,30 @@
         strong {
             font-weight: 900;
             color: var(--color-green);
+        }
+    }
+
+    @media (max-width: 800px) {
+        .faq {
+            width: 100%;
+            padding: 1rem;
+            border-top: 5px solid var(--color-green);
+            border-bottom: 5px solid var(--color-green);
+            border-radius: 0;
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                h3 {
+                    font-size: 1.25rem;
+                }
+            }
+            
+            p {
+                font-size: 0.85rem;
+            }
         }
     }
 </style>

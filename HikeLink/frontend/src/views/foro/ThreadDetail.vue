@@ -2,12 +2,18 @@
     <div v-if="thread" class="main-container">
         <div class="thread-container">
             <div class="thread-main">
-                <img :src="getIconUserThread(thread.user)"
-                    @error="handleImgError"
-                    class="avatar-thread"
-                    alt="Imagen del Usuario"
-                /> 
+                <div class="avatar-delete">
+                    <img :src="getIconUserThread(thread.user)"
+                        @error="handleImgError"
+                        class="avatar-thread"
+                        alt="Imagen del Usuario"
+                    />
     
+                    <div v-if="isOwner" class="delete-button">
+                        <p @click="showDeleteModal = true">Eliminar</p>
+                    </div>
+                </div>
+                
                 <div class="content">
                     <div class="user-date">
                         <h1>{{ thread.user.username }}</h1>
@@ -15,10 +21,6 @@
                     </div>
                     <h1>{{ thread.title }}</h1>
                     <p>{{ thread.content }}</p>
-                </div>
-
-                <div v-if="isOwner" class="delete-button">
-                    <p @click="showDeleteModal = true">Eliminar Hilo</p>
                 </div>
             </div>
     
@@ -175,32 +177,60 @@
                 box-shadow: 2px 2px 5px 1px var(--color-black); 
                 border-radius: 25px;
 
-                .avatar-thread {
-                    width: 6rem;
-                    height: 6rem;
-                    object-fit: cover;
-                    border-radius: 25px;
-                    border: 2px solid var(--color-green);
+                .avatar-delete {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 0.5rem;
+
+                    .avatar-thread {
+                        width: 6rem;
+                        height: 6rem;
+                        object-fit: cover;
+                        border-radius: 25px;
+                        border: 2px solid var(--color-green);
+                    }
+
+                    .delete-button {
+                        background-color: var(--color-red-500);
+                        border: 2px solid var(--color-red-700);
+                        border-radius: 25px;
+                        padding: 0.5rem 1rem;
+                        cursor: pointer;
+                        transition: all 0.25s;
+
+                        &:hover {
+                            background-color: var(--color-red-400);
+                        }
+
+                        p {
+                            font-weight: 900;
+                            color: var(--color-white);
+                        }
+                    }
                 }
 
                 .content {
                     display: flex;
                     flex-direction: column;
-
+                    
                     .user-date {
                         display: flex;
                         align-items: center;
                         gap: 1rem;
+                        margin-bottom: 1rem;
 
                         h1 {
                             font-family: "Montserrat-Bold";
                             font-size: 1.25rem;
                             color: var(--color-green);
+                            line-height: 0;
                         }
 
                         p {
                             font-weight: 900;
-                            color: var(--color-black);
+                            color: var(--color-brown);
                         }
                     }
 
@@ -220,27 +250,6 @@
                         -webkit-box-orient: vertical;
                         overflow: hidden;
                         text-overflow: ellipsis;
-                    }
-                }
-
-                .delete-button {
-                    position: absolute;
-                    top: 0.5rem;
-                    right: 1rem;
-                    background-color: var(--color-red-500);
-                    border: 2px solid var(--color-red-700);
-                    border-radius: 25px;
-                    padding: 0.5rem 1rem;
-                    cursor: pointer;
-                    transition: all 0.25s;
-
-                    &:hover {
-                        background-color: var(--color-red-400);
-                    }
-
-                    p {
-                        font-weight: 900;
-                        color: var(--color-white);
                     }
                 }
             }
@@ -268,6 +277,7 @@
                             border-radius: 25px;
                             border: 2px solid var(--color-green);
                         }
+
                         .content {
                             display: flex;
                             flex-direction: column;
@@ -279,13 +289,13 @@
 
                                 h1 {
                                     font-family: "Montserrat-Bold";
-                                    font-size: 1.5rem;
+                                    font-size: 1.25rem;
                                     color: var(--color-green);
                                 }
 
                                 p {
                                     font-weight: 900;
-                                    color: var(--color-black);
+                                    color: var(--color-brown);
                                 }
                             }
 
@@ -301,6 +311,79 @@
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .main-container {
+            width: 100%;
+
+            .thread-container {
+                margin: 2rem 1rem;
+            }
+        }
+
+        .content {
+            .user-date {
+                h1 {
+                    font-size: 1rem !important;
+                }
+    
+                p {
+                    font-size: 0.85rem !important;
+                }
+            }
+
+            h1 {
+                font-size: 1.5rem !important;
+            }
+        }
+
+        .avatar-thread {
+            width: 4.5rem !important;
+            height: 4.5rem !important;
+        }
+
+        .thread-main, .comment-main {
+            grid-template-columns: 5rem 1fr !important;
+        } 
+
+        .delete-button {
+            padding: 0.25rem 0.5rem !important;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .main-container {
+            .thread-container {
+                padding: 0.5rem 0.25rem;
+                margin: 2rem 0;
+                border-radius: 0;
+                border-top: 5px solid var(--color-brown);
+                border-bottom: 5px solid var(--color-brown);
+            }
+        }
+
+        .content {
+            .user-date {
+                align-items: normal !important;
+                flex-direction: column;
+                gap: 0.25rem !important;
+                margin: 0.5rem 0 !important;
+
+                h1 {
+                    text-align: left;
+                    line-height: 0;
+                }
+            }
+
+            h1 {
+                font-size: 1rem !important;
+            }
+
+            p {
+                font-size: 0.85rem !important;
             }
         }
     }

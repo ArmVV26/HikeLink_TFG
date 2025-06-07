@@ -18,8 +18,9 @@
                     </div>
                 </div>
                 <div class="card-right">
-                    <h1>{{ route.title }}</h1>
+                    <h1 :title="route.title">{{ route.title }}</h1>
                     <p class="type">{{ route.type }}</p>
+                    <p class="created-date">{{ formatDate(route.created_date) }}</p>
                     <div class="description" v-html="route.description_html"></div>
                     <p :style="{color: getColorByOrigin(route.origin)}" class="origin">{{ route.origin }}</p>
                     <div class="route-stats">
@@ -34,10 +35,9 @@
                         </p>
                         <p class="rating">
                             <i v-for="(star, index) in getRanting(route.average_rating)" :key="index" :class="star"></i>
-                            {{ route.average_rating }}
+                            <div>{{ route.average_rating }}</div>
                         </p>
                     </div>
-                    <p class="created-date">{{ formatDate(route.created_date) }}</p>
                 </div>
             </router-link>
         </div>
@@ -239,6 +239,7 @@
                     position: relative;
                     display: flex;
                     flex-direction: column;
+                    min-width: 0;
 
                     h1 {
                         font-family: "Montserrat-Bold";
@@ -246,6 +247,11 @@
                         font-size: 2rem;
                         line-height: 1;
                         text-align: left;
+                        white-space: nowrap;         
+                        overflow: hidden;             
+                        text-overflow: ellipsis; 
+                        max-width: 100%;
+                        display: block;
                     }
 
                     .type {
@@ -255,7 +261,7 @@
                     }
 
                     .description {
-                        margin: 1rem 0;
+                        margin: 1rem 0 0.25rem;
                         max-width: 100%;
                         display: -webkit-box;
                         line-clamp: 3;
@@ -263,6 +269,7 @@
                         -webkit-box-orient: vertical;
                         overflow: hidden;
                         text-overflow: ellipsis;
+                        text-indent: 2rem;
                     }
 
                     .origin {
@@ -271,23 +278,37 @@
 
                     .route-stats {
                         display: flex;
-                        gap: 10%;
+                        justify-self: flex-end;
+                        gap: 3rem;
+                        margin-top: 3.5rem;
                         font-weight: 900;
+                        font-size: 1rem;
+
                         i {
                             color: var(--color-green);
                         }
                         
-                        .rating i {
-                            color: gold;
-                            text-shadow: 0px 0px 2px var(--color-black);
+                        .rating {
+                            display: flex;
+                            align-items: center;
+                            
+                            i {
+                                color: gold;
+                                text-shadow: 0px 0px 2px var(--color-black);
+                            }
+
+                            div {
+                                margin-left: 0.25rem;
+                            }
                         }
+
                     }
 
                     .created-date {
                         position: absolute;
                         font-weight: 900;
-                        bottom: 1rem;
-                        right: 1rem;
+                        bottom: 0.25rem;
+                        right: 0.5rem;
                         color: var(--color-light-green);
                         text-align: right;
                     }
@@ -338,6 +359,138 @@
         .active {
             background-color: var(--color-green);
             color: var(--color-white);
+        }
+    }
+
+    @media (max-width: 930px) {
+        .route-wrapper {
+            .route-card {
+                a {
+                    grid-template-columns: 15rem 1fr;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .route-wrapper {
+            .route-card {
+                a {
+                    display: flex;
+                    flex-direction: column-reverse;
+
+                    .card-left {
+                        position: relative;
+                        justify-content: center;
+                        align-items: center;
+
+                        .route-img {
+                            height: 20rem;
+                        }
+
+                        div {
+                            flex-direction: row-reverse;
+                            gap: 0.5rem;
+                            position: absolute;
+                            bottom: 0.5rem;
+                            right: 0.5rem;
+
+                            background-color: var(--color-green);
+                            border-radius: 25px;
+                            padding: 0.25rem 0.25rem;
+                            box-shadow: 2px 2px 5px 1px var(--color-black);
+
+                            .avatar-route {
+                                width: 3.5rem;
+                                height: 3.5rem;
+                                border-color: var(--color-light-green);
+                            }
+
+                            p {
+                                color: var(--color-white);
+                            }
+                        }
+                    }
+
+                    .card-right {
+                        h1 {
+                            font-size: 1.5rem;
+                            text-align: center;
+                            display: -webkit-box;
+                            line-clamp: 2;
+                            -webkit-line-clamp: 2;       
+                            -webkit-box-orient: vertical;
+                            white-space: wrap;
+                        }
+
+                        .type {
+                            text-align: center;
+                        }
+
+                        .description {
+                            margin: 0 0 0.25rem;
+                        }
+
+                        .route-stats {
+                            justify-content: space-around;
+                            margin-top: 0.5rem;
+                        }
+
+                        .created-date {
+                            position: relative;
+                            text-align: left;
+                            padding-left: 0.5rem;
+                            margin-top: 1rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 500px) {
+        .route-wrapper {
+            padding: 0 0.5rem;
+
+            .route-card {
+                a {
+                    .card-left {
+                        .route-img {
+                            height: 10rem;
+                        }
+
+                        div {
+                            .avatar-route {
+                                width: 2rem;
+                                height: 2rem;
+                            }
+
+                            p {
+                                font-size: 0.75rem;
+                            }
+                        }
+                    }
+
+                    .card-right {
+                        .route-stats {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            margin: auto;
+                            text-align: center;
+                            gap: 1rem;
+                        }
+                    }
+                }
+            }
+        }
+
+        .pagination {
+            gap: 0.5rem;
+
+            .nav-btn, .page-btn {
+                font-size: 1rem;
+                padding: 0.25rem 0.5rem;
+            }
         }
     }
 </style>

@@ -145,8 +145,8 @@
 
             a {
                 display: grid;
-                grid-template-columns: 10rem 1fr 10rem;
-                gap: 1rem;
+                grid-template-columns: 10rem 1fr 8rem;
+                gap: 0.5rem;
 
                 .card-left {
                     display: flex;
@@ -173,6 +173,8 @@
                     position: relative;
                     display: flex;
                     flex-direction: column;
+                    min-width: 0;
+                    padding-bottom: 2rem;
 
                     h1 {
                         font-family: "Montserrat-Bold";
@@ -180,6 +182,12 @@
                         font-size: 2rem;
                         line-height: 1;
                         text-align: left;
+                        display: -webkit-box;
+                        line-clamp: 2;
+                        -webkit-line-clamp: 2;       
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
 
                     p {
@@ -191,6 +199,7 @@
                         -webkit-box-orient: vertical;
                         overflow: hidden;
                         text-overflow: ellipsis;
+                        text-indent: 2rem;
                     }
 
                     .created-date {
@@ -268,6 +277,110 @@
         .active {
             background-color: var(--color-green);
             color: var(--color-white);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .foro-wrapper {
+            .foro-card {
+                a {
+                    grid-template-columns: 1fr 1fr;
+                    grid-template-rows: 1fr 5rem;
+                    gap: 0.25rem;
+
+                    .card-left {
+                        flex-direction: row-reverse;
+                        grid-column: 1 / 2;
+                        grid-row: 2 / 3;
+                        justify-self: flex-end;
+
+                        .avatar-thread {
+                            width: 4rem;
+                            height: 4rem;
+                        }
+
+                        h1 {
+                            font-size: 1.25rem;
+                            white-space: nowrap;         
+                            overflow: hidden;             
+                            text-overflow: ellipsis; 
+                            max-width: 100%;
+                            display: block;
+                        }
+                    }
+
+                    .card-center {
+                        padding: 0.5rem 1rem 1.5rem;
+                        grid-column: 1 / 3;
+                        grid-row: 1 / 2;
+
+                        h1 {
+                            text-align: center;
+                            font-size: 1.5rem;
+                        }
+
+                        .created-date {
+                            right: 1rem;
+                        }
+                    }
+
+                    .card-right {
+                        grid-column: 2 / 3;
+                        grid-row: 2 / 3;
+                        justify-self: flex-start;
+                        align-self: center;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 500px) {
+        .foro-wrapper {
+            .foro-card {
+                margin: 0 0.5rem;
+
+                a {
+                    grid-template-columns: 1fr;
+                    grid-template-rows: 1fr 3rem 3rem;
+                    gap: 0;
+
+                    .card-left {
+                        grid-column: 1 / 2;
+                        grid-row: 2 / 3;
+                        justify-self: center;
+
+                        .avatar-thread {
+                            width: 3rem;
+                            height: 3rem;
+                        }
+                    }
+
+                    .card-center {
+                        grid-column: 1 / 2;
+                        grid-row: 1 / 2;
+                    }
+
+                    .card-right {
+                        grid-column: 1 / 2;
+                        grid-row: 3 / 4;
+                        justify-self: center;
+
+                        i {
+                            font-size: 2rem;
+                        }
+                    }
+                }
+            }
+        }
+
+        .pagination {
+            gap: 0.5rem;
+
+            .nav-btn, .page-btn {
+                font-size: 1rem;
+                padding: 0.25rem 0.5rem;
+            }
         }
     }
 </style>

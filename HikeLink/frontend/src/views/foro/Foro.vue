@@ -23,7 +23,7 @@
             />
         </div>
 
-        <div v-else class="no-routes">
+        <div v-else class="no-threads">
             <i class="fa-solid fa-comment"></i>
             <h1>¡No se han encontrado hilos!</h1>
             <p>Modifica el filtro para buscar tus hilos deseadas</p>
@@ -137,7 +137,7 @@
         }
     }
 
-    .no-routes {
+    .no-threads {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -164,6 +164,34 @@
 
         p {
             margin-bottom: 1rem;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .foro-container {
+            width: 100%;
+            padding: 0 2rem;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .foro-container {
+            padding: 0;
+
+            .top-options {
+                padding: 0 0.5rem;
+
+                form {
+                    width: 10rem;
+                }
+            }
+
+            .threads-container {
+                padding: 1rem 0;
+                border-radius: 0;
+                border-top: 5px solid var(--color-brown);
+                border-bottom: 5px solid var(--color-brown);
+            }
         }
     }
 </style>
