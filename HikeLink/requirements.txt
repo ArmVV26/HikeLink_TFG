@@ -10,3 +10,4 @@ requests
 cryptography
 markdown
 Pillow
+gunicorn

@@ -65,6 +65,7 @@
             border: 2px solid transparent;
             border-radius: 25px;
             margin: 0 5rem 0 1rem;
+            object-fit: cover;
             cursor: pointer;
             transition: all 0.15s;
         }

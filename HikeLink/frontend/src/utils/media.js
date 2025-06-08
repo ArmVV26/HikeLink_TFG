@@ -3,5 +3,7 @@ const MEDIA_URL = import.meta.env.VITE_MEDIA_URL;
 
 // Funcion para obtener una imagen de la API
 export function getMediaUrl(path) {
-  return `${MEDIA_URL}/${path}`;
+  const base = import.meta.env.VITE_MEDIA_URL.replace(/\/$/, '');
+  const cleanPath = path.replace(/^\/+/, '');
+  return `${base}/${cleanPath}`;
 }

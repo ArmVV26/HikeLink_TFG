@@ -156,6 +156,22 @@
         }
     }
 
+    @media (max-width: 1350px) {
+        .comment-add-container {
+            .comment-add {
+                div {
+                    align-items: flex-start;
+                    flex-direction: column;
+                    gap: 0;
+
+                    h1 {
+                        line-height: 0.5;
+                    }
+                }
+            }
+        }
+    }
+
     @media (max-width: 1024px) {
         .comment-add-container {
             margin: 0 2rem 2rem;
@@ -170,6 +186,10 @@
                 h1 {
                     font-size: 1rem;
                     line-height: 1;
+                }
+
+                .auth-warning {
+                    font-size: 0.85rem;
                 }
             }
         }

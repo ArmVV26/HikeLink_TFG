@@ -84,14 +84,14 @@ class RegisterSerializer(serializers.ModelSerializer):
             file_path = f"{username}/{filename}"
 
             # Guardar imagen en el storage
-            default_storage.save(file_path, ContentFile(profile_picture.read()))
+            save_path = default_storage.save(file_path, ContentFile(profile_picture.read()))
 
             # Asignar ruta al ImageField y guardar
             user.profile_picture = filename
             user.save()
 
             # Validación tras guardar
-            if not default_storage.exists(user.profile_picture):
+            if not default_storage.exists(save_path):
                 raise Exception("Fallo al guardar la imagen de perfil")
         
         # Mandar el correo de bienvenida

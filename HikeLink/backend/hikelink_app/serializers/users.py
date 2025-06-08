@@ -99,7 +99,9 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             ext = new_image.name.split('.')[-1]
             filename = f"{slugify(instance.username)}-{uuid.uuid4().hex[:8]}.{ext}"
             file_path = f"{instance.username}/{filename}"
-            default_storage.save(file_path, ContentFile(new_image.read()))
+            save_path = default_storage.save(file_path, ContentFile(new_image.read()))
+            if not default_storage.exists(save_path):
+                raise Exception("Fallo al guardar la nueva imagen de perfil")
             instance.profile_picture = filename
 
         instance.save()

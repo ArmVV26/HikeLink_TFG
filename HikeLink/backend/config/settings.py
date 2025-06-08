@@ -25,14 +25,14 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xlbp$g@*vhkd43b8()p_6^creq2f3h!)^ebg@0=$p=y3+j=py-'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
 # SOLO EN DESARROLLO
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.41']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -84,7 +84,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -149,7 +149,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/dist/assets')]
+
+# Seguridad adicional
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -186,29 +192,6 @@ SIMPLE_JWT = {
 # Para el admin
 SITE_ID = 1
 
-# Servicio SMTP
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = env('EMAIL_HOST')
-# EMAIL_PORT = env.int('EMAIL_PORT')
-# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-# EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
-# DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
-
-# Google Login
-
-# REST_USE_JWT = True
-# ACCOUNT_LOGIN_METHODS = {'email', 'username'} 
-# ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*'] 
-# SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
-
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         'APP': {
-#             'client_id': env('GOOGLE_CLIENT_ID'),
-#             'secret': env('GOOGLE_SECRET'),
-#             'key': ''
-#         }
-#     }
-# }
+# Para determinar el tamaño de los archivos que se pueden subir 25MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 26214400
+FILE_UPLOAD_MAX_MEMORY_SIZE = 26214400

@@ -137,6 +137,7 @@
         const toggleEl = document.querySelector('.filter-toggle')
 
         if (
+            window.innerWidth < 1440 &&
             filterEl &&
             !filterEl.contains(event.target) &&
             toggleEl &&
@@ -169,7 +170,7 @@
             routes.value = response.data.results
             totalPages.value = Math.ceil(response.data.count / pageSize)
             currentPage.value = page
-            
+
             if (window.innerWidth < 1440) showFilters.value = false
         } catch (error) {
             console.error("Error al cargar las rutas:", error)
@@ -200,6 +201,7 @@
     onMounted(async () => {
         window.addEventListener('resize', handleResize)
         document.addEventListener('click', handleClickOutside)
+        handleResize()
 
         try {   
             loadRoutes()

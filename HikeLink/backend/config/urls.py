@@ -25,11 +25,14 @@ from rest_framework_simplejwt.views import (
 )
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from dj_rest_auth.registration.views import SocialLoginView
+from django.views.generic import TemplateView
 
 class GoogleLoginView(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
 
 urlpatterns = [
+    path('', TemplateView.as_view(template_name="index.html")),
+
     path('admin/', admin.site.urls),
     path('api/', include('hikelink_app.urls')), # Cualquier llamada a la API se delega al urls.py de hikelink_app
 
@@ -40,6 +43,6 @@ urlpatterns = [
     path('api/auth/google/', GoogleLoginView.as_view(), name='google_login'),
 ]
 
-# Añade esto SOLO en desarrollo (no en producción)
+# Funciona SOLO en desarrollo (no en producción)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/', 
   plugins: [
     vue(),
     vueDevTools(),
@@ -23,4 +24,9 @@ export default defineConfig({
       usePolling: true
     }
   },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    manifest: true,
+  }
 })

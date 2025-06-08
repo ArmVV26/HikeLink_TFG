@@ -87,7 +87,10 @@ class UploadRouteSerializer(serializers.ModelSerializer):
         gpx_file = validated_data.pop('gpxFile')
         gpx_filename = f"{slug}.gpx"
         gpx_path = f"{route_folder}{gpx_filename}"
-        default_storage.save(gpx_path, ContentFile(gpx_file.read()))
+        gpx_save_path = default_storage.save(gpx_path, ContentFile(gpx_file.read()))    
+        if not default_storage.exists(gpx_save_path):
+            raise Exception("Fallo al guardar el archivo GPX")
+
 
         # Guardar imaganes de la ruta
         images = validated_data.pop('images', [])
@@ -96,7 +99,9 @@ class UploadRouteSerializer(serializers.ModelSerializer):
             ext = image.name.split('.')[-1]
             filename = f"{i+1}_img.{ext}"
             path = f"{route_folder}{filename}"
-            default_storage.save(path, ContentFile(image.read()))
+            img_save_path = default_storage.save(path, ContentFile(image.read()))
+            if not default_storage.exists(img_save_path):
+                raise Exception(f"Fallo al guardar la imagen {filename}")
             img_filenames.append(filename)
         
         route = Route.objects.create(
@@ -155,7 +160,9 @@ class UpdateRouteSerializer(serializers.ModelSerializer):
                 ext = image.name.split('.')[-1]
                 filename = f"{i+1}_img.{ext}"
                 path = f"{route_folder}{filename}"
-                default_storage.save(path, ContentFile(image.read()))
+                img_save_path = default_storage.save(path, ContentFile(image.read()))
+                if not default_storage.exists(img_save_path):
+                    raise Exception(f"Fallo al guardar la imagen {filename}")
                 img_filenames.append(filename)
             instance.img = img_filenames
 

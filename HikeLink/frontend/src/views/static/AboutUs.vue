@@ -371,6 +371,7 @@
 
       .about-us-img-container {
         margin: 2rem 1rem;
+        height: 20rem;
       }
     }
   }

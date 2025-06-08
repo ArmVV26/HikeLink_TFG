@@ -417,6 +417,10 @@
                     user-select: none;
                     cursor: grab;
 
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
+
                     .carousel-img-card {
                         flex: 0 0 auto;
                         width: 30.55rem;

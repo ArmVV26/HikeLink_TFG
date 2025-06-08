@@ -90,6 +90,7 @@
     const validateUploadRouteForm = () => {
         resetErrors()
         let valid = true
+        const maxSize = 100 * 1024 * 1024;
 
         if (!title.value) {
             fieldErrors.value.title = 'El título es obligatorio.'
@@ -102,10 +103,14 @@
         if (!gpxFile.value) {
             fieldErrors.value.gpxFile = 'El archivo GPX es obligatorio.'
             valid = false
+        } else if (gpxFile.value.size > maxSize) {
+            fieldErrors.value.gpxFile = 'El archivo GPX es demasiado grande.'
+            valid = false
         }
 
         return valid
     }
+    
     // Convierte las imagenes en un array normal
     const handleFiles = (event) => {
         images.value = Array.from(event.target.files)
