@@ -6,5 +6,8 @@ python manage.py migrate --noinput
 echo "📦 Recolectando archivos estáticos..."
 python manage.py collectstatic --noinput
 
+echo "💼 Cargando los datos base..."
+python manage.py shell < populate.py
+
 echo "🚀 Lanzando aplicación..."
 exec "$@"
