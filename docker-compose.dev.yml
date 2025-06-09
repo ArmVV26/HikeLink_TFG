@@ -1,14 +1,19 @@
 services:
   db:
-    image: postgres
+    image: postgres:15
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-hikelink}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
@@ -16,13 +21,22 @@ services:
       dockerfile: ../docker/dev/Dockerfile.backend
     volumes:
       - ./backend:/app
+      - backend_static:/app/staticfiles
+      - backend_media:/app/media
     env_file:
       - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings
+      - DEBUG=1
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "8000:8000"
-    command: bash -c "chmod +x ./wait-for-it.sh && ./wait-for-it.sh db:5432 -- python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: >
+      bash -c "./wait-for-it.sh db:5432 -- 
+      python manage.py migrate && 
+      python manage.py runserver 0.0.0.0:8000"
 
   frontend:
     build:
@@ -33,9 +47,12 @@ services:
       - frontend_node_modules:/app/node_modules
     env_file:
       - .env
+    environment:
+      - VITE_API_URL=http://localhost:8000
     ports:
       - "5173:5173"
-    command: npm run dev
+    depends_on:
+      - backend
 
   pgadmin:
     image: dpage/pgadmin4
@@ -44,13 +61,16 @@ services:
     ports:
       - "5050:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-
+    depends_on:
+      - db
 
 volumes:
   pgdata:
   pgadmin_data:
   frontend_node_modules:
+  backend_static:
+  backend_media:

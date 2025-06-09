@@ -2,7 +2,22 @@ FROM python:3.11
 
 WORKDIR /app
 
-COPY ../../requirements.txt /app/
+# Copiar requirements.txt primero para aprovechar la caché de Docker
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app
+# Crear directorios necesarios
+RUN mkdir -p staticfiles media static && \
+    chmod -R 755 staticfiles media static
+
+# Copiar el resto de archivos
+COPY . .
+
+# Dar permisos de ejecución al script wait-for-it
+RUN chmod +x wait-for-it.sh
+
+# Exponer el puerto
+EXPOSE 8000
+
+# El comando se especifica en docker-compose
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
