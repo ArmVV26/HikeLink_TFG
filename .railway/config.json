@@ -1,0 +1,5 @@
+{
+  "build": {
+    "dockerfilePath": "docker-compose.prod.yml"
+  }
+}
