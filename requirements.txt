@@ -12,3 +12,4 @@ markdown
 Pillow
 gunicorn
 dj_database_url
+whitenoise
