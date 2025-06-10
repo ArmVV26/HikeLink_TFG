@@ -228,6 +228,14 @@
                     width: 6.5rem;
                 }
             }
+
+            .links-container {
+                .links {
+                    a {
+                        font-size: 1.25rem;
+                    }
+                }
+            }
         }
     } 
 </style>  

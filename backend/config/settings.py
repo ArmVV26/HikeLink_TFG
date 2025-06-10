@@ -28,11 +28,46 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG")
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-# SOLO EN DESARROLLO
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.41']
-ALLOWED_HOSTS = ['*']
+# Configuración de hosts permitidos
+ALLOWED_HOSTS = [
+    'hikelink.es',
+    'www.hikelink.es',
+    'hikelink-backend.up.railway.app',  
+]
+
+# Configuración de CORS
+CORS_ALLOWED_ORIGINS = [
+    "https://hikelink.es",
+    "https://www.hikelink.es",
+    "https://hikelink-frontend.up.railway.app",  
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Desactivar CORS_ALLOW_ALL_ORIGINS en producción
+CORS_ALLOW_ALL_ORIGINS = DEBUG
 
 # Application definition
 
@@ -165,14 +200,24 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+# Configuración de archivos estáticos según el entorno
 if DEBUG:
     STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'static'),  # Directorio para archivos estáticos en desarrollo
+        os.path.join(BASE_DIR, 'static'),
     ]
 else:
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'frontend/dist/assets'),
+        os.path.join(BASE_DIR, 'static'),  # Añadimos el directorio static para el admin
     ]
+
+# Configuración de seguridad para archivos estáticos
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Seguridad adicional
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -182,8 +227,6 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CORS_ALLOW_ALL_ORIGINS = True;
 
 # Para el inicio de sesion con correo o username
 AUTHENTICATION_BACKENDS = [
@@ -199,7 +242,21 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day'
+    }
 }
 
 # Para securizar el token
@@ -216,3 +273,14 @@ SITE_ID = 1
 # Para determinar el tamaño de los archivos que se pueden subir 25MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 26214400
 FILE_UPLOAD_MAX_MEMORY_SIZE = 26214400
+
+# Configuración de seguridad adicional
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_HSTS_SECONDS = 31536000  # 1 año
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True

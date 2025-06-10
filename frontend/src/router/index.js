@@ -20,6 +20,7 @@ import ConditionUse from '@/views/static/ConditionUse.vue'
 import Help from '@/views/static/Help.vue'
 import Privacity from '@/views/static/Privacity.vue'
 import Home from '@/views/Home.vue'
+import NotFound from '@/views/NotFound.vue'
 
 // Para asegurar que el usuario esta con la sesion iniciada
 const requireAuth = (to, from, next) => {
@@ -160,6 +161,12 @@ const routes = [
     path: '/', name:'Home', 
     component: Home, meta: { title: 'HikeLink' }
   },
+  { 
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
+    meta: { title: 'HikeLink - Página no encontrada' }
+  }
 ]
 
 // Crear el router, el historial y al cambiar de pagina mueve el scroll al top

@@ -86,33 +86,33 @@
             color: var(--color-white);
             font-size: 1.25rem;
             transition: all 0.15s;
-        }
-    
-        .dropdown h1 {
-            font-family: "Montserrat-Bold";
-            font-weight: 900;
-            font-size: 1rem;
-            text-align: center;
-            color: var(--color-light-green);
-            border-bottom: 2px solid var(--color-grey);
-            line-height: 0.75;
-            padding: 0.5rem 0 0.25rem;
-        }
-    
-        .dropdown a {
-            font-family: "Montserrat-Bold";
-            padding: 0 1rem;
-            line-height: 1;
-            cursor: pointer;
-            transition: all 0.25s;
-
-            &:last-child {
-                padding-bottom: 1rem;
+            
+            h1 {
+                font-family: "Montserrat-Bold";
+                font-weight: 900;
+                font-size: 1rem;
+                text-align: center;
+                color: var(--color-light-green);
+                border-bottom: 2px solid var(--color-grey);
+                line-height: 0.75;
+                padding: 0.5rem 0 0.25rem;
             }
-        }
+            
+            a {
+                font-family: "Montserrat-Bold";
+                padding: 0 1rem;
+                line-height: 1;
+                cursor: pointer;
+                transition: all 0.25s;
     
-        .dropdown a:hover {
-            color: var(--color-light-green);
+                &:last-child {
+                    padding-bottom: 1rem;
+                }
+                
+                &:hover {
+                    color: var(--color-light-green);
+                }
+            }
         }
     }
 

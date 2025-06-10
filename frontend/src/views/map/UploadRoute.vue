@@ -40,7 +40,10 @@
                     </select>
                 </div>
 
+                <label class="label-file" for="images">Imágenes: </label>
                 <input type="file" @change="handleFiles" accept="image/*" multiple/>
+
+                <label class="label-file" for="gpxFile">Archivo GPX: </label>
                 <input type="file" @change="handleGPX" accept=".gpx" />
 
                 <ul>
@@ -299,6 +302,13 @@
             textarea {
                 resize: none;
                 min-height: 20rem;
+            }
+
+            .label-file {
+                font-size: 1rem;
+                font-weight: 900;
+                color: var(--color-black);
+                margin-bottom: 0.5rem;
             }
 
             input[type="file"] {

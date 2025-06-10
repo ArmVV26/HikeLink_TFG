@@ -116,4 +116,18 @@
     .hero-SobreNosotros .background-layer {
         @include hero-background('SobreNosotros');
     }
+
+    @media (max-width: 600px) {
+        .hero-image {
+            .content-layer {
+                h1 {
+                    font-size: 2.5rem;
+                }
+
+                h2 {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
 </style>

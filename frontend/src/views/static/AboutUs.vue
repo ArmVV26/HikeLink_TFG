@@ -398,7 +398,7 @@
 <style>
   .about-us-img {
     width: 70rem;
-    height: 40rem;
+    height: 100%;
     border-radius: 25px;
     box-shadow: 0px 0px 10px 0px var(--color-black);
     object-fit: cover;

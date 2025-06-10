@@ -18,7 +18,7 @@
                 </li>
             </ul>
 
-            <button class="fullscreen-btn" @click="toggleFullscreen">
+            <button v-if="!isMobile" class="fullscreen-btn" @click="toggleFullscreen">
                 <i class="fa-solid fa-expand"></i>
             </button>
         </div>
@@ -62,8 +62,13 @@
             </div>
 
             <!-- Poner el mapa en grande, si es una unica ruta -->
-            <button v-if="!detailedMap" class="fullscreen-btn-map" @click="toggleFullscreen">
+            <button v-if="!detailedMap && !isMobile" class="fullscreen-btn-map" @click="toggleFullscreen">
                 <i class="fa-solid fa-expand"></i>
+            </button>
+
+            <!-- Boton para salir de pantalla completa -->
+            <button v-if="isFullscreen" class="exit-fullscreen-btn" @click="exitFullscreen">
+                <i class="fa-solid fa-compress"></i>
             </button>
 
             <!-- Mostrar info del mapa -->
@@ -126,7 +131,7 @@
 
 <script setup>
     // IMPORTS
-    import { defineProps, ref, onMounted, computed } from 'vue';
+    import { defineProps, ref, onMounted, computed, onUnmounted } from 'vue';
     import { useRoute } from 'vue-router'
     import { getMediaUrl } from '@/utils/media';
     import { useRouteImage } from '@/composables/useRouteImage' 
@@ -154,6 +159,8 @@
     const routeMarkers = ref(new Map())
     const gpxLayers = ref(new Map())
     const selectedRoute = ref(null)
+    const isFullscreen = ref(false)
+    const isMobile = ref(window.innerWidth <= 700)
 
     const suggestions = ref([])
     const highlightedIndex = ref(-1)
@@ -396,8 +403,20 @@
                 console.error(`Error al entrar en pantalla completa: ${err.message}`);
             });
         } else {
+            exitFullscreen();
+        }
+    }
+
+    // Función para salir de pantalla completa
+    const exitFullscreen = () => {
+        if (document.fullscreenElement) {
             document.exitFullscreen();
         }
+    }
+
+    // Función para manejar cambios en el tamaño de la ventana
+    const handleResize = () => {
+        isMobile.value = window.innerWidth <= 700;
     }
 
     // Funcion para quitar las rutas del mapa y cerrar los detalles de la ruta
@@ -427,12 +446,16 @@
         // Detectar cambio de pantalla completa
         document.addEventListener('fullscreenchange', () => {
             const mapElement = document.getElementById('map')
+            isFullscreen.value = !!document.fullscreenElement;
             if (document.fullscreenElement) {
                 mapElement.classList.add('fullscreen-border')
             } else {
                 mapElement.classList.remove('fullscreen-border')
             }
         });
+
+        // Añadir listener para cambios de tamaño de ventana
+        window.addEventListener('resize', handleResize);
 
         if (isSingleRoute.value) {
             api.get(`/routes/${vueRoute.params.id}`)
@@ -447,6 +470,11 @@
             loadRoutes();
         }
     })
+
+    onUnmounted(() => {
+        // Limpiar listeners
+        window.removeEventListener('resize', handleResize);
+    })
 </script>
 
 <style lang="scss" scoped>
@@ -454,6 +482,7 @@
         position: relative;
 
         .map-top-container {
+            position: relative;
             width: 70%;
             margin: 2rem auto 0;
             background-color: var(--color-vanille);
@@ -483,9 +512,9 @@
             
             .suggestions-list {
                 position: absolute;
-                top: 4rem;
-                left: 21rem;
-                width: 30%;
+                top: 3.5rem;
+                left: 0.5rem;
+                width: 55%;
                 background: var(--color-white);
                 border: 5px solid var(--color-green);
                 border-top-left-radius: 10px;
@@ -794,6 +823,27 @@
                     }
                 }
             }
+
+            .exit-fullscreen-btn {
+                position: absolute;
+                top: 1rem;
+                right: 6rem;
+                z-index: 1000;
+                color: var(--color-green);
+                background-color: var(--color-white);
+                border: 2px solid var(--color-light-green);
+                font-size: 1.5rem;
+                padding: 0.25rem 0.75rem;
+                border-radius: 20rem;
+                cursor: pointer;
+                transition: all 0.25s;
+                
+                &:hover {
+                    color: var(--color-white);
+                    background-color: var(--color-brown);
+                    border: 2px solid var(--color-vanille);
+                }
+            }
         }
     }
 
@@ -914,6 +964,11 @@
                         font-size: 1.5rem;
                     }
                 }
+
+                .exit-fullscreen-btn {
+                    top: 0.25rem;
+                    right: 4rem;
+                }
             }
         }
     }
@@ -955,6 +1010,7 @@
 
             .map {
                 width: 100%;
+                height: 33.5rem;
                 border-radius: 0;
                 border: 0;
                 border-bottom: 5px solid var(--color-green);

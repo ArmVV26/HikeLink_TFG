@@ -88,7 +88,7 @@
   // METODOS
   // Funcion para obtener ordenadas por mayor rating
   onMounted(async () => {
-    try {
+    try { 
       const response = await api.get('/routes/')
       const sortedRoutes = response.data.sort((a, b) => b.average_rating - a.average_rating)
       routes.value = sortedRoutes

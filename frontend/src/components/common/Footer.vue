@@ -69,9 +69,11 @@
             padding: 1rem 0;
             background-color: var(--color-brown);
             
-            .logo {
-                width: 13rem;
-                height: auto;
+            a {
+                .logo {
+                    width: 13rem;
+                    height: auto;
+                }
             }
 
             .links {
@@ -79,9 +81,10 @@
                 flex-direction: column;
 
                 h2 {
+                    font-family: "Montserrat-Bold";
                     color: var(--color-white);
                     text-shadow: 2px 2px 8px var(--color-black);
-                    font-size: 2.5rem;
+                    font-size: 2.25rem;
                 }
 
                 a {
@@ -168,11 +171,15 @@
                         grid-row: 1;
                     }
                 }
-    
-                .logo {
-                    grid-column: 1;
-                    grid-row: 2;
-                    justify-self: center;
+                
+                a {
+                    display: grid;
+
+                    .logo {
+                        grid-column: 1;
+                        grid-row: 2;
+                        justify-self: center;
+                    }
                 }
     
                 .social {
@@ -208,11 +215,12 @@
                         grid-row: 3;
                     }
                 }
-    
-                .logo {
-                    grid-column: 1;
-                    grid-row: 1;
-                    justify-self: center;
+                
+                a {
+                    .logo {
+                        grid-column: 1;
+                        grid-row: 1;
+                    }
                 }
     
                 .social {

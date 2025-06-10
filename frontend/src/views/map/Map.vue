@@ -88,7 +88,7 @@
         padding: 1rem;
         
         h1 {
-            font-family: "Monteserrat-Bold";
+            font-family: "Montserrat-Bold";
             font-size: 1.5rem;
             font-style: italic;
             color: var(--color-green);
@@ -157,6 +157,12 @@
     @media (max-width: 1250px) {
         .tutorial-map > p:nth-child(2) {
             width: 100%;
+        }
+        
+        .tutorial-map {
+            h1 {
+                font-size: 1.25rem;
+            }
         }
     }
 </style>
