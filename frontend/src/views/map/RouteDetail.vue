@@ -145,6 +145,7 @@
     import { useRouteImage } from '@/composables/useRouteImage'
     import { useUserCommentImage } from '@/composables/useUserImage'
 
+    import { apiWithAuth } from '@/utils/api'
     import api from '@/utils/api'
     
     import ShowMap from '@/components/map/ShowMap.vue'
@@ -282,13 +283,13 @@
         try {
             // Eliminar de favoritos
             if (isFavorite.value) {
-                await api.delete(`/favorites/${favoriteId.value}/`)
+                await apiWithAuth().delete(`/favorites/${favoriteId.value}/`)
                 isFavorite.value = false
                 favoriteId.value = null
             
                 // Añadir a favoritos
             } else {
-                const response = await api.post(`/favorites/`, {
+                const response = await apiWithAuth().post(`/favorites/`, {
                     user: currentUserId.value,
                     route: route.value.id
                 })
@@ -305,7 +306,7 @@
         if (!isAuthenticated.value) return
         
         try {
-            const response = await api.get(`/favorites/?user=${currentUserId.value}&route=${route.value.id}`)
+            const response = await apiWithAuth().get(`/favorites/?user=${currentUserId.value}&route=${route.value.id}`)
             if (response.data.length > 0) {
                 isFavorite.value = true
                 favoriteId.value = response.data[0].id

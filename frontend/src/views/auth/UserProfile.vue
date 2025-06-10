@@ -78,6 +78,7 @@
     import { useUserImage } from '@/composables/useUserImage';
     
     import api from '@/utils/api';
+    import { apiWithAuth } from '@/utils/api';
     import CommonButton from '@/components/common/CommonButton.vue';
     import RouteCard from '@/components/map/RouteCard.vue';
 
@@ -130,10 +131,10 @@
         if (!isAuthenticated.value) return
 
         try {
-            const response = await api.get(`favorites/?user=${user.value.id}`)
+            const response = await apiWithAuth().get(`favorites/?user=${user.value.id}`)
             const favoriteIds = response.data.map(fav => fav.route)
             
-            const promises = favoriteIds.map(id => api.get(`/routes/${id}/`))
+            const promises = favoriteIds.map(id => apiWithAuth().get(`/routes/${id}/`))
             const routeDetails = await Promise.all(promises)
 
             favorites.value = routeDetails.map(r => r.data)
