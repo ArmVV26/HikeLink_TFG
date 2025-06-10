@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ./backend /app
 
 # Crear carpeta de archivos estáticos
-RUN mkdir -p /app/staticfiles
+RUN mkdir -p /app/staticfiles /app/media
 
 # Entrypoint dinámico que corre collectstatic y migrate
 COPY docker/prod/entrypoint.sh /entrypoint.sh
@@ -26,4 +26,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 EXPOSE 8000
 
 # Ejecutar Gunicorn
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--timeout", "120"]
