@@ -136,28 +136,6 @@ r5 = Route.objects.create(
     start_longitude=-3.39193
 )
 
-def crear_rutas_masivas(base_user, base_description, cantidad=20):
-    for i in range(cantidad):
-        Route.objects.create(
-            user=base_user,
-            title=f'Ruta Vereda de la Estrella - Variante {i + 1}',
-            type='Senderismo',
-            description=base_description,
-            img=[
-                '1_img.jpg', '2_img.jpg', '3_img.jpg',
-                '4_img.jpg', '5_img.jpg', '6_img.jpg'
-            ],
-            difficulty='Difícil',
-            duration=30240 + i * 60,  # cada ruta tarda un poco más
-            distance=23800 + i * 10,  # y recorre un poco más
-            origin='Komoot',
-            gpx_file=f'vereda-estrella-variante-{i + 1}.gpx',
-            start_latitude=37.13443 + (i * 0.0001),
-            start_longitude=-3.39193 - (i * 0.0001)
-        )
-
-crear_rutas_masivas(u1, descriptionR5, cantidad=50)
-
 # Valoraciones
 RouteRating.objects.create(user=u2, route=r1, rating=5)
 RouteRating.objects.create(user=u2, route=r2, rating=4)
@@ -182,5 +160,5 @@ ForoComment.objects.create(user=u2, thread=thread1, content='Hey si o no.')
 ForoComment.objects.create(user=u2, thread=thread1, content='No lo se bro.')
 
 # Favoritos
-# Favorites.objects.create(user=u2, route=r1)
-# Favorites.objects.create(user=u2, route=r2)
+Favorites.objects.create(user=u2, route=r1)
+Favorites.objects.create(user=u2, route=r2)
