@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "🧹 Limpiando la base de datos..."
+python manage.py flush --noinput
+
 echo "▶️ Ejecutando migraciones..."
 python manage.py migrate --noinput
 
