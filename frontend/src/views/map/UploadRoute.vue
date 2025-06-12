@@ -310,7 +310,9 @@
                 font-size: 1rem;
                 font-weight: 900;
                 color: var(--color-black);
-                margin-bottom: 0.5rem;
+                line-height: 0;
+                margin-top: 1rem;
+                text-align: center
             }
 
             input[type="file"] {
