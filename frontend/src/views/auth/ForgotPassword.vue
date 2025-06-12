@@ -5,12 +5,20 @@
             <p>Inserta el correo para mandarte un correo con un enlace para que recuperes tu contraseña.</p>
 
             <form v-if="!success && !error" @submit.prevent="submitEmail">
-                <input type="email" v-model="email" placeholder="Tu correo" required />
+                <input type="text" v-model="email" placeholder="Tu correo" />
                 <button type="submit">Enviar enlace</button>
             </form>
             
-            <p class="success" v-if="success">{{ success }}</p>
-            <p class="error" v-if="error">{{ error }}</p>
+            <p class="success" v-if="success">
+                <i class="fa-solid fa-circle-check"></i>
+                {{ success }}
+            </p>
+            <div v-if="error || Object.keys(fieldErrors).length > 0" class="errors-container">
+                <ul>
+                    <li class="error" v-for="err in fieldErrors">{{ err }}</li>
+                </ul>
+                <p class="error">{{ error }}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -19,17 +27,42 @@
     // IMPORTS
     import { ref } from 'vue'
     import { forgotPasswordServices } from '@/services/UserServices'
+    import { useFormValidation } from '@/composables/useValidation'
 
     // VARIABLES
     const email = ref('')
     const success = ref('')
     const error = ref('')
 
+    const {
+        fieldErrors,
+        resetErrors,
+        validateEmail,
+    } = useFormValidation()
+
     // METODOS
+    // Validacion general
+    const validateEmailForm = () => {
+        resetErrors()
+        let valid = true
+
+        if (!email.value) {
+            fieldErrors.value.email = 'El correo electrónico es obligatorio.'
+            valid = false
+        } else if (!validateEmail(email.value)) {
+            fieldErrors.value.email = 'Correo electrónico no válido.'
+            valid = false
+        }
+
+        return valid
+    }
+
     // Funcion para mandar el correo para que el usuario recupere su contraseña
     const submitEmail = async () => {
         success.value = ''
         error.value = ''
+
+        if (!validateEmailForm()) return
 
         try {
             await forgotPasswordServices(email.value)
@@ -81,7 +114,7 @@
             gap: 1rem;
             font-family: "Lato";
 
-            input[type="email"] {
+            input[type="text"] {
                 width: 90%;
                 padding: 0.5rem 0.75rem;
                 margin: auto;
@@ -116,16 +149,28 @@
         }
         .success {
             color: var(--color-green);
+            background-color: var(--color-light-green-opacity);
+            border-radius: 25px;
+            padding: 0.25rem 0.5rem;
             font-size: 1rem;
             font-weight: 900;
             text-align: center;
         }
 
-        .error {
-            text-align: center;
-            color: var(--color-red-400);
-            font-size: 1rem;
-            font-weight: 900;
+        .errors-container {
+            background-color: rgba(255, 103, 103, 0.3);
+            border-radius: 25px;
+            padding: 0.25rem 0 0;
+            margin: 1rem;
+
+            .error {
+                text-align: center;
+                color: var(--color-red-400);
+                font-size: 1rem;
+                font-weight: 900;
+                margin: auto;
+                padding: 0.5rem 0;
+            }
         }
     }
 

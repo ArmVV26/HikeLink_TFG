@@ -77,7 +77,6 @@
     import { useAuthStore } from '@/stores/authStore';
     import { useUserImage } from '@/composables/useUserImage';
     
-    import api from '@/utils/api';
     import { apiWithAuth } from '@/utils/api';
     import CommonButton from '@/components/common/CommonButton.vue';
     import RouteCard from '@/components/map/RouteCard.vue';
@@ -117,7 +116,7 @@
     // Para hacer que las rutas se pongan en paginas
     const paginationFetch = async (page = 1) => {
         try {
-            const response = await api.get(`/routes/user/${user.value.id}?page=${page}&page_size=${pageSize}`)
+            const response = await apiWithAuth().get(`/routes/user/${user.value.id}?page=${page}&page_size=${pageSize}`)
             routes.value = response.data.results
             totalPages.value = Math.ceil(response.data.count / pageSize)
             currentPage.value = page 

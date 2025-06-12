@@ -37,10 +37,13 @@
                     <input type="file" @change="handleFiles" accept="image/*" />
                 </div>
 
-                <ul>
-                    <li class="error" v-for="err in fieldErrors">{{ err }}</li>
-                </ul>
-                <p class="error" v-if="error">{{ error }}</p>
+                <div v-if="error || Object.keys(fieldErrors).length > 0" class="errors-container">
+                    <ul>
+                        <li class="error" v-for="err in fieldErrors">{{ err }}</li>
+                    </ul>
+                    <p class="error">{{ error }}</p>
+                </div>
+                
                 <p class="success" v-if="success">{{ success }}</p>
                 <p class="success-deleted" v-if="successMessage">{{ successMessage }}</p>
 
@@ -357,15 +360,25 @@
                 }
             }
 
-            .error {
-                color: var(--color-red-400);
-                font-size: 1rem;
-                font-weight: 900;
-                text-align: center;
+            .errors-container {
+                background-color: rgba(255, 103, 103, 0.3);
+                border-radius: 25px;
+                padding: 0.5rem;
+                margin: 0 0.5rem;
+
+                .error {
+                    text-align: center;
+                    color: var(--color-red-400);
+                    font-size: 1rem;
+                    font-weight: 900;
+                }
             }
 
             .success {
                 color: var(--color-green);
+                background-color: var(--color-light-green-opacity);
+                border-radius: 25px;
+                padding: 0.25rem 0.5rem;
                 font-size: 1rem;
                 font-weight: 900;
                 text-align: center;
@@ -373,6 +386,9 @@
 
             .success-deleted {
                 color: var(--color-green);
+                background-color: var(--color-light-green-opacity);
+                border-radius: 25px;
+                padding: 0.25rem 0.5rem;
                 font-size: 1.5rem;
                 font-weight: 900;
                 text-align: center;

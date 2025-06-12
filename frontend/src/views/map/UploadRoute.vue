@@ -46,10 +46,12 @@
                 <label class="label-file" for="gpxFile">Archivo GPX: </label>
                 <input type="file" @change="handleGPX" accept=".gpx" />
 
-                <ul>
-                    <li class="error" v-for="err in fieldErrors">{{ err }}</li>
-                </ul>
-                <p class="error" v-if="error">{{ error }}</p>
+                <div v-if="error || Object.keys(fieldErrors).length > 0" class="errors-container">
+                    <ul>
+                        <li class="error" v-for="err in fieldErrors">{{ err }}</li>
+                    </ul>
+                    <p class="error">{{ error }}</p>
+                </div>
 
                 <button type="submit">Subir Ruta</button>
             </form>
@@ -332,11 +334,18 @@
                 }
             }
 
-            .error {
-                color: var(--color-red-400);
-                font-size: 1rem;
-                font-weight: 900;
-                text-align: center;
+            .errors-container {
+                background-color: rgba(255, 103, 103, 0.3);
+                border-radius: 25px;
+                padding: 0.5rem;
+                margin: 0 0.5rem;
+
+                .error {
+                    text-align: center;
+                    color: var(--color-red-400);
+                    font-size: 1rem;
+                    font-weight: 900;
+                }
             }
 
             button[type="submit"] {

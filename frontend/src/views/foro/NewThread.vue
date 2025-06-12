@@ -9,10 +9,12 @@
 
                 <textarea v-model="content" placeholder="Descripción del hilo"></textarea>
 
-                <ul>
-                    <li class="error" v-for="err in fieldErrors">{{ err }}</li>
-                </ul>
-                <p class="error" v-if="error">{{ error }}</p>
+                <div v-if="error || Object.keys(fieldErrors).length > 0" class="errors-container">
+                    <ul>
+                        <li class="error" v-for="err in fieldErrors">{{ err }}</li>
+                    </ul>
+                    <p class="error">{{ error }}</p>
+                </div>
 
                 <button type="submit">Subir Hilo</button>
             </form>
@@ -146,11 +148,18 @@
                     min-height: 9rem;
                 }
 
-                .error {
-                    text-align: center;
-                    color: var(--color-red-400);
-                    font-size: 1rem;
-                    font-weight: 900;
+                .errors-container {
+                    background-color: rgba(255, 103, 103, 0.3);
+                    border-radius: 25px;
+                    padding: 0.5rem;
+                    margin: 0 0.5rem;
+
+                    .error {
+                        text-align: center;
+                        color: var(--color-red-400);
+                        font-size: 1rem;
+                        font-weight: 900;
+                    }
                 }
 
                 button[type="submit"] {

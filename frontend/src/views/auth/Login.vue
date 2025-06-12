@@ -3,7 +3,10 @@
         <div class="login-form">
             <h1>Inicia sesión</h1>
             <h2>Para comenzar la aventura</h2>
-            <p class="success" v-if="success">{{ success }}</p>
+            <p class="success" v-if="success">
+                <i class="fa-solid fa-circle-check"></i>
+                {{ success }}
+            </p>
 
             <form @submit.prevent="login">
                 <input type="text" v-model="inputUserMail" placeholder="Usuario o Correo" />
@@ -20,10 +23,12 @@
                     </p>
                 </div>
 
-                <ul>
-                    <li class="error" v-for="err in fieldErrors">{{ err }}</li>
-                </ul>
-                <p class="error" v-if="error">{{ error }}</p>
+                <div v-if="error || Object.keys(fieldErrors).length > 0" class="errors-container">
+                    <ul>
+                        <li class="error" v-for="err in fieldErrors">{{ err }}</li>
+                    </ul>
+                    <p class="error">{{ error }}</p>
+                </div>
                 
                 <button type="submit">Iniciar Sesión</button>
             </form>
@@ -142,10 +147,12 @@
         
         .success {
             color: var(--color-green);
+            background-color: var(--color-light-green-opacity);
+            border-radius: 25px;
+            padding: 0.25rem 0.5rem;
             font-size: 1rem;
             font-weight: 900;
             text-align: center;
-            margin-top: -1rem;
             margin-bottom: 2rem;
         }
 
@@ -201,11 +208,18 @@
                 }
             }
 
-            .error {
-                text-align: center;
-                color: var(--color-red-400);
-                font-size: 1rem;
-                font-weight: 900;
+            .errors-container {
+                background-color: rgba(255, 103, 103, 0.3);
+                border-radius: 25px;
+                padding: 0.5rem;
+                margin: 0 0.5rem;
+
+                .error {
+                    text-align: center;
+                    color: var(--color-red-400);
+                    font-size: 1rem;
+                    font-weight: 900;
+                }
             }
 
             button[type="submit"] {
