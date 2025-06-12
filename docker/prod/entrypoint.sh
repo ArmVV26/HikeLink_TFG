@@ -12,8 +12,8 @@ python create_superuser.py
 echo "📦 Recolectando archivos estáticos..."
 python manage.py collectstatic --noinput --clear
 
-echo "🔧 Configurando archivos estáticos del admin..."
-python manage.py collectstatic --noinput --clear --no-post-process
+# echo "🔧 Configurando archivos estáticos del admin..."
+# python manage.py collectstatic --noinput --clear --no-post-process
 
 echo "💼 Cargando los datos base..."
 python manage.py shell < hikelink_app/populate.py
