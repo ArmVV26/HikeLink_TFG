@@ -132,7 +132,8 @@ Para simular el entorno de producción localmente:
 docker-compose -f docker-compose.prod.yml up --build
 ```
 
-> [!WARNING] Asegúrate de tener configurados los archivos `.env` con las variables de entorno necesarias tanto en el directorio raíz como en `/frontend/`.
+> [!WARNING]
+> Asegúrate de tener configurados los archivos `.env` con las variables de entorno necesarias tanto en el directorio raíz como en `/frontend/`.
 
 ---
 
