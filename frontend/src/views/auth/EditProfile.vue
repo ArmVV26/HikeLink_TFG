@@ -74,9 +74,9 @@
     import { useUserSpecificImage } from '@/composables/useUserImage';
     import { updateUserServices, deleteUserServices } from '@/services/UserServices';
     import { useFormValidation } from '@/composables/useValidation';
+    import { apiWithAuth } from '@/utils/api';
     
     import DeleteModal from '@/components/modal/DeleteModal.vue';
-    import api from '@/utils/api';
 
     // VARIABLES
     const showDeleteModal = ref(false)
@@ -162,7 +162,7 @@
         if (!isAuthenticated.value) return
 
         try {
-            const { data } = await api.get(`users/${route.params.id}`)
+            const { data } = await apiWithAuth().get(`users/${route.params.id}`)
             
             username.value = data.username
             email.value = data.email

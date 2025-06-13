@@ -28,10 +28,12 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+DEBUG = env.bool("DEBUG", default=False)
 
 # Configuración de hosts permitidos
 ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
     'hikelink.es',
     'www.hikelink.es',
     'hikelink-backend.up.railway.app',  
@@ -39,6 +41,8 @@ ALLOWED_HOSTS = [
 
 # Configuración de CORS
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
     "https://hikelink.es",
     "https://www.hikelink.es",
     "https://hikelink-frontend.up.railway.app",  
@@ -220,7 +224,9 @@ else:
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Seguridad adicional
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+if not DEBUG or DATABASE_URL:
+    print("Estoy dentro")
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Default primary key field type
@@ -275,12 +281,13 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 26214400
 FILE_UPLOAD_MAX_MEMORY_SIZE = 26214400
 
 # Configuración de seguridad adicional
-SECURE_SSL_REDIRECT = not DEBUG
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_HSTS_SECONDS = 31536000  # 1 año
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+if not DEBUG or DATABASE_URL:
+    SECURE_SSL_REDIRECT = not DEBUG
+    SESSION_COOKIE_SECURE = not DEBUG
+    CSRF_COOKIE_SECURE = not DEBUG
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_SECONDS = 31536000  # 1 año
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
