@@ -180,7 +180,6 @@
                 .avatar-delete {
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
                     align-items: center;
                     gap: 0.5rem;
 
@@ -244,12 +243,7 @@
 
                     p {
                         max-width: 100%;
-                        display: -webkit-box;
-                        line-clamp: 3;
-                        -webkit-line-clamp: 3;       
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
+                        text-indent: 2rem;
                     }
                 }
             }
@@ -301,12 +295,6 @@
 
                             p {
                                 max-width: 100%;
-                                display: -webkit-box;
-                                line-clamp: 3;
-                                -webkit-line-clamp: 3;       
-                                -webkit-box-orient: vertical;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
                             }
                         }
                     }

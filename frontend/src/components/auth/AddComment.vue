@@ -165,7 +165,7 @@
                     gap: 0;
 
                     h1 {
-                        line-height: 0.5;
+                        line-height: 1;
                     }
                 }
             }

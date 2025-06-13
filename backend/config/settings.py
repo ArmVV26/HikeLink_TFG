@@ -225,7 +225,6 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 # Seguridad adicional
 if not DEBUG or DATABASE_URL:
-    print("Estoy dentro")
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 

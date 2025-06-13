@@ -920,6 +920,7 @@
             .map-top-container {
                 width: 90%;
             }
+
             .map {
                 width: 90%;
 
@@ -956,6 +957,13 @@
                     }
                 }
 
+                .exit-fullscreen-btn {
+                    top: 0.25rem;
+                    right: 4rem;
+                }
+            }
+
+            .map, .map-detailed {
                 .map-info-panel {
                     bottom: 0.25rem;
                     left: 0.25rem;
@@ -963,11 +971,6 @@
                     h1 {
                         font-size: 1.5rem;
                     }
-                }
-
-                .exit-fullscreen-btn {
-                    top: 0.25rem;
-                    right: 4rem;
                 }
             }
         }
@@ -1050,6 +1053,16 @@
                         padding: 0 0.75rem;
                         border-top-right-radius: 25px;
                         border-bottom-left-radius: 25px;
+                    }
+                }
+            }
+
+            .map, .map-detailed {
+                .map-info-panel {
+                    width: 19.5rem;
+
+                    h1 {
+                        font-size: 1rem;
                     }
                 }
             }
