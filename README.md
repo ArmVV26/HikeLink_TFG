@@ -12,8 +12,9 @@
 ![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)
 ![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white)
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
-![Railway](https://img.shields.io/badge/Railway-000000?style=for-the-badge&logo=railway&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) <br>
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) 
+![Railway](https://img.shields.io/badge/Railway-000000?style=for-the-badge&logo=railway&logoColor=white) 
+![Brevo](https://img.shields.io/badge/-Brevo-0B996E?style=for-the-badge&logo=brevo&logoColor=white)<br>
 
 [![wakatime](https://wakatime.com/badge/user/10ede374-1869-4114-a927-8309de39fc83/project/d4351531-9847-4e6b-959f-28e421085c36.svg)](https://wakatime.com/badge/user/10ede374-1869-4114-a927-8309de39fc83/project/d4351531-9847-4e6b-959f-28e421085c36)
 
