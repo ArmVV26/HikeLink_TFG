@@ -1,284 +1,103 @@
 <template>
-    <footer>
-        <div class="first-counter">
-            <router-link to="/">
-                <ResponsiveImage
-                    :info="['LogoHikelink', 'logo']"
-                    :formats="['svg', 'png']"
-                    figureClass="logo"
-                    alt="Logo Header"
-                />
-            </router-link>
+  <footer class="flex flex-col">
+    <section class="bg-brown flex flex-col items-center justify-center gap-8 py-8 lg:flex-row">
+      <router-link to="/">
+        <ResponsiveImage
+          :info="['LogoHikelink', 'logo']"
+          :formats="['svg', 'png']"
+          alt="Logo Header"
+          class="h-auto w-55"
+        />
+      </router-link>
 
-            <div class="links">
-                <h2>Explora</h2>
-                <router-link to="/map">Mapa</router-link>
-                <router-link to="/search-routes">Buscar Ruta</router-link>
-                <router-link to="/foro">Foro</router-link>
-            </div>
-            
-            <div class="links">
-                <h2>Acerca de HikeLink</h2>
-                <router-link to="/about-us">Sobre Nosotros</router-link>
-                <a href="mailto:hikelink.soporte@gmail.com">Contacta con Nosotros</a>
-                <router-link to="/help">Ayuda</router-link>
-            </div>
+      <nav class="flex flex-col items-center justify-center lg:items-start">
+        <h2 class="font-montserrat-bold text-2xl text-white text-shadow-lg/30 sm:text-4xl">
+          Explora
+        </h2>
+        <article class="flex flex-col items-center lg:items-start lg:pl-4">
+          <router-link
+            to="/map"
+            class="text-grey text-xl font-bold transition-all duration-250 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            >Mapa</router-link
+          >
+          <router-link
+            to="/search-routes"
+            class="text-grey text-xl font-bold transition-all duration-250 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            >Buscar Ruta</router-link
+          >
+          <router-link
+            to="/foro"
+            class="text-grey text-xl font-bold transition-all duration-250 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            >Foro</router-link
+          >
+        </article>
+      </nav>
 
-            <div class="social">
-                <a href="https://www.instagram.com/">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-                <a href="https://www.youtube.com/">
-                    <i class="fa-brands fa-youtube"></i>
-                </a>
-                <a href="https://es.pinterest.com/">
-                    <i class="fa-brands fa-pinterest"></i>
-                </a>
-                <a href="https://www.facebook.com/">
-                    <i class="fa-brands fa-facebook"></i>
-                </a>
-            </div>
-        </div>
+      <nav class="flex flex-col items-center justify-center lg:items-start">
+        <h2 class="font-montserrat-bold text-2xl text-white text-shadow-lg/30 sm:text-4xl">
+          HikeLink
+        </h2>
+        <article class="flex flex-col items-center pl-4 lg:items-start">
+          <router-link
+            to="/about-us"
+            class="text-grey text-xl font-bold transition-all duration-250 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            >Sobre Nosotros</router-link
+          >
+          <a
+            href="mailto:hikelink.soporte@gmail.com"
+            class="text-grey text-xl font-bold transition-all duration-250 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            >Contacta con Nosotros</a
+          >
+          <router-link
+            to="/help"
+            class="text-grey text-xl font-bold transition-all duration-250 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            >Ayuda</router-link
+          >
+        </article>
+      </nav>
 
-        <div class="second-counter">
-            <p><span>© HikeLink.</span> Todos los derechos reservados.</p>
+      <nav class="grid grid-cols-2">
+        <a href="https://www.instagram.com/hikelink" target="_blank">
+          <i
+            class="fa-brands fa-instagram hover:text-light-green text-6xl text-white transition-all duration-250"
+          ></i>
+        </a>
+        <a href="https://www.youtube.com/hikelink" target="_blank">
+          <i
+            class="fa-brands fa-youtube hover:text-light-green text-6xl text-white transition-all duration-250"
+          ></i>
+        </a>
+        <a href="https://es.pinterest.com/hikelink" target="_blank">
+          <i
+            class="fa-brands fa-pinterest hover:text-light-green text-6xl text-white transition-all duration-250"
+          ></i>
+        </a>
+        <a href="https://www.facebook.com/hikelink" target="_blank">
+          <i
+            class="fa-brands fa-facebook hover:text-light-green text-6xl text-white transition-all duration-250"
+          ></i>
+        </a>
+      </nav>
+    </section>
 
-            <div class="extra-links">
-                <router-link to="/condition-use">Condiciones de Uso</router-link>
-                <router-link to="/privacity">Política de Privacidad</router-link>
-            </div>
-        </div>
-    </footer>
+    <section
+      class="bg-vanille text-brown flex flex-col items-center justify-center px-5 py-2 text-sm sm:text-base md:flex-row md:justify-between"
+    >
+      <p><span class="font-bold">© HikeLink</span> - Todos los derechos reservados.</p>
+
+      <nav class="flex gap-6">
+        <router-link to="/condition-use" class="hover:font-bold hover:underline"
+          >Condiciones de Uso</router-link
+        >
+        <router-link to="/privacity" class="hover:font-bold hover:underline"
+          >Política de Privacidad</router-link
+        >
+      </nav>
+    </section>
+  </footer>
 </template>
 
 <script setup>
-    // IMPORTS
-    import ResponsiveImage from '../images/ResponsiveImage.vue';
+// IMPORTS
+import ResponsiveImage from "@/components/images/ResponsiveImage.vue";
 </script>
-  
-<style lang="scss" scoped>
-    footer {
-        display: flex;
-        flex-direction: column;
-        
-        .first-counter {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 3.5rem;
-            padding: 1rem 0;
-            background-color: var(--color-brown);
-            
-            a {
-                .logo {
-                    width: 13rem;
-                    height: auto;
-                }
-            }
-
-            .links {
-                display: flex;
-                flex-direction: column;
-
-                h2 {
-                    font-family: "Montserrat-Bold";
-                    color: var(--color-white);
-                    text-shadow: 2px 2px 8px var(--color-black);
-                    font-size: 2.25rem;
-                }
-
-                a {
-                    color: var(--color-grey);
-                    text-decoration: none;
-                    font-size: 1.5rem;
-                    font-weight: bold;
-                    padding-left: 2rem;
-                    transition: all 0.25s;
-
-                    &:hover {
-                        color: var(--color-white);
-                        text-shadow: 2px 2px 8px var(--color-black);
-                    }
-                }
-            }
-
-            .social {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                
-                .fa-brands {
-                    color: var(--color-white);
-                    font-size: 5rem;
-                    transition: all 0.25s;
-                    
-                    &:hover {
-                        color: var(--color-light-green);
-                    }
-                }
-            }
-        }
-
-        .second-counter {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.25rem 1rem;
-            background-color: var(--color-vanille);
-            color: var(--color-brown);
-            
-            span {
-                font-weight: bold;
-            }
-   
-            .extra-links {
-                a {
-                    text-decoration: none;
-                    padding: 0 0.5rem;
-                    
-                    &:hover {
-                        text-decoration: underline;
-                        font-weight: 600;
-                    }
-                }    
-            } 
-        }
-    }
-
-    @media (max-width: 1110px) {
-        footer {
-            .first-counter {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: auto auto;
-                gap: 1rem;
-    
-                .links {
-                    h2 {
-                        line-height: 1;
-                    }
-
-                    a {
-                        text-align: center;
-                        padding: 0;
-                    }
-                    
-                    &:first-of-type {
-                        grid-column: 1;
-                        grid-row: 1;
-                    }
-    
-                    &:nth-of-type(2) {
-                        grid-column: 2;
-                        grid-row: 1;
-                    }
-                }
-                
-                a {
-                    display: grid;
-
-                    .logo {
-                        grid-column: 1;
-                        grid-row: 2;
-                        justify-self: center;
-                    }
-                }
-    
-                .social {
-                    grid-column: 2;
-                    grid-row: 2;
-                    justify-self: center;
-                }
-            }
-        }
-    }
-
-    
-    @media (max-width: 800px) { 
-        footer {
-            .first-counter {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto auto auto;
-                gap: 1rem;
-    
-                .links {
-                    a {
-                        text-align: center;
-                        padding: 0;
-                    }
-                    
-                    &:first-of-type {
-                        grid-column: 1;
-                        grid-row: 2;
-                    }
-    
-                    &:nth-of-type(2) {
-                        grid-column: 1;
-                        grid-row: 3;
-                    }
-                }
-                
-                a {
-                    .logo {
-                        grid-column: 1;
-                        grid-row: 1;
-                    }
-                }
-    
-                .social {
-                    display: flex;
-                    gap: 1rem;
-                    grid-column: 1;
-                    grid-row: 4;
-                    justify-self: center;
-
-                    .fa-brands {
-                        font-size: 3rem;
-                    }
-                }
-            }
-
-            .second-counter {
-                display: grid;
-                grid-template-columns: 1fr;
-                grid-template-rows: 1fr 1fr;
-                gap: 0.25rem;
-                text-align: center;
-
-                p {
-                    grid-row: 2;
-                }
-
-                .extra-links {
-                    grid-row: 1;
-                    display: flex;
-                    justify-content: center;
-                    gap: 2rem;
-                    padding: 0;
-                }
-            }
-        }
-    }
-
-    @media (max-width: 400px) {
-        footer {
-            .first-counter {
-                .links {
-                    h2 {
-                        font-size: 1.5rem;
-                    }
-
-                    a {
-                        font-size: 1.25rem;
-                    }
-                }
-            }
-
-            .second-counter {
-                font-size: 0.85rem;
-
-                .extra-links {
-                    gap: 0.5rem;
-                }
-            }
-        }
-    }
-</style>  

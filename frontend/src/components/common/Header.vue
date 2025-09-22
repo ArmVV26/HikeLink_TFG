@@ -12,7 +12,7 @@
       />
     </router-link>
 
-    <div class="flex items-center justify-center">
+    <section class="flex items-center justify-center">
       <button
         class="flex cursor-pointer items-center justify-center border-none bg-none text-5xl text-white transition-all duration-250 hover:scale-85"
         v-if="isMobile"
@@ -35,7 +35,7 @@
       </transition>
 
       <LoginButton :menuOpen="showUserMenu" @toggle-user-menu="handleUserMenuToggle" />
-    </div>
+    </section>
   </nav>
 </template>
 
@@ -43,8 +43,8 @@
 // IMPORTS
 import { onMounted, onBeforeUnmount, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import ResponsiveImage from "../images/ResponsiveImage.vue";
-import LoginButton from "../auth/LoginButton.vue";
+import ResponsiveImage from "@/components/images/ResponsiveImage.vue";
+import LoginButton from "@/components/auth/LoginButton.vue";
 
 // VARIABLES
 const route = useRoute();
@@ -138,12 +138,12 @@ const handleUserMenuToggle = (isOpen) => {
 .fade-dropdown-enter-from,
 .fade-dropdown-leave-to {
   opacity: 0;
-  transform: translateX(20px);
+  transform: translateY(-10px);
 }
 
 .fade-dropdown-enter-to,
 .fade-dropdown-leave-from {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 </style>
