@@ -1,7 +1,11 @@
 <template>
   <nav
-    :class="[{ 'hero-nav': route.name === 'Home' || route.name === 'AboutUs' }]"
-    class="relative z-5 flex min-h-30 justify-between bg-black shadow-xl/30 transition-colors duration-500"
+    :class="[
+      {
+        'bg-black-50 shadow-transparent': route.name === 'Home' || route.name === 'AboutUs',
+      },
+    ]"
+    class="relative z-5 flex min-h-30 justify-between bg-black shadow-xl/30 transition-all duration-500"
   >
     <router-link to="/" class="self-center p-1 sm:p-4">
       <ResponsiveImage
@@ -24,7 +28,12 @@
       <transition name="fade-dropdown">
         <div
           v-if="!isMobile || showMainMenu"
-          class="links bg-black-50 absolute top-30 right-0 flex flex-col items-center rounded-bl-3xl p-1 shadow-xl/30 lg:relative lg:top-0 lg:flex-row lg:justify-end lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none"
+          :class="[
+            {
+              'bg-black-50 shadow-transparent': route.name === 'Home' || route.name === 'AboutUs',
+            },
+          ]"
+          class="links absolute top-30 right-0 flex flex-col items-center rounded-bl-3xl bg-black p-1 shadow-xl/30 lg:relative lg:top-0 lg:flex-row lg:justify-end lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none"
         >
           <router-link to="/map" class="font-montserrat-bold text-xl">Mapa</router-link>
           <router-link to="/search-routes" class="font-montserrat-bold text-xl"
@@ -91,12 +100,6 @@ const handleUserMenuToggle = (isOpen) => {
 </script>
 
 <style lang="scss" scoped>
-.hero-nav {
-  background: var(--color-black-opacity);
-  box-shadow: none;
-  transition: background 0.5s ease;
-}
-
 .links {
   a {
     display: inline-block;

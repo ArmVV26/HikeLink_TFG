@@ -300,26 +300,3 @@ Favorites.objects.create(user=u2, route=r4)
 # Favoritos de JoseTravel
 Favorites.objects.create(user=u3, route=r1)
 Favorites.objects.create(user=u3, route=r3)
-
-# Script para popular muchos datos en la base de datos
-# def crear_rutas_masivas(base_user, base_description, cantidad=20):
-#     for i in range(cantidad):
-#         Route.objects.create(
-#             user=base_user,
-#             title=f'Ruta Vereda de la Estrella - Variante {i + 1}',
-#             type='Senderismo',
-#             description=base_description,
-#             img=[
-#                 '1_img.jpg', '2_img.jpg', '3_img.jpg',
-#                 '4_img.jpg', '5_img.jpg', '6_img.jpg'
-#             ],
-#             difficulty='Difícil',
-#             duration=30240 + i * 60,  # cada ruta tarda un poco mas
-#             distance=23800 + i * 10,  # y recorre un poco mas
-#             origin='Komoot',
-#             gpx_file=f'vereda-estrella-variante-{i + 1}.gpx',
-#             start_latitude=37.13443 + (i * 0.0001),
-#             start_longitude=-3.39193 - (i * 0.0001)
-#         )
-
-# crear_rutas_masivas(u1, descriptionR5, cantidad=50)

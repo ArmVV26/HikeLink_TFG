@@ -19,6 +19,12 @@
       <transition name="fade-dropdown">
         <nav
           v-if="menuOpen"
+          :class="[
+            {
+              'bg-black-50 shadow-transparent transition-all duration-500':
+                route.name === 'Home' || route.name === 'AboutUs',
+            },
+          ]"
           class="absolute top-full right-0 flex flex-col rounded-bl-3xl bg-black pb-4 text-center text-xl text-white transition-all duration-150"
         >
           <h1
@@ -54,9 +60,12 @@
 // IMPORTS
 import { useAuthStore } from "@/stores/authStore";
 import { useUserImage } from "@/composables/useUserImage";
+import { useRoute } from "vue-router";
 import CommonButton from "@/components/common/CommonButton.vue";
 
 // PROPS
+const route = useRoute();
+
 const props = defineProps({
   menuOpen: Boolean,
 });
