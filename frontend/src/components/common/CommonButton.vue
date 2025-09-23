@@ -8,7 +8,7 @@
       'font-lato cursor-pointer rounded-3xl border-2 px-4 py-4 font-bold transition-all duration-500 disabled:pointer-events-none',
       {
         'text-2xl sm:text-3xl': header,
-        'text-lg sm:text-xl': !header,
+        'text-base sm:text-xl': !header,
         'px-1 py-1': thin,
         'bg-grey border-black text-white': disabled,
         'bg-green border-light-green hover:bg-light-green hover:border-green hover:text-green text-white':
