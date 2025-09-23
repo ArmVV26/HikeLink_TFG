@@ -1,154 +1,96 @@
 <template>
-    <div v-if="authStore.isAuthResolved">
-        <CommonButton 
-            v-if="!authStore.isAuthenticated"
-            :header="false"
-            :text="'Iniciar Sesión'"
-            :route="'/login'"
-            class="login-button"
-        />
-        <div v-else class="user-menu">
-            <img :src="getIconUserImg"
-                @error="handleImgError" 
-                class="avatar" 
-                ref="userImg"
-                @click="toggleMenu" />
-            <transition name="fade-dropdown">
-                <div v-if="menuOpen" class="dropdown">
-                    <h1>{{ authStore.user.username }}</h1>
-                    <router-link :to="`/profile/${authStore.user.username}-${authStore.user.id}`"> Mi Perfil </router-link>
-                    <router-link to="/upload-route"> Subir Ruta </router-link>
-                    <router-link @click="authStore.logout" to="/">Cerrar Sesión</router-link>
-                </div>
-            </transition>
-        </div>
-    </div>
+  <section v-if="authStore.isAuthResolved">
+    <CommonButton
+      v-if="!authStore.isAuthenticated"
+      :header="false"
+      :text="'Iniciar Sesión'"
+      :route="'/login'"
+      class="color-white mr-2 ml-2 text-2xl sm:mr-4 sm:ml-4"
+    />
+    <article v-else>
+      <img
+        :src="getIconUserImg"
+        @error="handleImgError"
+        class="hover:border-light-green mr-2 ml-2 h-22 w-22 cursor-pointer rounded-3xl border-2 border-transparent object-cover transition-all duration-150 sm:mr-4 sm:ml-4"
+        ref="userImg"
+        @click="toggleMenu"
+      />
+
+      <transition name="fade-dropdown">
+        <nav
+          v-if="menuOpen"
+          class="absolute top-full right-0 flex flex-col rounded-bl-3xl bg-black pb-4 text-center text-xl text-white transition-all duration-150"
+        >
+          <h1
+            class="font-montserrat-bold text-light-green border-b-grey border-b-2 pt-1 pb-1 text-center text-2xl font-bold"
+          >
+            {{ authStore.user.username }}
+          </h1>
+          <router-link
+            :to="`/profile/${authStore.user.username}-${authStore.user.id}`"
+            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-250"
+          >
+            Mi Perfil
+          </router-link>
+          <router-link
+            to="/upload-route"
+            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-250"
+          >
+            Subir Ruta
+          </router-link>
+          <router-link
+            @click="authStore.logout"
+            to="/"
+            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-250"
+            >Cerrar Sesión</router-link
+          >
+        </nav>
+      </transition>
+    </article>
+  </section>
 </template>
 
 <script setup>
-    // IMPORTS
-    import { useAuthStore } from '@/stores/authStore';
-    import { useUserImage } from '@/composables/useUserImage';
-    import CommonButton from '../common/CommonButton.vue';
+// IMPORTS
+import { useAuthStore } from "@/stores/authStore";
+import { useUserImage } from "@/composables/useUserImage";
+import CommonButton from "@/components/common/CommonButton.vue";
 
-    // PROPS
-    const props = defineProps({
-        menuOpen: Boolean
-    });
+// PROPS
+const props = defineProps({
+  menuOpen: Boolean,
+});
 
-    // VARIABLES
-    const authStore = useAuthStore()
+// VARIABLES
+const authStore = useAuthStore();
 
-    const emit = defineEmits(['toggle-user-menu'])
-    
-    // Imagen de usuario
-    const { getIconUserImg, handleImgError, userImg } = useUserImage();
-    
-    // METODOS
-    // Para abrir o cerrar el menu
-    const toggleMenu = () => {
-        emit('toggle-user-menu', !props.menuOpen); 
-    }
+const emit = defineEmits(["toggle-user-menu"]);
+
+// Imagen de usuario
+const { getIconUserImg, handleImgError, userImg } = useUserImage();
+
+// METODOS
+// Para abrir o cerrar el menu
+const toggleMenu = () => {
+  emit("toggle-user-menu", !props.menuOpen);
+};
 </script>
 
 <style lang="scss" scoped>
-    .login-button {
-        color: var(--color-white);
-        font-size: 1.75rem;
-        margin: 0 2.5rem 0 1rem;
-    }
+.fade-dropdown-enter-active,
+.fade-dropdown-leave-active {
+  transition: all 0.25s ease;
+}
 
-    .user-menu {
-        .avatar {
-            width: 5rem;
-            height: 5rem;
-            border: 2px solid transparent;
-            border-radius: 25px;
-            margin: 0 5rem 0 1rem;
-            object-fit: cover;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-        .avatar:hover {
-            border: 2px solid var(--color-light-green);
-        }
-    
-        .dropdown {
-            position: absolute;
-            right: 0;
-            top: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-    
-            background-color: var(--color-black-opacity);
-            border-bottom-left-radius: 25px;
-            color: var(--color-white);
-            font-size: 1.25rem;
-            transition: all 0.15s;
-            
-            h1 {
-                font-family: "Montserrat-Bold";
-                font-weight: 900;
-                font-size: 1rem;
-                text-align: center;
-                color: var(--color-light-green);
-                border-bottom: 2px solid var(--color-grey);
-                line-height: 0.75;
-                padding: 0.5rem 0 0.25rem;
-            }
-            
-            a {
-                font-family: "Montserrat-Bold";
-                padding: 0 1rem;
-                line-height: 1;
-                cursor: pointer;
-                transition: all 0.25s;
-    
-                &:last-child {
-                    padding-bottom: 1rem;
-                }
-                
-                &:hover {
-                    color: var(--color-light-green);
-                }
-            }
-        }
-    }
+.fade-dropdown-enter-from,
+.fade-dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
 
-    .fade-dropdown-enter-active,
-    .fade-dropdown-leave-active {
-        transition: all 0.25s ease;
-    }
-
-    .fade-dropdown-enter-from,
-    .fade-dropdown-leave-to {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    .fade-dropdown-enter-to,
-    .fade-dropdown-leave-from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    @media (max-width: 550px) {
-        .login-button {
-            font-size: 1.25rem;
-            margin: 0 1rem 0 0.5rem;
-        }
-
-        .user-menu {
-            .avatar {
-                margin: 0.25rem 1rem 0.25rem 0.5rem;
-            }
-        }
-    }
-
-    @media(max-width: 350px) {
-        .login-button {
-            font-size: 1rem;
-        }
-    }
+.fade-dropdown-enter-to,
+.fade-dropdown-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
 </style>
