@@ -11,7 +11,7 @@
       </button>
 
       <section
-        class="border-green overflow-hidden rounded-lg border-x-4"
+        class="border-light-green-50 overflow-hidden rounded-md border-x-4"
         :class="[
           'w-[calc(320px*3+2rem)] max-[1150px]:w-[calc(320px*2+1rem)] max-[800px]:w-[320px]',
         ]"
