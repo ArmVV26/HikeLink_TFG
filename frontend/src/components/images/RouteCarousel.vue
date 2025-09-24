@@ -4,14 +4,14 @@
     <article class="relative flex w-full items-center justify-center overflow-hidden">
       <button
         v-if="showButton"
-        class="bg-green border-light-green hover:text-green z-1 mx-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl border-2 text-2xl font-bold text-white transition-all duration-250 hover:bg-white max-[550px]:absolute max-[550px]:top-[30%] max-[550px]:left-0"
+        class="bg-green border-light-green hover:text-green z-6 mx-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl border-2 text-2xl font-bold text-white transition-all duration-250 hover:bg-white max-[550px]:absolute max-[550px]:top-[30%] max-[550px]:left-0"
         @click="prevSlide(routes || imgUrls)"
       >
         <i class="fa-solid fa-arrow-left"></i>
       </button>
 
       <section
-        class="border-light-green-50 overflow-hidden rounded-md border-x-4"
+        class="carousel-overlay overflow-hidden p-1 max-[1150px]:p-[2px] max-[800px]:p-[1px]"
         :class="[
           'w-[calc(320px*3+2rem)] max-[1150px]:w-[calc(320px*2+1rem)] max-[800px]:w-[320px]',
         ]"
@@ -23,7 +23,7 @@
             :key="route.id"
           >
             <router-link :to="{ name: 'RouteDetail', params: { id: route.id, slug: route.slug } }">
-              <article class="carousel-card relative overflow-hidden rounded-3xl">
+              <article class="relative overflow-hidden rounded-3xl">
                 <div class="border-green h-40 overflow-hidden rounded-t-3xl border-4">
                   <img
                     :src="getRouteImg(route)"
@@ -60,7 +60,7 @@
 
       <button
         v-if="showButton"
-        class="bg-green border-light-green hover:text-green z-1 mx-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl border-2 text-2xl font-bold text-white transition-all duration-250 hover:bg-white max-[550px]:absolute max-[550px]:top-[30%] max-[550px]:right-0"
+        class="bg-green border-light-green hover:text-green z-6 mx-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl border-2 text-2xl font-bold text-white transition-all duration-250 hover:bg-white max-[550px]:absolute max-[550px]:top-[30%] max-[550px]:right-0"
         @click="nextSlide(routes || imgUrls)"
       >
         <i class="fa-solid fa-arrow-right"></i>
@@ -278,5 +278,31 @@ onUnmounted(() => {
   &:hover img {
     transform: scale(1.05);
   }
+}
+
+.carousel-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-overlay::before,
+.carousel-overlay::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.carousel-overlay::before {
+  left: 0;
+  background: linear-gradient(to right, white, transparent);
+}
+
+.carousel-overlay::after {
+  right: 0;
+  background: linear-gradient(to left, white, transparent);
 }
 </style>
