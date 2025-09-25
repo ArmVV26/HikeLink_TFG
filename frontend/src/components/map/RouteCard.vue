@@ -1,7 +1,7 @@
 <template>
   <main class="flex flex-col gap-4">
     <section
-      class="rounded-3xl p-2 shadow-[2px_2px_5px_1px_rgb(0,_0,_0)] transition-all duration-250 hover:scale-99"
+      class="rounded-3xl p-2 shadow-[2px_2px_5px_1px_rgb(0,_0,_0)] transition-all duration-300 hover:scale-99"
       v-for="route in paginatedRoutes"
       :key="route.id"
     >
@@ -86,7 +86,7 @@
       <button
         @click="emit('change-page', props.currentPage - 1)"
         :disabled="props.currentPage === 1"
-        class="border-green hover:bg-green cursor-pointer rounded-3xl border-2 bg-white px-2 py-1 text-sm transition-all duration-250 hover:text-white disabled:hidden sm:px-4 sm:py-2 sm:text-lg"
+        class="border-green hover:bg-green cursor-pointer rounded-3xl border-2 bg-white px-2 py-1 text-sm transition-all duration-300 hover:text-white disabled:hidden sm:px-4 sm:py-2 sm:text-lg"
       >
         <i class="fa-solid fa-less-than"></i>
       </button>
@@ -96,7 +96,7 @@
         :key="page"
         :disabled="page === '...'"
         :class="[
-          'text-sm transition-all duration-250 sm:text-lg',
+          'text-sm transition-all duration-300 sm:text-lg',
           {
             'bg-green text-white': page === props.currentPage,
             'bg-white': page !== props.currentPage && page !== '...',
@@ -113,7 +113,7 @@
       <button
         @click="emit('change-page', props.currentPage + 1)"
         :disabled="props.currentPage === props.totalPages"
-        class="border-green hover:bg-green cursor-pointer rounded-3xl border-2 bg-white px-2 py-1 text-sm transition-all duration-250 hover:text-white disabled:hidden sm:px-4 sm:py-2 sm:text-lg"
+        class="border-green hover:bg-green cursor-pointer rounded-3xl border-2 bg-white px-2 py-1 text-sm transition-all duration-300 hover:text-white disabled:hidden sm:px-4 sm:py-2 sm:text-lg"
       >
         <i class="fa-solid fa-greater-than"></i>
       </button>

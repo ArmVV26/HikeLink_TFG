@@ -1,7 +1,7 @@
 <template>
   <main class="flex flex-col gap-4">
     <section
-      class="bg-white px-2 py-4 shadow-md/30 transition-all duration-250 hover:scale-99 sm:rounded-3xl"
+      class="bg-white px-2 py-4 shadow-md/30 transition-all duration-300 hover:scale-99 sm:rounded-3xl"
       v-for="thread in paginatedThreads"
       :key="thread.id"
     >
@@ -49,7 +49,7 @@
       <button
         @click="emit('change-page', props.currentPage - 1)"
         :disabled="props.currentPage === 1"
-        class="border-green hover:bg-green cursor-pointer rounded-3xl border-2 bg-white px-2 py-1 text-sm transition-all duration-250 hover:text-white disabled:hidden sm:px-4 sm:py-2 sm:text-lg"
+        class="border-green hover:bg-green tranext-wsition-all hover:thite cursor-pointer rounded-3xl border-2 bg-white px-2 py-1 text-sm duration-300 disabled:hidden sm:px-4 sm:py-2 sm:text-lg"
       >
         <i class="fa-solid fa-less-than"></i>
       </button>
@@ -59,7 +59,7 @@
         :key="page"
         :disabled="page === '...'"
         :class="[
-          'text-sm transition-all duration-250 sm:text-lg',
+          'text-sm transition-all duration-300 sm:text-lg',
           {
             'bg-green text-white': page === props.currentPage,
             'bg-white': page !== props.currentPage && page !== '...',
@@ -76,7 +76,7 @@
       <button
         @click="emit('change-page', props.currentPage + 1)"
         :disabled="props.currentPage === props.totalPages"
-        class="border-green hover:bg-green cursor-pointer rounded-3xl border-2 bg-white px-2 py-1 text-sm transition-all duration-250 hover:text-white disabled:hidden sm:px-4 sm:py-2 sm:text-lg"
+        class="border-green hover:bg-green cursor-pointer rounded-3xl border-2 bg-white px-2 py-1 text-sm transition-all duration-300 hover:text-white disabled:hidden sm:px-4 sm:py-2 sm:text-lg"
       >
         <i class="fa-solid fa-greater-than"></i>
       </button>

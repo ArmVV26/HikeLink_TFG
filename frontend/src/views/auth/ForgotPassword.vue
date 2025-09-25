@@ -1,7 +1,7 @@
 <template>
-  <main class="flex h-full items-center justify-center px-6">
+  <main class="flex h-full items-center justify-center py-10 sm:px-6">
     <section
-      class="flex max-w-110 flex-col justify-center rounded-3xl bg-white px-6 py-6 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)]"
+      class="flex flex-col justify-center bg-white px-6 py-6 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] sm:max-w-110 sm:rounded-3xl"
     >
       <h1 class="font-montserrat-bold text-green text-center text-2xl leading-6">
         Recupera tu contraseña
@@ -19,11 +19,11 @@
           type="text"
           v-model="email"
           placeholder="Tu correo"
-          class="border-brown hover:border-green m-auto w-[90%] rounded-3xl border-2 px-3 py-2 text-base text-black"
+          class="border-brown hover:border-green m-auto w-[90%] rounded-xl border-2 px-3 py-2 text-base text-black"
         />
         <button
           type="submit"
-          class="bg-green hover:bg-light-green hover:text-green m-auto w-[90%] cursor-pointer rounded-3xl px-1 py-2 text-base font-bold text-white transition-all duration-250"
+          class="bg-green hover:bg-light-green hover:text-green m-auto w-[90%] cursor-pointer rounded-3xl px-1 py-2 text-base font-bold text-white transition-all duration-300"
         >
           Enviar enlace
         </button>
@@ -39,15 +39,18 @@
 
       <article
         v-if="error || Object.keys(fieldErrors).length > 0"
-        class="my-1 rounded-lg bg-red-500 p-2"
+        class="my-1 rounded-lg bg-red-600 p-2"
       >
         <ul>
-          <li class="text-center text-base font-bold text-white" v-for="err in fieldErrors">
+          <li class="text-center text-base font-bold text-red-100" v-for="err in fieldErrors">
             <i class="fa-solid fa-circle-exclamation"></i>
             {{ err }}
           </li>
         </ul>
-        <p class="text-center text-base font-bold text-white">{{ error }}</p>
+        <p v-if="error" class="text-center text-base font-bold text-red-100">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ error }}
+        </p>
       </article>
     </section>
   </main>

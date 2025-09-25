@@ -23,7 +23,7 @@
             placeholder="Contraseña Actual"
           />
           <span
-            class="text-brown hover:text-green absolute top-[50%] right-1 translate-y-[-50%] cursor-pointer transition-all duration-250"
+            class="text-brown hover:text-green absolute top-[50%] right-1 -translate-y-1/2 cursor-pointer transition-all duration-300"
             @click="showOldPassword = !showOldPassword"
           >
             <i :class="showOldPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
@@ -38,14 +38,18 @@
             placeholder="Nueva contraseña (opcional)"
           />
           <span
-            class="text-brown hover:text-green absolute top-[50%] right-1 translate-y-[-50%] cursor-pointer transition-all duration-250"
+            class="text-brown hover:text-green absolute top-[50%] right-1 -translate-y-1/2 cursor-pointer transition-all duration-300"
             @click="showNewPassword = !showNewPassword"
           >
             <i :class="showNewPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
         </article>
 
-        <textarea v-model="bio" placeholder="Biografía (Opcional)"></textarea>
+        <textarea
+          v-model="bio"
+          placeholder="Biografía (Opcional)"
+          class="min-h-40 resize-none"
+        ></textarea>
 
         <article class="flex flex-col items-center">
           <img
@@ -64,15 +68,18 @@
 
         <article
           v-if="error || Object.keys(fieldErrors).length > 0"
-          class="my-1 rounded-lg bg-red-500 p-2"
+          class="my-1 rounded-lg bg-red-600 p-2"
         >
           <ul>
-            <li class="text-center text-base font-bold text-white" v-for="err in fieldErrors">
+            <li class="text-center text-base font-bold text-red-100" v-for="err in fieldErrors">
               <i class="fa-solid fa-circle-exclamation"></i>
               {{ err }}
             </li>
           </ul>
-          <p class="text-center text-base font-bold text-white">{{ error }}</p>
+          <p v-if="error" class="text-center text-base font-bold text-red-100">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ error }}
+          </p>
         </article>
 
         <p
@@ -307,11 +314,6 @@ form {
     &:hover {
       border: 2px solid var(--color-green);
     }
-  }
-
-  textarea {
-    resize: none;
-    min-height: 20rem;
   }
 
   input[type="file"] {

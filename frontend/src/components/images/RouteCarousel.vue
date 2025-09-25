@@ -4,7 +4,7 @@
     <article class="relative flex w-full items-center justify-center overflow-hidden">
       <button
         v-if="showButton"
-        class="bg-green border-light-green hover:text-green z-6 mx-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl border-2 text-2xl font-bold text-white transition-all duration-250 hover:bg-white max-[550px]:absolute max-[550px]:top-[30%] max-[550px]:left-0"
+        class="bg-green border-light-green hover:text-green z-6 mx-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl border-2 text-2xl font-bold text-white transition-all duration-300 hover:bg-white max-[550px]:absolute max-[550px]:top-[30%] max-[550px]:left-0"
         @click="prevSlide(routes || imgUrls)"
       >
         <i class="fa-solid fa-arrow-left"></i>
@@ -18,7 +18,7 @@
       >
         <section class="flex gap-3 will-change-transform" :style="trackStyle">
           <article
-            class="carousel-card w-80 shrink-0 p-1 transition-all duration-250"
+            class="carousel-card w-80 shrink-0 p-1 transition-all duration-300"
             v-for="route in routes"
             :key="route.id"
           >
@@ -28,7 +28,7 @@
                   <img
                     :src="getRouteImg(route)"
                     @error="handleImgError"
-                    class="block h-full w-full object-cover brightness-100 contrast-110 saturate-110 sepia-[0.1] filter transition-transform duration-250"
+                    class="block h-full w-full object-cover brightness-100 contrast-110 saturate-110 sepia-[0.1] filter transition-transform duration-300"
                     alt="Imagen de ruta"
                   />
                 </div>
@@ -60,7 +60,7 @@
 
       <button
         v-if="showButton"
-        class="bg-green border-light-green hover:text-green z-6 mx-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl border-2 text-2xl font-bold text-white transition-all duration-250 hover:bg-white max-[550px]:absolute max-[550px]:top-[30%] max-[550px]:right-0"
+        class="bg-green border-light-green hover:text-green z-6 mx-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl border-2 text-2xl font-bold text-white transition-all duration-300 hover:bg-white max-[550px]:absolute max-[550px]:top-[30%] max-[550px]:right-0"
         @click="nextSlide(routes || imgUrls)"
       >
         <i class="fa-solid fa-arrow-right"></i>
@@ -74,7 +74,7 @@
       <div class="text-center">
         <button
           @click="openLightbox(0)"
-          class="font-montserrat-bold bg-green border-light-green hover:text-green hover:bg-light-green hover:border-green mb-2 cursor-pointer rounded-3xl border-2 px-4 py-2 text-xl text-white transition-all duration-250"
+          class="font-montserrat-bold bg-green border-light-green hover:text-green hover:bg-light-green hover:border-green mb-2 cursor-pointer rounded-3xl border-2 px-4 py-2 text-xl text-white transition-all duration-300"
         >
           <i class="fa-solid fa-expand"></i> Ver en grande
         </button>

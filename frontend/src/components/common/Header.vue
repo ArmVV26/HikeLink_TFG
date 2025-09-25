@@ -12,13 +12,13 @@
         :info="['LogoHikelink', 'logo']"
         :formats="['svg', 'png']"
         alt="Logo Header"
-        class="w-30 transition-all duration-250 hover:scale-95 sm:w-40"
+        class="w-30 transition-all duration-300 hover:scale-95 sm:w-40"
       />
     </router-link>
 
     <section class="flex items-center justify-center">
       <button
-        class="flex cursor-pointer items-center justify-center border-none bg-none text-5xl text-white transition-all duration-250 hover:scale-85"
+        class="flex cursor-pointer items-center justify-center border-none bg-none text-5xl text-white transition-all duration-300 hover:scale-85"
         v-if="isMobile"
         @click="toggleMainMenu"
       >

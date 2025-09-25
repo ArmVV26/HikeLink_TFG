@@ -11,7 +11,7 @@
       <img
         :src="getIconUserImg"
         @error="handleImgError"
-        class="hover:border-light-green mr-2 ml-2 h-22 w-22 cursor-pointer rounded-3xl border-2 border-transparent object-cover transition-all duration-150 sm:mr-4 sm:ml-4"
+        class="hover:border-light-green mr-2 ml-2 h-22 w-22 cursor-pointer rounded-3xl border-2 border-transparent object-cover transition-all duration-200 sm:mr-4 sm:ml-4"
         ref="userImg"
         @click="toggleMenu"
       />
@@ -25,7 +25,7 @@
                 route.name === 'Home' || route.name === 'AboutUs',
             },
           ]"
-          class="absolute top-full right-0 flex flex-col rounded-bl-3xl bg-black pb-4 text-center text-xl text-white transition-all duration-150"
+          class="absolute top-full right-0 flex flex-col rounded-bl-3xl bg-black pb-4 text-center text-xl text-white transition-all duration-200"
         >
           <h1
             class="font-montserrat-bold text-light-green border-b-grey border-b-2 pt-1 pb-1 text-center text-2xl font-bold"
@@ -34,20 +34,20 @@
           </h1>
           <router-link
             :to="`/profile/${authStore.user.username}-${authStore.user.id}`"
-            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-250"
+            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-300"
           >
             Mi Perfil
           </router-link>
           <router-link
             to="/upload-route"
-            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-250"
+            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-300"
           >
             Subir Ruta
           </router-link>
           <router-link
             @click="authStore.logout"
             to="/"
-            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-250"
+            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-300"
             >Cerrar Sesión</router-link
           >
         </nav>
