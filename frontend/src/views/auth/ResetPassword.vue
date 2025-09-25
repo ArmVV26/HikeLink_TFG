@@ -79,7 +79,9 @@
         </h2>
       </article>
 
-      <h2 v-else class="expired">Enlace expirado, vuelva a realizar el proceso.</h2>
+      <h2 v-else class="font-montserrat-bold my-2 text-center text-red-400">
+        Enlace expirado, vuelva a realizar el proceso.
+      </h2>
     </section>
   </main>
 </template>
@@ -162,12 +164,5 @@ form {
       border: 2px solid var(--color-green);
     }
   }
-}
-
-.expired {
-  font-family: "Monteserrat-Bold";
-  font-size: 1.5rem;
-  color: var(--color-red-400);
-  text-shadow: none;
 }
 </style>
