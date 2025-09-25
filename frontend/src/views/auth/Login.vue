@@ -4,20 +4,21 @@
       class="flex w-full flex-col justify-center bg-white px-6 py-6 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] sm:max-w-110 sm:rounded-3xl"
     >
       <h1 class="font-montserrat-bold text-green text-center text-3xl leading-6">Inicia sesión</h1>
-      <h2 class="font-montserrat-bold text-brown mb-6 text-center text-lg sm:text-xl">
+      <h2 class="font-montserrat-bold text-brown mb-4 text-center text-lg sm:text-xl">
         Para comenzar la aventura
       </h2>
 
       <p
-        class="text-green bg-light-green-50 rounded-3xl px-1 py-2 text-center text-base font-bold"
+        class="text-green bg-light-green-50 mb-6 rounded-3xl px-1 py-2 text-center text-base font-bold"
         v-if="success"
       >
         <i class="fa-solid fa-circle-check"></i>
         {{ success }}
       </p>
 
-      <form @submit.prevent="login" class="font-lato flex flex-col gap-2">
+      <form @submit.prevent="login" class="font-lato flex flex-col gap-2 text-sm sm:text-base">
         <input type="text" v-model="inputUserMail" placeholder="Usuario o Correo" />
+
         <article class="relative m-auto mb-4 w-[90%]">
           <input
             :type="showPassword ? 'text' : 'password'"
