@@ -25,7 +25,7 @@
                 route.name === 'Home' || route.name === 'AboutUs',
             },
           ]"
-          class="absolute top-full right-0 flex flex-col rounded-bl-3xl bg-black pb-4 text-center text-xl text-white transition-all duration-200"
+          class="absolute top-full right-0 flex w-60 flex-col rounded-bl-3xl bg-black pb-4 text-center text-xl text-white transition-all duration-200"
         >
           <h1
             class="font-montserrat-bold text-light-green border-b-grey border-b-2 pt-1 pb-1 text-center text-2xl font-bold"

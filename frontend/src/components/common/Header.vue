@@ -26,7 +26,7 @@
       </button>
 
       <transition name="fade-dropdown">
-        <div
+        <nav
           v-if="!isMobile || showMainMenu"
           :class="[
             {
@@ -40,7 +40,7 @@
             >Buscar Ruta</router-link
           >
           <router-link to="/foro" class="font-montserrat-bold text-xl">Foro</router-link>
-        </div>
+        </nav>
       </transition>
 
       <LoginButton :menuOpen="showUserMenu" @toggle-user-menu="handleUserMenuToggle" />

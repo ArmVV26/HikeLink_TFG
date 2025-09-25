@@ -1,7 +1,7 @@
 <template>
   <main class="flex h-full items-center justify-center py-10 sm:px-6">
     <section
-      class="flex flex-col justify-center bg-white px-6 py-6 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] sm:max-w-110 sm:rounded-3xl"
+      class="flex w-full flex-col justify-center bg-white px-6 py-6 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] sm:max-w-110 sm:rounded-3xl"
     >
       <h1 class="font-montserrat-bold text-green text-center text-2xl leading-6">
         Recupera tu contraseña
