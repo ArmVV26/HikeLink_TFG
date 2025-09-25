@@ -64,10 +64,11 @@
 
         <article
           v-if="error || Object.keys(fieldErrors).length > 0"
-          class="my-1 rounded-3xl bg-red-500 p-2"
+          class="my-1 rounded-lg bg-red-500 p-2"
         >
           <ul>
             <li class="text-center text-base font-bold text-white" v-for="err in fieldErrors">
+              <i class="fa-solid fa-circle-exclamation"></i>
               {{ err }}
             </li>
           </ul>
