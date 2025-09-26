@@ -1,197 +1,125 @@
 <template>
-    <div class="main-container">
-        <div class="thread-form">
-            <h1>Nuevo Hilo</h1>
-            <h2>HikeLink</h2>
+  <main class="flex h-full items-center justify-center py-10 sm:px-6">
+    <section
+      class="w-full bg-white px-6 py-6 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] sm:w-100 sm:rounded-3xl"
+    >
+      <h1 class="font-montserrat-bold text-green text-center text-3xl leading-6">Nuevo Hilo</h1>
+      <h2 class="font-montserrat-bold text-brown mb-2 text-center text-lg sm:text-xl">HikeLink</h2>
 
-            <form @submit.prevent="uploadThread">
-                <input type="text" v-model="title" placeholder="Título"/>
+      <form @submit.prevent="uploadThread" class="font-lato flex flex-col gap-2">
+        <input type="text" v-model="title" placeholder="Título" class />
 
-                <textarea v-model="content" placeholder="Descripción del hilo"></textarea>
+        <textarea
+          v-model="content"
+          class="min-h-12 resize-none"
+          placeholder="Descripción del hilo"
+        ></textarea>
 
-                <div v-if="error || Object.keys(fieldErrors).length > 0" class="errors-container">
-                    <ul>
-                        <li class="error" v-for="err in fieldErrors">{{ err }}</li>
-                    </ul>
-                    <p class="error">{{ error }}</p>
-                </div>
+        <article
+          v-if="error || Object.keys(fieldErrors).length > 0"
+          class="mb-5 rounded-lg bg-red-600 p-2"
+        >
+          <ul>
+            <li class="text-center text-base font-bold text-red-100" v-for="err in fieldErrors">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ err }}
+            </li>
+          </ul>
+          <p v-if="error" class="text-center text-base font-bold text-red-100">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ error }}
+          </p>
+        </article>
 
-                <button type="submit">Subir Hilo</button>
-            </form>
-        </div>
-    </div>
+        <button
+          type="submit"
+          class="bg-green hover:bg-light-green hover:text-green m-auto w-[50%] cursor-pointer rounded-3xl px-3 py-2 text-base font-bold text-white transition-all duration-250"
+        >
+          Subir Hilo
+        </button>
+      </form>
+    </section>
+  </main>
 </template>
 
 <script setup>
-    // IMPORTS
-    import { ref } from 'vue'
-    import { useRouter } from 'vue-router'
-    import { useFormValidation } from '@/composables/useValidation'
-    import { uploadThreadServices } from '@/services/ThreadServices'
+// IMPORTS
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useFormValidation } from "@/composables/useValidation";
+import { uploadThreadServices } from "@/services/ThreadServices";
 
-    // VARIABLES
-    const title = ref('')
-    const content = ref('')
+// VARIABLES
+const title = ref("");
+const content = ref("");
 
-    const error = ref('')
-    const router = useRouter()
+const error = ref("");
+const router = useRouter();
 
-    const {
-        fieldErrors,
-        resetErrors,
-        validateTitle,
-    } = useFormValidation()
+const { fieldErrors, resetErrors, validateTitle } = useFormValidation();
 
-    // METODOS
-    // Validacion general
-    const validateThreadForm = () => {
-        resetErrors()
-        let valid = true
+// METODOS
+// Validacion general
+const validateThreadForm = () => {
+  resetErrors();
+  let valid = true;
 
-        if (!title.value) {
-            fieldErrors.value.title = 'El título es obligatorio.'
-            valid = false
-        } else if (!validateTitle(title.value)) {
-            fieldErrors.value.title = 'El título solo puede contener todas las letras, espacios, numeros, comas y guiones (-).'
-            valid = false
-        }
+  if (!title.value) {
+    fieldErrors.value.title = "El título es obligatorio.";
+    valid = false;
+  } else if (!validateTitle(title.value)) {
+    fieldErrors.value.title =
+      "El título solo puede contener todas las letras, espacios, numeros, comas y guiones (-).";
+    valid = false;
+  }
 
-        if (!content.value) {
-            fieldErrors.value.content = 'El contenido es obligatorio.'
-            valid = false
-        }
+  if (!content.value) {
+    fieldErrors.value.content = "El contenido es obligatorio.";
+    valid = false;
+  }
 
-        return valid
+  return valid;
+};
+
+// Funcion para subir el Hilo
+const uploadThread = async () => {
+  error.value = "";
+
+  if (!validateThreadForm()) return;
+
+  const formData = new FormData();
+  formData.append("title", title.value);
+  formData.append("content", content.value);
+
+  try {
+    const data = await uploadThreadServices(formData);
+    router.push({ name: "ThreadDetail", params: { slug: data.slug, id: data.id } });
+  } catch (err) {
+    if (err.response && err.response.data && err.response.data.error) {
+      error.value = err.response.data.error;
+    } else {
+      error.value = "Error al guardar la ruta.";
     }
-
-    // Funcion para subir el Hilo
-    const uploadThread = async () => {
-        error.value = ''
-
-        if (!validateThreadForm()) return
-
-        const formData = new FormData()
-        formData.append('title', title.value)
-        formData.append('content', content.value)
-
-        try {
-            const data = await uploadThreadServices(formData)
-            router.push({ name: 'ThreadDetail', params: { slug: data.slug, id: data.id }})
-        } catch (err) {
-            if (err.response && err.response.data && err.response.data.error) {
-                error.value = err.response.data.error
-            } else {
-                error.value = 'Error al guardar la ruta.'
-            }
-            console.error(err)
-        }
-    }
+    console.error(err);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-    .main-container {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 2rem 0 2rem;
+form {
+  input[type="text"],
+  textarea {
+    border: 2px solid var(--color-brown);
+    border-radius: 12px;
+    margin: auto;
+    width: 90%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    color: var(--color-black);
 
-        .thread-form {
-            width: 25rem;
-            padding: 2rem 1.5rem;
-            background-color: var(--color-white);
-            border-radius: 25px;
-            box-shadow: 0px 0px 10px 0px var(--color-black);
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            h1 {
-                font-family: "Montserrat-Bold";
-                font-size: 2rem;
-                color: var(--color-green);
-                text-shadow: none;
-                line-height: 1;
-            }
-
-            h2 {
-                font-family: "Montserrat-Bold";
-                font-size: 1.5rem;
-                color: var(--color-brown);
-                text-shadow: none;
-                margin-bottom: 1rem;
-            }
-
-            form {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-                font-family: "Lato";
-
-                input[type="text"], textarea {
-                    width: 90%;
-                    padding: 0.5rem 0.75rem;
-                    margin: auto;
-                    font-size: 1rem;
-                    color: var(--color-black);
-                    border: 2px solid var(--color-brown);
-                    border-radius: 10px;
-
-                    &:hover {
-                        border: 2px solid var(--color-green);
-                    }
-                }
-
-                textarea {
-                    resize: none;
-                    min-height: 9rem;
-                }
-
-                .errors-container {
-                    background-color: rgba(255, 103, 103, 0.3);
-                    border-radius: 25px;
-                    padding: 0.5rem;
-                    margin: 0 0.5rem;
-
-                    .error {
-                        text-align: center;
-                        color: var(--color-red-400);
-                        font-size: 1rem;
-                        font-weight: 900;
-                    }
-                }
-
-                button[type="submit"] {
-                    width: 90%;
-                    padding: 0.5rem 0.75rem;
-                    margin: auto;
-                    font-size: 1rem;
-                    font-weight: 900;
-                    color: var(--color-white);
-                    background-color: var(--color-green);
-                    border-radius: 25px;
-                    cursor: pointer;
-                    transition: all 0.25s;
-
-                    &:hover {
-                        background-color: var(--color-light-green);
-                        color: var(--color-green);
-                    }
-                }
-            }
-        }
+    &:hover {
+      border: 2px solid var(--color-green);
     }
-
-    @media (max-width: 400px) {
-        .main-container {
-            .thread-form {
-                width: 100%;
-                padding: 1rem 0;
-                border-top: 5px solid var(--color-green);
-                border-bottom: 5px solid var(--color-green);
-                border-radius: 0;
-            }
-        }
-    }
+  }
+}
 </style>
