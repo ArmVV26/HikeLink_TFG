@@ -1,7 +1,11 @@
+1111
 <template>
-  <main v-if="user.id" class="flex flex-col gap-6 py-10 sm:mx-2 xl:mx-6 xl:flex-row xl:items-start">
+  <main
+    v-if="user.id"
+    class="flex flex-col gap-6 py-10 sm:mx-2 xl:mx-6 xl:grid xl:grid-cols-[25rem_1fr]"
+  >
     <section
-      class="bg-vanille-50 border-brown w-full self-center border-y-6 p-6 sm:w-100 sm:rounded-3xl sm:border-0 sm:shadow-[5px_5px_0px_2px_rgb(141,_110,_99)] xl:w-200 xl:self-start"
+      class="bg-vanille-50 border-brown w-full self-center border-y-6 p-6 sm:w-100 sm:rounded-3xl sm:border-0 sm:shadow-[5px_5px_0px_2px_rgb(141,_110,_99)] xl:self-start"
     >
       <article
         class="border-b-brown mb-4 flex flex-col items-center justify-center border-b-2 pb-4"
@@ -86,14 +90,17 @@
         <i
           class="fa-solid fa-mountain-sun text-green text-[6rem] drop-shadow-[8px_5px_0px_0px_rgb(129,_199,_132)]"
         ></i>
-        <article v-if="view === 'myRoutes'" class="flex flex-col items-center justify-center">
+        <article
+          v-if="view === 'myRoutes'"
+          class="flex flex-col items-center justify-center text-center"
+        >
           <h1 class="font-montserrat-bold text-green text-3xl">¡Comienza a incluir tus rutas!</h1>
           <p class="mb-4">
             Todavía no has subido ninguna ruta. Subelas para compartir tus experiencias.
           </p>
           <CommonButton :text="'Subir Ruta'" :route="'/upload-route'" :thin="true" />
         </article>
-        <article v-else class="flex flex-col items-center justify-center">
+        <article v-else class="flex flex-col items-center justify-center text-center">
           <h1 class="font-montserrat-bold text-green text-3xl">¡Añade alguna ruta a Favoritos!</h1>
           <p class="mb-4">
             Todavía no has añadido ninguna ruta a favoritos, dale al botón de abajo para buscar tus
