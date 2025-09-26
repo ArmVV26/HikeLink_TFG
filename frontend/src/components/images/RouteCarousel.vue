@@ -69,12 +69,14 @@
   </section>
 
   <section v-else-if="imgUrls && imgUrls.length > 0" class="flex flex-col">
-    <article class="flex items-center justify-between">
-      <h1 class="font-montserrat-bold text-green text-left text-2xl font-bold">Fotos de la Ruta</h1>
+    <article class="flex flex-col items-center sm:flex-row sm:justify-between">
+      <h1 class="font-montserrat-bold text-green text-left text-lg font-bold sm:text-2xl">
+        Fotos de la Ruta
+      </h1>
       <div class="text-center">
         <button
           @click="openLightbox(0)"
-          class="font-montserrat-bold bg-green border-light-green hover:text-green hover:bg-light-green hover:border-green mb-2 cursor-pointer rounded-3xl border-2 px-4 py-2 text-xl text-white transition-all duration-300"
+          class="font-montserrat-bold bg-green border-light-green hover:text-green hover:bg-light-green hover:border-green mb-2 cursor-pointer rounded-3xl border-2 px-4 py-2 text-sm text-white transition-all duration-300 sm:text-base"
         >
           <i class="fa-solid fa-expand"></i> Ver en grande
         </button>
