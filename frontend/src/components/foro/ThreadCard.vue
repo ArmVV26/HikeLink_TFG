@@ -1,7 +1,7 @@
 <template>
   <main class="flex flex-col gap-4">
     <section
-      class="bg-white px-2 py-4 shadow-md/30 transition-all duration-300 hover:scale-99 sm:rounded-3xl"
+      class="bg-white px-2 py-4 shadow-[0px_0px_6px_0px_rgb(0,_0,_0)] transition-all duration-300 hover:scale-99 sm:rounded-3xl"
       v-for="thread in paginatedThreads"
       :key="thread.id"
     >
