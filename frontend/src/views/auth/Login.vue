@@ -4,7 +4,7 @@
       class="flex w-full flex-col justify-center bg-white px-6 py-6 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] sm:max-w-110 sm:rounded-3xl"
     >
       <h1 class="font-montserrat-bold text-green text-center text-3xl leading-6">Inicia sesión</h1>
-      <h2 class="font-montserrat-bold text-brown mb-4 text-center text-lg sm:text-xl">
+      <h2 class="font-montserrat-bold text-brown mb-4 text-center text-base sm:text-xl">
         Para comenzar la aventura
       </h2>
 

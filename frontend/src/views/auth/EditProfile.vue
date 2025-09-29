@@ -6,7 +6,9 @@
       <h1 class="font-montserrat-bold text-green text-center text-3xl leading-6">
         Modificar Perfil
       </h1>
-      <h2 class="font-montserrat-bold text-brown mb-4 text-center text-xl">{{ username }}</h2>
+      <h2 class="font-montserrat-bold text-brown mb-4 text-center text-base sm:text-xl">
+        {{ username }}
+      </h2>
 
       <form
         @submit.prevent="updateProfile"

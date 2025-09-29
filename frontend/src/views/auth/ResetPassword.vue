@@ -8,7 +8,7 @@
       </h1>
       <h2
         v-if="userName"
-        class="font-montserrat-bold text-brown mb-4 text-center text-lg sm:text-xl"
+        class="font-montserrat-bold text-brown mb-4 text-center text-base sm:text-xl"
       >
         {{ userName }}
       </h2>

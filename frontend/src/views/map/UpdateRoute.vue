@@ -4,7 +4,9 @@
       class="w-full bg-white px-1 py-8 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] md:w-180 md:rounded-3xl md:px-4"
     >
       <h1 class="font-montserrat-bold text-green text-center text-3xl leading-6">Modificar Ruta</h1>
-      <h2 class="font-montserrat-bold text-brown mb-4 text-center text-xl">{{ title }}</h2>
+      <h2 class="font-montserrat-bold text-brown mb-4 text-center text-base sm:text-xl">
+        {{ title }}
+      </h2>
 
       <form
         @submit.prevent="updateRoute"

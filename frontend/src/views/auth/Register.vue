@@ -6,7 +6,9 @@
       <h1 class="font-montserrat-bold text-green text-center text-3xl leading-6">
         Crear una cuenta
       </h1>
-      <h2 class="font-montserrat-bold text-brown mb-6 text-center text-lg sm:text-xl">HikeLink</h2>
+      <h2 class="font-montserrat-bold text-brown mb-6 text-center text-base sm:text-xl">
+        HikeLink
+      </h2>
 
       <form @submit.prevent="register" class="font-lato flex flex-col gap-2 text-sm sm:text-base">
         <input type="text" v-model="email" placeholder="Correo electrónico" />
