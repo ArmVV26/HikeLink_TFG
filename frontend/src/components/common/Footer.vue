@@ -14,20 +14,20 @@
         <h2 class="font-montserrat-bold text-2xl text-white text-shadow-lg/30 sm:text-4xl">
           Explora
         </h2>
-        <article class="flex flex-col items-center lg:items-start lg:pl-4">
+        <article class="flex flex-col items-center text-lg sm:text-xl lg:items-start lg:pl-4">
           <router-link
             to="/map"
-            class="text-grey text-xl font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            class="text-grey font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30"
             >Mapa</router-link
           >
           <router-link
             to="/search-routes"
-            class="text-grey text-xl font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            class="text-grey font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30"
             >Buscar Ruta</router-link
           >
           <router-link
             to="/foro"
-            class="text-grey text-xl font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            class="text-grey font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30"
             >Foro</router-link
           >
         </article>
@@ -37,20 +37,20 @@
         <h2 class="font-montserrat-bold text-2xl text-white text-shadow-lg/30 sm:text-4xl">
           HikeLink
         </h2>
-        <article class="flex flex-col items-center pl-4 lg:items-start">
+        <article class="flex flex-col items-center pl-4 text-lg sm:text-xl lg:items-start">
           <router-link
             to="/about-us"
-            class="text-grey text-xl font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            class="text-grey font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30"
             >Sobre Nosotros</router-link
           >
           <a
             href="mailto:hikelink.soporte@gmail.com"
-            class="text-grey text-xl font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            class="text-grey font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30"
             >Contacta con Nosotros</a
           >
           <router-link
             to="/help"
-            class="text-grey text-xl font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30 sm:text-2xl"
+            class="text-grey font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30"
             >Ayuda</router-link
           >
         </article>

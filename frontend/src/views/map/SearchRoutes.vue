@@ -155,7 +155,7 @@ const currentFilters = ref({});
 // METODOS
 // Funcion que detecta la redimension de la pagina para mostrar el menu de los filtros
 const handleResize = () => {
-  if (window.innerWidth > 1280) {
+  if (window.innerWidth > 1279) {
     showFilters.value = true;
   }
 };
@@ -166,7 +166,7 @@ const handleClickOutside = (event) => {
   const toggleEl = document.querySelector(".filter-toggle");
 
   if (
-    window.innerWidth < 1280 &&
+    window.innerWidth < 1279 &&
     filterEl &&
     !filterEl.contains(event.target) &&
     toggleEl &&
@@ -200,7 +200,7 @@ const loadRoutes = async (page = 1) => {
     totalPages.value = Math.ceil(response.data.count / pageSize);
     currentPage.value = page;
 
-    if (window.innerWidth < 1280) showFilters.value = false;
+    if (window.innerWidth < 1279) showFilters.value = false;
   } catch (error) {
     console.error("Error al cargar las rutas:", error);
   }

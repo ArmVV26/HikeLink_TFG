@@ -309,7 +309,7 @@ form {
     margin: auto;
     color: var(--color-black);
     border: 2px solid var(--color-brown);
-    border-radius: 10px;
+    border-radius: 12px;
 
     &:hover {
       border: 2px solid var(--color-green);
