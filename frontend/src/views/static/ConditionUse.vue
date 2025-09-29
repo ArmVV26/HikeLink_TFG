@@ -6,9 +6,7 @@
       Condiciones de Uso
     </h1>
 
-    <p class="font-montserrat mb-6 text-center text-base sm:text-xl">
-      Última actualización: Junio 2025
-    </p>
+    <p class="font-montserrat mb-6 text-center text-base">Última actualización: Junio 2025</p>
 
     <p class="text-center text-sm sm:text-base">
       Bienvenido/a a <strong>HikeLink</strong>, una plataforma donde los usuarios pueden compartir,
