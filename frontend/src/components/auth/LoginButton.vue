@@ -21,7 +21,7 @@
           v-if="menuOpen"
           :class="[
             {
-              'bg-black-50 shadow-transparent transition-all duration-500':
+              'bg-transparent shadow-transparent transition-all duration-500':
                 route.name === 'Home' || route.name === 'AboutUs',
             },
           ]"

@@ -2,7 +2,7 @@
   <nav
     :class="[
       {
-        'bg-black-50 shadow-transparent': route.name === 'Home' || route.name === 'AboutUs',
+        'bg-transparent shadow-transparent': route.name === 'Home' || route.name === 'AboutUs',
       },
     ]"
     class="relative z-5 flex min-h-30 justify-between bg-black shadow-xl/30 transition-all duration-500"
@@ -30,7 +30,8 @@
           v-if="!isMobile || showMainMenu"
           :class="[
             {
-              'bg-black-50 shadow-transparent': route.name === 'Home' || route.name === 'AboutUs',
+              'bg-transparent shadow-transparent':
+                route.name === 'Home' || route.name === 'AboutUs',
             },
           ]"
           class="links absolute top-30 right-0 flex flex-col items-center rounded-bl-3xl bg-black p-1 shadow-xl/30 lg:relative lg:top-0 lg:flex-row lg:justify-end lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none"

@@ -2,7 +2,9 @@
   <ShowMap />
 
   <main class="bg-vanille-50 flex flex-col items-center justify-center p-6">
-    <h1 class="font-montserrat-bold text-green text-2xl italic">Explora el mapa sin límites</h1>
+    <h1 class="font-montserrat-bold text-green text-center text-2xl italic">
+      Explora el mapa sin límites
+    </h1>
     <p class="text-brown w-full text-center text-base font-bold md:w-160">
       El mapa es el corazón de HikeLink. Desde aquí podrás descubrir rutas increíbles, acceder a la
       información más relevante de cada punto y visualizar todo de una forma clara e interactiva.

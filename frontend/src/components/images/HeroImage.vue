@@ -1,9 +1,19 @@
 <template>
-  <figure :class="['hero-image', computedClass]">
-    <div class="background-layer"></div>
-    <div class="content-layer">
+  <figure
+    :class="[
+      'relative z-0 mt-[-10rem] h-200 w-full overflow-hidden pt-[10rem] shadow-[0px_-2px_10px_10px_rgb(0,_0,_0)] md:h-240',
+      'hero-image',
+      computedClass,
+    ]"
+  >
+    <div
+      class="background-layer sature-90 absolute inset-0 z-0 bg-cover bg-center bg-no-repeat brightness-75 contrast-100 sepia-10"
+    ></div>
+    <article
+      class="content-layer relative z-1 flex h-full w-full flex-col items-center justify-center p-4 text-center text-white"
+    >
       <slot />
-    </div>
+    </article>
   </figure>
 </template>
 
@@ -57,54 +67,20 @@ $resolutions: (320px, 640px, 960px, 1600px, 2240px, 3200px);
 }
 
 /* Estilos generales de todas las hero images */
-.hero-image {
-  width: 100%;
-  height: 55rem;
-  position: relative;
-  overflow: hidden;
-  margin-top: -10rem;
-  padding-top: 10rem;
-  box-shadow: 0px -2px 10px 10px var(--color-black);
-  z-index: 0;
-
-  .background-layer {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    filter: brightness(0.75) contrast(100%) saturate(90%) sepia(10%);
-    z-index: 0;
+.content-layer {
+  h1 {
+    font-size: 3rem;
+    font-family: "Montserrat-Bold";
+    font-style: italic;
+    text-shadow: 4px 6px 2px var(--color-black);
   }
 
-  .content-layer {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    color: white;
-    padding: 1rem;
-
-    h1 {
-      font-family: "Montserrat-Bold";
-      font-style: italic;
-      text-shadow: 4px 6px 2px var(--color-black);
-    }
-
-    h2 {
-      font-size: 2rem;
-      font-family: "Lato";
-      font-style: italic;
-      font-weight: normal;
-      line-height: 1;
-      margin-bottom: 2rem;
-      text-shadow: 2px 4px 2px var(--color-black);
-    }
+  h2 {
+    font-size: 1.5rem;
+    font-family: "Lato";
+    text-shadow: 2px 4px 2px var(--color-black);
+    line-height: 1;
+    margin-bottom: 3rem;
   }
 }
 
@@ -117,16 +93,22 @@ $resolutions: (320px, 640px, 960px, 1600px, 2240px, 3200px);
   @include hero-background("SobreNosotros");
 }
 
-@media (max-width: 600px) {
-  .hero-image {
-    .content-layer {
-      h1 {
-        font-size: 2.5rem;
-      }
+@media (max-width: 1024px) {
+  .content-layer {
+    h1 {
+      font-size: 2.5rem;
+    }
+  }
+}
 
-      h2 {
-        font-size: 1.5rem;
-      }
+@media (max-width: 768px) {
+  .content-layer {
+    h1 {
+      font-size: 2.25rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
     }
   }
 }
