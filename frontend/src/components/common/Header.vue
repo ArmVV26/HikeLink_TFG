@@ -7,15 +7,19 @@
         'bg-black shadow-xl/30': route.name !== 'Home' && route.name !== 'AboutUs',
       },
     ]"
-    class="relative z-5 flex min-h-30 justify-between transition-all duration-500"
+    class="relative z-5 flex min-h-20 justify-between transition-all duration-500"
   >
-    <router-link to="/" class="self-center p-1 sm:p-4">
+    <router-link
+      to="/"
+      class="flex items-center self-center p-1 transition-all duration-300 select-none hover:scale-95 sm:p-4"
+    >
       <ResponsiveImage
-        :info="['LogoHikelink', 'logo']"
+        :info="['header-LogoHikelink', 'logo']"
         :formats="['svg', 'png']"
         alt="Logo Header"
-        class="w-30 transition-all duration-300 hover:scale-95 sm:w-40"
+        class="w-22"
       />
+      <h1 class="font-montserrat-bold ml-[-16px] hidden text-2xl text-white sm:block">HIKELINK</h1>
     </router-link>
 
     <section class="flex items-center justify-center">
@@ -36,7 +40,7 @@
               'bg-black shadow-lg/30': route.name !== 'Home' && route.name !== 'AboutUs',
             },
           ]"
-          class="links absolute top-30 right-0 flex flex-col items-center rounded-bl-3xl p-1 lg:relative lg:top-0 lg:flex-row lg:justify-end lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none"
+          class="links absolute top-20 right-0 flex flex-col items-center rounded-bl-3xl p-1 lg:relative lg:top-0 lg:flex-row lg:justify-end lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none"
         >
           <router-link to="/map" class="font-montserrat-bold text-xl">Mapa</router-link>
           <router-link to="/search-routes" class="font-montserrat-bold text-xl"

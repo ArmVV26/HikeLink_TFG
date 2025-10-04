@@ -1,7 +1,7 @@
 <template>
   <figure
     :class="[
-      'relative z-0 mt-[-10rem] h-200 w-full overflow-hidden pt-[10rem] shadow-[0px_-2px_10px_10px_rgb(0,_0,_0)] md:h-240',
+      'relative z-0 mt-[-10rem] h-210 w-full overflow-hidden pt-[10rem] shadow-[0px_-2px_10px_10px_rgb(0,_0,_0)] md:h-250',
       'hero-image',
       computedClass,
     ]"

@@ -1,15 +1,5 @@
 @import "tailwindcss";
 
-/* Declaro el reset de CSS */
-/* * {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-decoration: none;
-  border: none;
-  outline: none;
-} */
-
 /* Declara colores */
 :root {
   --color-green: #2e7d32;

@@ -11,7 +11,7 @@
       <img
         :src="getIconUserImg"
         @error="handleImgError"
-        class="hover:border-light-green mr-2 ml-2 h-22 w-22 cursor-pointer rounded-3xl border-2 border-transparent object-cover transition-all duration-200 sm:mr-4 sm:ml-4"
+        class="hover:border-light-green mr-2 ml-2 h-18 w-18 cursor-pointer rounded-3xl border-2 border-transparent object-cover transition-all duration-200 sm:mr-4 sm:ml-4"
         ref="userImg"
         @click="toggleMenu"
       />

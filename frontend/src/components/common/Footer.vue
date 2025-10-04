@@ -3,9 +3,9 @@
     <section class="bg-brown flex flex-col items-center justify-center gap-8 py-8 lg:flex-row">
       <router-link to="/">
         <ResponsiveImage
-          :info="['LogoHikelink', 'logo']"
+          :info="['footer-LogoHikelink', 'logo']"
           :formats="['svg', 'png']"
-          alt="Logo Header"
+          alt="Logo Footer"
           class="h-auto w-55"
         />
       </router-link>
