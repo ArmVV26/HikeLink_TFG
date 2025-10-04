@@ -7,7 +7,7 @@
     ]"
   >
     <div
-      class="background-layer sature-90 absolute inset-0 z-0 bg-cover bg-center bg-no-repeat brightness-75 contrast-100 sepia-10"
+      class="background-layer absolute inset-0 z-0 bg-cover bg-center bg-no-repeat brightness-75 contrast-100 saturate-90 sepia-10"
     ></div>
     <article
       class="content-layer relative z-1 flex h-full w-full flex-col items-center justify-center p-4 text-center text-white"

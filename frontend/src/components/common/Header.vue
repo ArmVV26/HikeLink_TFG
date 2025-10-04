@@ -2,10 +2,12 @@
   <nav
     :class="[
       {
-        'bg-transparent shadow-transparent': route.name === 'Home' || route.name === 'AboutUs',
+        'bg-gradient-to-b from-black/40 to-transparent':
+          route.name === 'Home' || route.name === 'AboutUs',
+        'bg-black shadow-xl/30': route.name !== 'Home' && route.name !== 'AboutUs',
       },
     ]"
-    class="relative z-5 flex min-h-30 justify-between bg-black shadow-xl/30 transition-all duration-500"
+    class="relative z-5 flex min-h-30 justify-between transition-all duration-500"
   >
     <router-link to="/" class="self-center p-1 sm:p-4">
       <ResponsiveImage
@@ -30,11 +32,11 @@
           v-if="!isMobile || showMainMenu"
           :class="[
             {
-              'bg-transparent shadow-transparent':
-                route.name === 'Home' || route.name === 'AboutUs',
+              'backdrop-blur-sm': (route.name === 'Home' || route.name === 'AboutUs') && isMobile,
+              'bg-black shadow-lg/30': route.name !== 'Home' && route.name !== 'AboutUs',
             },
           ]"
-          class="links absolute top-30 right-0 flex flex-col items-center rounded-bl-3xl bg-black p-1 shadow-xl/30 lg:relative lg:top-0 lg:flex-row lg:justify-end lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none"
+          class="links absolute top-30 right-0 flex flex-col items-center rounded-bl-3xl p-1 lg:relative lg:top-0 lg:flex-row lg:justify-end lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none"
         >
           <router-link to="/map" class="font-montserrat-bold text-xl">Mapa</router-link>
           <router-link to="/search-routes" class="font-montserrat-bold text-xl"

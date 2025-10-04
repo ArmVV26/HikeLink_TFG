@@ -34,7 +34,7 @@
   </section>
 
   <section id="aboutus" class="my-10 flex flex-col text-center">
-    <h1 class="font-montserrat-bold text-green text-3xl md:text-5xl">Quiénes Somos</h1>
+    <h1 class="font-montserrat-bold text-green text-2xl md:text-4xl">Quiénes Somos</h1>
     <p class="m-auto w-[90%] text-sm sm:w-[60%] sm:text-base xl:w-[40%]">
       HikeLink nació del amor por la montaña y el deseo de compartirla. Somos un equipo de
       senderistas, escaladores y aventureros que decidió crear una plataforma donde cualquier
@@ -46,32 +46,32 @@
       class="mx-auto my-4 w-[90%] sm:w-[70%] md:grid md:grid-cols-3 md:grid-rows-[20rem_20rem] md:gap-4 xl:w-[50%]"
     >
       <img
-        class="col-span-2 row-span-1 hidden h-full w-full rounded-3xl object-cover md:block"
+        class="col-span-2 row-span-1 hidden h-full w-full rounded-3xl object-cover brightness-100 contrast-100 saturate-110 sepia-20 md:block"
         src="/images/img-collage/img-collage-1.jpg"
         alt="Imagen Collage 1"
       />
       <img
-        class="col-span-1 row-span-2 hidden h-full w-full rounded-3xl object-cover md:block"
+        class="col-span-1 row-span-2 hidden h-full w-full rounded-3xl object-cover brightness-100 contrast-100 saturate-110 sepia-20 md:block"
         src="/images/img-collage/img-collage-2.jpg"
         alt="Imagen Collage 2"
       />
       <img
-        class="col-span-1 row-span-1 h-full w-full rounded-3xl object-cover"
+        class="col-span-1 row-span-1 h-full w-full rounded-3xl object-cover brightness-100 contrast-100 saturate-110 sepia-20"
         src="/images/img-collage/img-collage-3.jpg"
         alt="Imagen Collage 3"
       />
       <img
-        class="col-span-1 row-span-1 hidden h-full w-full rounded-3xl object-cover md:block"
+        class="col-span-1 row-span-1 hidden h-full w-full rounded-3xl object-cover brightness-100 contrast-100 saturate-110 sepia-20 md:block"
         src="/images/img-collage/img-collage-4.jpg"
         alt="Imagen Collage 4"
       />
     </article>
   </section>
 
-  <main id="values" class="bg-vanille-50 mb-10 px-4 py-6 text-center">
-    <h1 class="font-montserrat-bold text-green text-3xl md:text-5xl">Nuestros Valores</h1>
+  <main id="values" class="bg-light-green-50 mb-10 py-10 text-center">
+    <h1 class="font-montserrat-bold text-green text-2xl md:text-4xl">Nuestros Valores</h1>
 
-    <section class="mt-4 flex flex-wrap justify-center gap-6">
+    <section class="mx-4 mt-4 flex flex-wrap justify-center gap-6 min-[900px]:w-200 md:mx-auto">
       <article
         class="flex w-80 flex-col rounded-3xl bg-white px-4 py-6 shadow-[3px_3px_8px_0px_rgb(0,_0,_0)]"
       >
@@ -113,21 +113,25 @@
     </section>
   </main>
 
-  <section id="living" class="mb-10 flex flex-col text-center">
-    <h1 class="font-montserrat-bold text-green text-3xl md:text-5xl">Nuestra Forma de Vivir</h1>
-    <h2 class="font-montserrat-bold text-light-green text-lg md:text-2xl">
-      Conectar con la montaña es reconectar contigo
-    </h2>
-    <p class="m-auto w-[90%] text-sm sm:w-[60%] sm:text-base xl:w-[40%]">
-      El deporte en la naturaleza fortalece cuerpo y mente, reduce el estrés y mejora la salud
-      física mientras te permite descubrir paisajes únicos y respirar aire puro.
-    </p>
+  <section
+    id="living"
+    class="mx-6 mb-10 flex flex-col items-center justify-center text-center xl:mx-auto xl:grid xl:w-300 xl:grid-cols-2 xl:gap-6"
+  >
+    <article>
+      <h1 class="font-montserrat-bold text-green text-2xl md:text-4xl">Nuestra Forma de Vivir</h1>
+      <h2 class="font-montserrat-bold text-light-green text-base md:text-xl">
+        Conectar con la montaña es reconectar contigo
+      </h2>
+      <p class="mx-auto w-full text-sm sm:text-base md:w-[50%] xl:mt-4 xl:w-[80%]">
+        El deporte en la naturaleza fortalece cuerpo y mente, reduce el estrés y mejora la salud
+        física mientras te permite descubrir paisajes únicos y respirar aire puro.
+      </p>
+    </article>
+
     <ResponsiveImage
       :info="['decorative-SobreNosotros', 'img-decorative']"
       :formats="['jpg', 'webp']"
-      figureClass="about-us-img-container"
-      imgClass="about-us-img"
-      class="mx-6 my-6 sm:mx-20 xl:mx-auto"
+      imgClass="my-6 h-50 w-full object-cover rounded-3xl shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] brightness-95 contrast-120 saturate-90 sepia-10 sm:h-100 xl:w-150 xl:h-full"
       alt="Imagen Living HikeLink"
     />
   </section>
@@ -138,13 +142,3 @@
 import HeroImage from "@/components/images/HeroImage.vue";
 import ResponsiveImage from "@/components/images/ResponsiveImage.vue";
 </script>
-
-<style>
-.about-us-img {
-  width: 70rem;
-  height: 100%;
-  border-radius: 25px;
-  box-shadow: 0px 0px 10px 0px var(--color-black);
-  object-fit: cover;
-}
-</style>
