@@ -44,6 +44,7 @@
 /* Declaro los estilos basicos */
 body {
   font-family: "Lato", sans-serif !important;
+  color: var(--color-black);
 }
 
 @theme {
