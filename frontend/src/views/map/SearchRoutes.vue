@@ -12,7 +12,7 @@
 
     <transition name="fade-slide">
       <section
-        class="bg-vanille xl:bg-vanille-50 absolute top-48 z-10 h-124 rounded-b-3xl p-4 shadow-[3px_3px_0px_3px_rgb(141,_110,_99)] xl:relative xl:top-0 xl:h-140 xl:rounded-xl"
+        class="bg-vanille xl:bg-vanille-50 absolute top-38 z-10 h-124 rounded-b-3xl p-4 shadow-[3px_3px_0px_3px_rgb(141,_110,_99)] xl:relative xl:top-0 xl:h-140 xl:rounded-xl"
         :class="{ active: showFilters }"
         ref="filterRef"
         v-show="showFilters"

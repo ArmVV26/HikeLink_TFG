@@ -1,6 +1,8 @@
 <template>
   <figure ref="counter" class="counter-img" :class="figureClass" role="img" :aria-label="alt">
-    <picture>
+    <div v-if="isSvg && svgRaw" class="inline-svg" :class="imgClass" v-html="processedSvg" />
+
+    <picture v-else>
       <source v-for="(src, key) in currentSources" :key="key" :type="mimeType(key)" :srcset="src" />
       <img :class="imgClass" :src="currentImg" :alt="alt" loading="lazy" />
     </picture>
@@ -8,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 
 // Defino las propiedades del componente
 const props = defineProps({
@@ -44,6 +46,16 @@ const imgs = ref([]);
 const currentSources = ref({});
 // Guarda el src actual que debe tener el img
 const currentImg = ref("");
+// Para almacenar cuando se trata de una imagen SVG
+const svgRaw = ref("");
+const processedSvg = computed(() => {
+  if (!svgRaw.value) return "";
+  // Agrega las clases directamente al SVG si no las tiene
+  return svgRaw.value.replace(/<svg([^>]+)>/, `<svg$1 class="${props.imgClass || ""}">`);
+});
+const svgContent = ref("div");
+
+const isSvg = computed(() => props.formats.includes("svg"));
 
 // Genera las lista de imagenes con sus rutas correctas
 const generateImages = () => {
@@ -83,7 +95,7 @@ const changeImg = (widthCounter) => {
 };
 
 // Genera las rutas, crea un ResizeObserver para ver el tamaño del contenedor
-onMounted(() => {
+onMounted(async () => {
   imgs.value = generateImages();
 
   resizeObserver = new ResizeObserver((entries) => {
@@ -93,6 +105,17 @@ onMounted(() => {
   });
 
   resizeObserver.observe(counter.value);
+
+  // Si el formato principal es SVG
+  if (isSvg.value && imgs.value[0]?.svg) {
+    try {
+      const res = await fetch(imgs.value[0].svg);
+      svgRaw.value = await res.text();
+      svgContent.value = "div";
+    } catch (err) {
+      console.warn("No se pudo cargar el SVG:", err);
+    }
+  }
 });
 
 // Detiene el ResizeObserver para evitar fugas de memoria

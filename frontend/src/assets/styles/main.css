@@ -13,6 +13,13 @@
   --color-white: #fafafa;
   --color-dark-grey: #656565;
   --color-grey: #bdbdbd;
+
+  --color-bg-main: #eeeeee;
+  --color-bg: #d8ebd8;
+}
+
+body {
+  background-color: var(--color-bg-main);
 }
 
 /* Declaro las fuentes */
@@ -49,6 +56,8 @@ body {
   --color-white: var(--color-white);
   --color-dark-grey: var(--color-dark-grey);
   --color-grey: var(--color-grey);
+
+  --color-bg: var(--color-bg);
 
   --font-lato: "Lato";
   --font-montserrat: "Montserrat";

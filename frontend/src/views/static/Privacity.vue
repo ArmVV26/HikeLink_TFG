@@ -1,6 +1,6 @@
 <template>
   <section
-    class="mx-auto px-6 py-10 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] sm:my-10 sm:w-160 sm:rounded-3xl"
+    class="mx-auto bg-white px-6 py-10 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] sm:my-10 sm:w-160 sm:rounded-3xl"
   >
     <h1 class="font-montserrat-bold text-green text-center text-lg leading-6 sm:text-2xl">
       Política de Privacidad

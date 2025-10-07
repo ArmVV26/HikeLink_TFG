@@ -300,11 +300,11 @@ onUnmounted(() => {
 
 .carousel-overlay::before {
   left: 0;
-  background: linear-gradient(to right, white, transparent);
+  background: linear-gradient(to right, #eeeeee, transparent);
 }
 
 .carousel-overlay::after {
   right: 0;
-  background: linear-gradient(to left, white, transparent);
+  background: linear-gradient(to left, #eeeeee, transparent);
 }
 </style>

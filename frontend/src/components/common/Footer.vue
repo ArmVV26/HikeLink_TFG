@@ -1,20 +1,20 @@
 <template>
   <footer class="flex flex-col">
-    <section class="bg-brown flex flex-col items-center justify-center gap-8 py-8 lg:flex-row">
+    <section class="bg-brown flex flex-col items-center justify-center gap-8 py-8 md:flex-row">
       <router-link to="/">
         <ResponsiveImage
           :info="['footer-LogoHikelink', 'logo']"
           :formats="['svg', 'png']"
           alt="Logo Footer"
-          class="h-auto w-55"
+          imgClass="h-auto w-40"
         />
       </router-link>
 
-      <nav class="flex flex-col items-center justify-center lg:items-start">
-        <h2 class="font-montserrat-bold text-2xl text-white text-shadow-lg/30 sm:text-4xl">
+      <nav class="flex flex-col items-center justify-center md:items-start">
+        <h2 class="font-montserrat-bold text-lg text-white text-shadow-lg/30 sm:text-2xl">
           Explora
         </h2>
-        <article class="flex flex-col items-center text-lg sm:text-xl lg:items-start lg:pl-4">
+        <article class="flex flex-col items-center text-lg md:items-start md:pl-4">
           <router-link
             to="/map"
             class="text-grey font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30"
@@ -33,11 +33,11 @@
         </article>
       </nav>
 
-      <nav class="flex flex-col items-center justify-center lg:items-start">
-        <h2 class="font-montserrat-bold text-2xl text-white text-shadow-lg/30 sm:text-4xl">
+      <nav class="flex flex-col items-center justify-center md:items-start">
+        <h2 class="font-montserrat-bold text-lg text-white text-shadow-lg/30 sm:text-2xl">
           HikeLink
         </h2>
-        <article class="flex flex-col items-center pl-4 text-lg sm:text-xl lg:items-start">
+        <article class="flex flex-col items-center pl-4 text-lg md:items-start">
           <router-link
             to="/about-us"
             class="text-grey font-bold transition-all duration-300 hover:text-white hover:text-shadow-lg/30"
@@ -81,7 +81,7 @@
     </section>
 
     <section
-      class="bg-vanille text-brown flex flex-col items-center justify-center px-5 py-2 text-sm sm:text-base md:flex-row md:justify-between"
+      class="bg-vanille text-brown flex flex-col items-center justify-center px-5 py-1 text-sm sm:text-base md:flex-row md:justify-between"
     >
       <p><span class="font-bold">© HikeLink</span> - Todos los derechos reservados.</p>
 
