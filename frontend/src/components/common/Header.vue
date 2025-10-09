@@ -9,7 +9,7 @@
         :info="['header-LogoHikelink', 'logo']"
         :formats="['svg', 'png']"
         alt="Logo Header"
-        :figureClass="[headerTheme.logo]"
+        :figureClass="headerTheme.logo"
         imgClass="w-20 h-auto"
       />
       <h1
@@ -225,7 +225,10 @@ const menuTheme = computed(() => {
   opacity: 0;
   visibility: hidden;
   transform: translateX(0);
-  transition: all 0.3s ease;
+  transition:
+    opacity 0.25s ease,
+    visibility 0.3s ease,
+    transform 0.3s ease;
 }
 
 .logo:hover #fullsun {
@@ -238,7 +241,8 @@ const menuTheme = computed(() => {
   opacity: 1;
   visibility: visible;
   transition:
-    visibility 0.05s ease,
+    opacity 0.3s ease,
+    visibility 0.3s ease,
     transform 0.3s ease;
 }
 

@@ -4,19 +4,21 @@
     <main class="main-content">
       <router-view />
     </main>
-    <Footer />
+    <Footer v-if="route.name !== 'Map'" />
   </div>
 </template>
 
 <script setup>
 // IMPORTS
-import Header from "@/components/common/Header.vue";
-import Footer from "@/components/common/Footer.vue";
 import { onMounted } from "vue";
 import { useAuthStore } from "./stores/authStore";
+import { useRoute } from "vue-router";
+import Header from "@/components/common/Header.vue";
+import Footer from "@/components/common/Footer.vue";
 
 // VARIABLES
 const authStore = useAuthStore();
+const route = useRoute();
 
 // METODOS
 // Metodo para cargar desde el token las sesion del usuario

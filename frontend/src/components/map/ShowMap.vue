@@ -1,32 +1,34 @@
 <template>
   <main class="map-container">
-    <section v-if="detailedMap" class="map-top-container">
-      <input
-        type="text"
-        id="location-search"
-        placeholder="🔍 Buscar por lugares, regiones, coordenadas y más ..."
-        @input="handleInput"
-        @keydown.down.prevent="highlightNext"
-        @keydown.up.prevent="highlightPrev"
-        @keydown.enter.prevent="selectHighlighted"
-      />
-      <ul v-if="suggestions.length" class="suggestions-list">
-        <li
-          v-for="(s, i) in suggestions"
-          :key="i"
-          :class="{ highlighted: i === highlightedIndex }"
-          @click="selectSuggestion(s)"
-        >
-          {{ s.display_name }}
-        </li>
-      </ul>
-
-      <button v-if="!isMobile" class="fullscreen-btn" @click="toggleFullscreen">
-        <i class="fa-solid fa-expand"></i>
-      </button>
-    </section>
-
     <section id="map" :class="{ map: detailedMap, 'map-detailed': !detailedMap }">
+      <!-- Buscador -->
+      <section v-if="detailedMap" class="map-top-container">
+        <input
+          type="text"
+          id="location-search"
+          placeholder="🔍 Buscar por lugares, regiones, coordenadas y más ..."
+          @input="handleInput"
+          @keydown.down.prevent="highlightNext"
+          @keydown.up.prevent="highlightPrev"
+          @keydown.enter.prevent="selectHighlighted"
+        />
+        <ul v-if="suggestions.length" class="suggestions-list">
+          <li
+            v-for="(s, i) in suggestions"
+            :key="i"
+            :class="{ highlighted: i === highlightedIndex }"
+            @click="selectSuggestion(s)"
+          >
+            {{ s.display_name }}
+          </li>
+        </ul>
+
+        <!-- Poner el mapa en pantalla completa -->
+        <button v-if="!isMobile" class="fullscreen-btn" @click="toggleFullscreen">
+          <i class="fa-solid fa-expand"></i>
+        </button>
+      </section>
+
       <!-- Seleccionar el tipo de mapa -->
       <article class="map-style-toggle">
         <button @click="toggleMenu">
@@ -83,6 +85,7 @@
         </button>
       </div>
 
+      <!-- Informacion del Mapa -->
       <transition name="fade-slide">
         <article v-if="showInfo" class="map-info-panel">
           <button class="close-btn" @click="showInfo = false">
@@ -101,6 +104,7 @@
         </article>
       </transition>
 
+      <!-- Informacion de la Ruta seleccionada -->
       <transition v-if="detailedMap" name="fade-slide">
         <article v-if="selectedRoute" class="route-info-container">
           <div class="route-imgs">
@@ -171,7 +175,7 @@ const routeMarkers = ref(new Map());
 const gpxLayers = ref(new Map());
 const selectedRoute = ref(null);
 const isFullscreen = ref(false);
-const isMobile = ref(window.innerWidth <= 700);
+const isMobile = ref(window.innerWidth <= 1024);
 
 const suggestions = ref([]);
 const highlightedIndex = ref(-1);
@@ -433,7 +437,7 @@ const exitFullscreen = () => {
 
 // Función para manejar cambios en el tamaño de la ventana
 const handleResize = () => {
-  isMobile.value = window.innerWidth <= 700;
+  isMobile.value = window.innerWidth <= 1024;
 };
 
 // Funcion para quitar las rutas del mapa y cerrar los detalles de la ruta
@@ -457,7 +461,9 @@ onMounted(() => {
   }).addTo(map.value);
 
   if (!isSingleRoute.value) {
-    L.control.scale({ position: "topleft", imperial: true, metric: true }).addTo(map.value);
+    L.control
+      .scale({ position: "bottomright", imperial: false, metric: true, maxWidth: 150 })
+      .addTo(map.value);
   }
 
   // Detectar cambio de pantalla completa
@@ -498,92 +504,10 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .map-container {
   position: relative;
-
-  .map-top-container {
-    position: relative;
-    width: 70%;
-    margin: 2rem auto 0;
-    background-color: var(--color-vanille);
-    padding: 0.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-
-    border-top: 5px solid var(--color-green);
-    border-left: 5px solid var(--color-green);
-    border-right: 5px solid var(--color-green);
-
-    #location-search {
-      width: 100%;
-      height: 3rem;
-      margin-left: 1rem;
-      background-color: var(--color-white);
-      border: 2px solid var(--color-grey);
-      outline: none;
-      border-radius: 25px;
-      padding: 0 1rem;
-    }
-
-    .suggestions-list {
-      position: absolute;
-      top: 3.5rem;
-      left: 0.5rem;
-      width: 55%;
-      background: var(--color-white);
-      border: 5px solid var(--color-green);
-      border-top-left-radius: 10px;
-      border-bottom-left-radius: 10px;
-      max-height: 10rem;
-      overflow-y: auto;
-      z-index: 1001;
-      list-style: none;
-
-      li {
-        padding: 0.5rem;
-        cursor: pointer;
-        transition: all 0.25s;
-
-        &:hover,
-        &.highlighted {
-          background-color: var(--color-vanille);
-        }
-      }
-    }
-
-    .fullscreen-btn {
-      color: var(--color-green);
-      background-color: var(--color-white);
-      border: 2px solid var(--color-light-green);
-      font-size: 1.5rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20rem;
-      margin-right: 1rem;
-      cursor: pointer;
-      transition: all 0.25s;
-
-      &:hover {
-        color: var(--color-white);
-        background-color: var(--color-light-green);
-        border: 2px solid var(--color-green);
-      }
-    }
-  }
+  height: 100%;
 
   .map {
-    width: 70%;
-    height: 43.5rem;
-    margin: 0 auto 2rem;
-
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-
-    border-bottom: 5px solid var(--color-green);
-    border-left: 5px solid var(--color-green);
-    border-right: 5px solid var(--color-green);
+    height: 100%;
     z-index: 1;
   }
 
@@ -597,6 +521,86 @@ onUnmounted(() => {
 
   .map,
   .map-detailed {
+    .map-top-container {
+      width: 40%;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+
+      margin: 1rem auto 0;
+      padding: 0.25rem;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+
+      background-color: var(--color-vanille-50);
+      border-radius: 25px;
+      border: 2px solid var(--color-green);
+
+      z-index: 1000;
+
+      #location-search {
+        width: 100%;
+        height: 3rem;
+        outline: none;
+
+        margin-left: 1rem;
+        padding: 0 1rem;
+
+        background-color: var(--color-white);
+        border: 2px solid var(--color-grey);
+        border-radius: 25px;
+      }
+
+      .suggestions-list {
+        position: absolute;
+        top: 3.5rem;
+        left: 0.5rem;
+        width: 55%;
+        background: var(--color-white);
+        border: 5px solid var(--color-green);
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        max-height: 10rem;
+        overflow-y: auto;
+        z-index: 1001;
+        list-style: none;
+
+        li {
+          padding: 0.5rem;
+          cursor: pointer;
+          transition: all 0.25s;
+
+          &:hover,
+          &.highlighted {
+            background-color: var(--color-vanille);
+          }
+        }
+      }
+
+      .fullscreen-btn {
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.25s;
+
+        color: var(--color-green);
+        background-color: var(--color-white);
+        border: 2px solid var(--color-light-green);
+        border-radius: 20rem;
+
+        padding: 0.25rem 0.75rem;
+        margin-right: 1rem;
+
+        &:hover {
+          color: var(--color-white);
+          background-color: var(--color-light-green);
+          border: 2px solid var(--color-green);
+        }
+      }
+    }
+
     .map-style-toggle {
       position: absolute;
       top: 1rem;
@@ -604,16 +608,16 @@ onUnmounted(() => {
       z-index: 1000;
 
       button {
+        font-size: 2rem;
+        cursor: pointer;
+        transition: all 0.25s;
+
+        color: var(--color-green);
         background: var(--color-white);
         border: 2px solid var(--color-light-green);
-        padding: 0.5rem 1rem 0.5rem;
         border-radius: 10rem;
-        cursor: pointer;
 
-        font-size: 2rem;
-        color: var(--color-green);
-
-        transition: all 0.25s;
+        padding: 0.5rem 1rem 0.5rem;
 
         &:hover {
           color: var(--color-white);
@@ -625,8 +629,8 @@ onUnmounted(() => {
 
     .legend {
       position: absolute;
-      bottom: 2rem;
-      right: 1rem;
+      bottom: 3rem;
+      right: 0.5rem;
 
       display: flex;
       flex-direction: column;
@@ -650,24 +654,27 @@ onUnmounted(() => {
 
         p {
           font-family: "Lato";
-          font-size: 1.25rem;
+          font-size: 1rem;
         }
       }
     }
 
     .fullscreen-btn-map {
-      z-index: 1000;
       position: absolute;
       bottom: 1.5rem;
       right: 1rem;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: all 0.25s;
+
       color: var(--color-green);
       background-color: var(--color-white);
       border: 2px solid var(--color-light-green);
-      font-size: 2rem;
-      padding: 0.25rem 1rem;
       border-radius: 20rem;
-      cursor: pointer;
-      transition: all 0.25s;
+
+      padding: 0.25rem 1rem;
+
+      z-index: 1000;
 
       &:hover {
         color: var(--color-white);
@@ -683,16 +690,16 @@ onUnmounted(() => {
       z-index: 1000;
 
       button {
-        background: var(--color-white);
-        border: 2px solid var(--color-light-green);
-        padding: 0.5rem 1rem 0.5rem;
-        border-radius: 10rem;
-        cursor: pointer;
-
         font-size: 2rem;
-        color: var(--color-green);
-
+        cursor: pointer;
         transition: all 0.25s;
+
+        color: var(--color-green);
+        background-color: var(--color-white);
+        border: 2px solid var(--color-light-green);
+        border-radius: 10rem;
+
+        padding: 0.5rem 1rem 0.5rem;
 
         &:hover {
           color: var(--color-white);
@@ -707,24 +714,28 @@ onUnmounted(() => {
     }
 
     .map-info-panel {
+      width: 22rem;
       position: absolute;
       bottom: 1rem;
       left: 1rem;
-      width: 22rem;
-      background: var(--color-white);
+
+      background-color: var(--color-white);
       border-radius: 25px;
       box-shadow: 0 2px 8px var(--color-black);
+
       padding: 1rem;
-      z-index: 1000;
+
+      z-index: 1002;
 
       .close-btn {
         position: absolute;
         top: 0.25rem;
-        left: 0.75rem;
+        right: 0.75rem;
         font-size: 1.25rem;
-        color: var(--color-green);
         cursor: pointer;
         transition: all 0.25s;
+
+        color: var(--color-green);
 
         &:hover {
           color: var(--color-brown);
@@ -732,11 +743,16 @@ onUnmounted(() => {
       }
 
       h1 {
+        font-family: var(--font-montserrat-bold);
         font-size: 2rem;
+        text-align: center;
+
+        color: var(--color-green);
       }
 
       p {
         text-align: justify;
+        font-size: 0.75rem;
 
         &:first-of-type {
           text-indent: 2rem;
@@ -751,47 +767,55 @@ onUnmounted(() => {
     }
 
     .route-info-container {
+      width: 30rem;
       position: absolute;
-      z-index: 1000;
       bottom: 1.25rem;
-      margin-left: auto;
-      margin-right: auto;
       left: 0;
       right: 0;
+
+      margin-left: auto;
+      margin-right: auto;
+
       background-color: var(--color-white);
       border-radius: 25px;
       box-shadow: 0 2px 8px var(--color-black);
-      width: 30rem;
 
       display: flex;
       gap: 1rem;
 
+      z-index: 1000;
+
       .route-imgs {
-        padding: 0.25rem;
         display: flex;
         justify-content: center;
         align-items: center;
 
+        padding: 0.25rem;
+
         img {
           width: 8rem;
           height: 8rem;
-          border-radius: 25px;
           object-fit: cover;
+
           border: 2px solid var(--color-green);
+          border-radius: 25px;
         }
       }
 
       .route-info {
         width: 65%;
+        cursor: default;
+
         display: flex;
         flex-direction: column;
         justify-content: center;
-        cursor: default;
+
         margin: 1rem 0;
 
         p {
           font-size: 0.85rem;
           font-weight: 600;
+
           color: var(--color-brown);
 
           strong {
@@ -800,12 +824,14 @@ onUnmounted(() => {
         }
 
         h1 {
-          text-align: left;
           font-family: "Montserrat-Bold";
           font-size: 1rem;
+          text-align: left;
+
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+
           color: var(--color-green);
         }
       }
@@ -815,9 +841,10 @@ onUnmounted(() => {
         top: 0.25rem;
         right: 0.75rem;
         font-size: 1.25rem;
-        color: var(--color-green);
         cursor: pointer;
         transition: all 0.25s;
+
+        color: var(--color-green);
 
         &:hover {
           color: var(--color-brown);
@@ -830,13 +857,15 @@ onUnmounted(() => {
         right: 0rem;
         font-size: 0.85rem;
         font-weight: 900;
-        color: var(--color-white);
-        background-color: var(--color-green);
-        padding: 0.25rem 1rem;
-        border-top-left-radius: 25px;
-        border-bottom-right-radius: 25px;
         cursor: pointer;
         transition: all 0.25s;
+
+        color: var(--color-white);
+        background-color: var(--color-green);
+        border-top-left-radius: 25px;
+        border-bottom-right-radius: 25px;
+
+        padding: 0.25rem 1rem;
 
         &:hover {
           color: var(--color-light-green);
@@ -848,15 +877,18 @@ onUnmounted(() => {
       position: absolute;
       top: 1rem;
       right: 6rem;
-      z-index: 1000;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.25s;
+
       color: var(--color-green);
       background-color: var(--color-white);
       border: 2px solid var(--color-light-green);
-      font-size: 1.5rem;
-      padding: 0.25rem 0.75rem;
       border-radius: 20rem;
-      cursor: pointer;
-      transition: all 0.25s;
+
+      padding: 0.25rem 0.75rem;
+
+      z-index: 1000;
 
       &:hover {
         color: var(--color-white);
@@ -869,9 +901,8 @@ onUnmounted(() => {
 
 // Fullscreen
 .fullscreen-border {
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-top: 5px solid var(--color-green);
+  border-radius: 25px;
+  border: 5px solid var(--color-green);
 }
 
 // Menu desplegable layers
@@ -879,19 +910,23 @@ onUnmounted(() => {
   position: absolute;
   top: 100%;
   right: 0;
-  background: var(--color-white);
   list-style: none;
-  padding: 0;
-  margin-top: 0.25rem;
+
+  background-color: var(--color-white);
   border-radius: 25px;
   box-shadow: 0 2px 8px var(--color-black);
+
+  padding: 0;
+  margin-top: 0.25rem;
+
   z-index: 1000;
 }
 
 .map-style-menu li {
-  padding: 0.5rem;
   cursor: pointer;
   transition: all 0.25s;
+
+  padding: 0.5rem;
 }
 
 .map-style-menu li:first-of-type {
@@ -916,7 +951,7 @@ onUnmounted(() => {
 
 .fade-slide-enter-from {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(40px);
 }
 
 .fade-slide-enter-to {
@@ -931,182 +966,163 @@ onUnmounted(() => {
 
 .fade-slide-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(40px);
 }
 
 // MEDIA QUERIES
-@media (max-width: 1250px) {
+@media (max-width: 1280px) {
   .map-container {
-    .map-top-container {
-      width: 90%;
-    }
-
-    .map {
-      width: 90%;
-
-      .map-style-toggle {
-        top: 0.25rem;
-        right: 0.25rem;
-
-        button {
-          font-size: 1.5rem;
-          padding: 0.35rem 0.75rem;
-        }
-      }
-
-      .legend {
-        bottom: 1.25rem;
-        right: 0.25rem;
-
-        i {
-          font-size: 0.85rem;
-
-          p {
-            font-size: 1rem;
-          }
-        }
-      }
-
-      .map-info-button {
-        bottom: 0.25rem;
-        left: 0.25rem;
-
-        button {
-          font-size: 1.5rem;
-          padding: 0.35rem 0.75rem;
-        }
-      }
-
-      .exit-fullscreen-btn {
-        top: 0.25rem;
-        right: 4rem;
-      }
-    }
-
     .map,
     .map-detailed {
       .map-info-panel {
-        bottom: 0.25rem;
-        left: 0.25rem;
+        width: 16rem;
+        bottom: 0.5rem;
+        left: 0.5rem;
 
         h1 {
-          font-size: 1.5rem;
+          font-size: 1.25rem;
         }
       }
     }
   }
 }
 
-@media (max-width: 900px) {
-  .hide-mobile {
-    display: none !important;
+@media (max-width: 1024px) {
+  .map-container {
+    .map,
+    .map-detailed {
+      .map-top-container {
+        width: 60%;
+
+        #location-search {
+          margin-left: 0;
+        }
+      }
+
+      .map-style-toggle {
+        button {
+          font-size: 1.5rem;
+          padding: 0.25rem 0.65rem 0.25rem;
+        }
+      }
+
+      .map-info-button {
+        button {
+          font-size: 1.5rem;
+          padding: 0.25rem 0.65rem 0.25rem;
+        }
+      }
+
+      .route-info-container {
+        width: 20rem;
+
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .route-imgs {
+          img {
+            width: 100%;
+          }
+        }
+
+        .route-info {
+          width: 100%;
+          margin: 0 0.5rem 1.75rem;
+          text-align: center;
+
+          h1 {
+            line-height: 1rem;
+          }
+        }
+
+        .close-btn {
+          top: 0.75rem;
+          font-size: 0.95rem;
+
+          background-color: var(--color-white);
+          border-radius: 10rem;
+
+          padding: 0px 5px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .map-container {
+    .map {
+      .map-top-container {
+        width: 20rem;
+        left: 13.5rem;
+      }
+    }
   }
 }
 
 @media (max-width: 700px) {
   .map-container {
     .map-detailed {
-      border-radius: 0;
-      border: 0;
       border-top: 5px solid var(--color-green);
       border-bottom: 5px solid var(--color-green);
-      height: 25rem;
+      border-left: 0;
+      border-right: 0;
+      border-radius: 0;
     }
   }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 640px) {
   .map-container {
-    .map-top-container {
-      width: 100%;
-      border-radius: 0;
-      border: none;
-      border-top: 5px solid var(--color-green);
-
-      #location-search {
-        margin-left: 0.25rem;
-      }
-
-      .suggestions-list {
-        margin-right: 0.25rem;
-      }
-    }
-
     .map {
-      width: 100%;
-      height: 33.5rem;
-      border-radius: 0;
-      border: 0;
-      border-bottom: 5px solid var(--color-green);
-
-      .route-info-container {
-        width: 19.5rem;
-        flex-direction: column;
-        gap: 0.25rem;
-
-        .route-imgs {
-          padding: 0;
-
-          img {
-            width: 100%;
-            height: 7rem;
-            border: 0;
-            border-bottom: 2px solid var(--color-green);
-          }
-        }
-
-        .route-info {
-          width: 100%;
-          align-items: center;
-          margin: 0 0 2rem;
-          padding: 0 0.5rem;
-
-          h1 {
-            max-width: 100%;
-          }
-        }
-
-        .close-btn {
-          top: 0;
-          right: 0%;
-          color: var(--color-white);
-          background-color: var(--color-green);
-          padding: 0 0.75rem;
-          border-top-right-radius: 25px;
-          border-bottom-left-radius: 25px;
-        }
+      .map-top-container {
+        width: calc(100% - 4rem);
+        left: 3rem;
+        transform: translate(0);
       }
-    }
 
-    .map,
-    .map-detailed {
-      .map-info-panel {
-        width: 19.5rem;
-
-        h1 {
-          font-size: 1rem;
-        }
+      .map-style-toggle {
+        top: 5rem;
       }
     }
   }
 }
 </style>
 
-<style>
-/* Estilo al control de escala */
-.leaflet-control-scale {
-  padding: 0.5rem 1rem;
+<style lang="scss">
+.leaflet-control-zoom {
+  overflow: hidden;
   background-color: var(--color-white);
+  border: 2px solid var(--color-light-green);
   border-radius: 25px;
-  box-shadow: 0 2px 8px var(--color-black);
+  box-shadow: 0 2px 4px var(--color-black);
+
+  a {
+    color: var(--color-green);
+    font-weight: bold;
+    background-color: var(--color-white);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: var(--color-brown);
+      color: var(--color-white);
+    }
+  }
 }
 
-.leaflet-left .leaflet-control-scale {
-  margin: -4rem 4rem;
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+}
+
+.leaflet-control-scale {
+  font-weight: bold;
+  color: var(--color-black);
 }
 
 .leaflet-control-scale-line {
-  background-color: transparent;
-  color: var(--color-black);
+  border-color: var(--color-black);
+  background-color: var(--color-vanille-50);
 }
 </style>
