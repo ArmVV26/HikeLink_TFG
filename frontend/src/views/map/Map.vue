@@ -55,25 +55,25 @@
               <article class="w-100 text-center">
                 <header class="text-green flex items-center justify-center text-base">
                   <article class="border-light-green rounded-3xl border-2 bg-white px-3 text-sm">
-                    <div class="flex items-center gap-2">
-                      <i class="fa-solid fa-location-dot text-green-600"></i>
-                      <p class="text-black">Wikiloc</p>
+                    <div class="flex items-center gap-2 font-bold text-green-600">
+                      <i class="fa-solid fa-location-dot"></i>
+                      <p>Wikiloc</p>
                     </div>
-                    <div class="flex items-center gap-2">
-                      <i class="fa-solid fa-location-dot text-orange-600"></i>
-                      <p class="text-black">Strava</p>
+                    <div class="flex items-center gap-2 font-bold text-orange-600">
+                      <i class="fa-solid fa-location-dot"></i>
+                      <p>Strava</p>
                     </div>
-                    <div class="flex items-center gap-2">
-                      <i class="fa-solid fa-location-dot text-yellow-600"></i>
-                      <p class="text-black">OutdoorActive</p>
+                    <div class="flex items-center gap-2 font-bold text-yellow-600">
+                      <i class="fa-solid fa-location-dot"></i>
+                      <p>OutdoorActive</p>
                     </div>
-                    <div class="flex items-center gap-2">
-                      <i class="fa-solid fa-location-dot text-purple-600"></i>
-                      <p class="text-black">AllTrails</p>
+                    <div class="flex items-center gap-2 font-bold text-purple-600">
+                      <i class="fa-solid fa-location-dot"></i>
+                      <p>AllTrails</p>
                     </div>
-                    <div class="flex items-center gap-2">
-                      <i class="fa-solid fa-location-dot text-blue-600"></i>
-                      <p class="text-black">Komoot</p>
+                    <div class="flex items-center gap-2 font-bold text-blue-600">
+                      <i class="fa-solid fa-location-dot"></i>
+                      <p>Komoot</p>
                     </div>
                   </article>
                 </header>

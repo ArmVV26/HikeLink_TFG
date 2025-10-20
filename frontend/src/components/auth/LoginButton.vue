@@ -9,23 +9,40 @@
     />
 
     <article v-else>
-      <img
-        :src="getIconUserImg"
-        @error="handleImgError"
-        class="hover:border-light-green mr-2 ml-2 h-18 w-18 cursor-pointer rounded-3xl border-2 border-transparent object-cover transition-all duration-200 sm:mr-4 sm:ml-4"
-        ref="userImg"
+      <button
+        class="m-4 flex cursor-pointer items-center justify-center gap-2"
         @click="toggleMenu"
-      />
+        @mouseenter="isHovered = true"
+        @mouseleave="isHovered = false"
+      >
+        <img
+          :src="getIconUserImg"
+          @error="handleImgError"
+          :class="[
+            'h-12 w-12 rounded-3xl border-2 object-cover transition-all duration-200',
+            {
+              'border-light-green': isHovered || props.menuOpen,
+              'border-transparent': !isHovered && !props.menuOpen,
+            },
+          ]"
+          ref="userImg"
+        />
+
+        <i
+          class="fa-solid fa-chevron-down text-xl transition-transform duration-300"
+          :class="[{ 'rotate-180': isHovered || props.menuOpen }, menuTheme.icon]"
+        ></i>
+      </button>
 
       <transition name="fade-dropdown">
         <nav
           v-if="menuOpen"
           :class="[menuTheme.background]"
-          class="absolute top-full right-0 flex w-60 flex-col rounded-bl-3xl pb-4 text-center text-xl transition-all duration-200"
+          class="absolute top-21 right-1 flex w-46 flex-col rounded-3xl pb-2 transition-all duration-200"
         >
           <h1
             :class="[menuTheme.username]"
-            class="font-montserrat-bold text-green pt-1 pb-1 text-center text-2xl font-bold"
+            class="font-montserrat-bold pt-1 text-center text-lg font-bold"
           >
             {{ authStore.user.username }}
           </h1>
@@ -33,7 +50,7 @@
           <router-link
             :to="`/profile/${authStore.user.username}-${authStore.user.id}`"
             :class="[menuTheme.text]"
-            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-300"
+            class="font-montserrat-bold hover:text-light-green cursor-pointer transition-all duration-300"
           >
             Mi Perfil
           </router-link>
@@ -41,7 +58,7 @@
           <router-link
             to="/upload-route"
             :class="[menuTheme.text]"
-            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-300"
+            class="font-montserrat-bold hover:text-light-green cursor-pointer transition-all duration-300"
           >
             Subir Ruta
           </router-link>
@@ -50,7 +67,7 @@
             @click="authStore.logout"
             to="/"
             :class="[menuTheme.text]"
-            class="font-montserrat-bold hover:text-light-green cursor-pointer px-2 py-2 transition-all duration-300"
+            class="font-montserrat-bold hover:text-light-green cursor-pointer transition-all duration-300"
           >
             Cerrar Sesión
           </router-link>
@@ -62,7 +79,7 @@
 
 <script setup>
 // IMPORTS
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useAuthStore } from "@/stores/authStore";
 import { useUserImage } from "@/composables/useUserImage";
 import { useRoute } from "vue-router";
@@ -73,16 +90,17 @@ const route = useRoute();
 
 const props = defineProps({
   menuOpen: Boolean,
-  isScrolled: Boolean,
 });
 
 // VARIABLES
 const authStore = useAuthStore();
-
 const emit = defineEmits(["toggle-user-menu"]);
 
 // Imagen de usuario
 const { getIconUserImg, handleImgError, userImg } = useUserImage();
+
+// Hover
+const isHovered = ref(false);
 
 // METODOS
 // Para abrir o cerrar el menu
@@ -96,15 +114,17 @@ const menuTheme = computed(() => {
 
   if (currentRoute === "Home" || currentRoute === "AboutUs") {
     return {
-      background: props.isScrolled ? "backdrop-blur-md bg-black" : "bg-transparent",
-      text: "text-white",
-      username: props.isScrolled ? "border-b-2 border-b-light-green" : "",
+      background: "bg-black backdrop-blur-md shadow-[0px_0px_8px_0px_rgb(0,_0,_0)]",
+      text: "text-white pl-6 py-1 text-base",
+      username: "border-b-2 border-b-grey text-green",
+      icon: "text-white",
     };
   } else {
     return {
-      background: "bg-bg backdrop-blur-md shadow-sm",
-      text: "text-green",
-      username: "border-b-brown border-b-2",
+      background: "bg-white backdrop-blur-md shadow-[0px_0px_8px_0px_rgb(0,_0,_0)]",
+      text: "text-black pl-6 py-1 text-base",
+      username: "border-b-grey border-b-2 text-brown",
+      icon: "text-green",
     };
   }
 });

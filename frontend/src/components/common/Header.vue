@@ -1,7 +1,7 @@
 <template>
   <nav
     :class="[headerTheme.background]"
-    class="fixed top-0 z-50 flex h-20 w-full justify-between transition-all duration-500"
+    class="fixed top-0 z-1005 flex h-20 w-full justify-between transition-all duration-500"
   >
     <!-- Logo -->
     <router-link to="/" class="logo m-1 flex items-center self-center p-1 select-none sm:m-4">
@@ -13,7 +13,7 @@
         imgClass="w-20 h-auto"
       />
       <h1
-        :class="[headerTheme.text]"
+        :class="[headerTheme.textlogo]"
         class="font-montserrat-bold ml-[-20px] hidden text-2xl sm:block"
       >
         HIKELINK
@@ -23,7 +23,7 @@
     <!-- Menu -->
     <section class="flex items-center justify-center">
       <button
-        :class="[headerTheme.text]"
+        :class="[headerTheme.hambuerger]"
         class="flex cursor-pointer items-center justify-center border-none bg-none text-5xl transition-all duration-300 hover:scale-85"
         v-if="isMobile"
         @click="toggleMainMenu"
@@ -35,29 +35,23 @@
         <nav
           v-if="!isMobile || showMainMenu"
           :class="[menuTheme.background]"
-          class="links absolute top-20 right-0 flex flex-col items-center rounded-bl-3xl p-1 transition-all duration-500 will-change-transform lg:relative lg:top-0 lg:flex-row lg:justify-end lg:rounded-none lg:p-0 lg:shadow-none"
+          class="links absolute top-21 right-1 flex flex-col items-center rounded-3xl pb-2 transition-all duration-500 lg:relative lg:top-0 lg:flex-row lg:justify-end lg:rounded-none lg:p-0 lg:shadow-none"
         >
-          <router-link to="/map" :class="[headerTheme.text]" class="font-montserrat-bold text-xl">
-            Mapa
-          </router-link>
-          <router-link
-            to="/search-routes"
-            :class="[headerTheme.text]"
-            class="font-montserrat-bold text-xl"
+          <h1
+            v-if="isMobile"
+            :class="[menuTheme.head]"
+            class="font-montserrat-bold px-4 pt-2 text-center text-base font-bold"
           >
-            Buscar Ruta
-          </router-link>
-          <router-link to="/foro" :class="[headerTheme.text]" class="font-montserrat-bold text-xl">
-            Foro
-          </router-link>
+            Menú Principal
+          </h1>
+
+          <router-link to="/map" :class="[headerTheme.text]"> Mapa </router-link>
+          <router-link to="/search-routes" :class="[headerTheme.text]"> Buscar Ruta </router-link>
+          <router-link to="/foro" :class="[headerTheme.text]"> Foro </router-link>
         </nav>
       </transition>
 
-      <LoginButton
-        :menuOpen="showUserMenu"
-        @toggle-user-menu="handleUserMenuToggle"
-        :is-scrolled="isScrolled"
-      />
+      <LoginButton :menuOpen="showUserMenu" @toggle-user-menu="handleUserMenuToggle" />
     </section>
   </nav>
 </template>
@@ -129,14 +123,18 @@ const headerTheme = computed(() => {
       background: isScrolled.value
         ? "backdrop-blur-md bg-black/50"
         : "bg-gradient-to-b from-black/40 to-transparent",
-      text: "text-white",
+      text: "text-white font-montserrat-bold inline-block relative py-1 transition-all duration-300 lg:py-0 lg:mx-6 lg:my-6 lg:text-xl",
+      hambuerger: "text-white",
       logo: "",
+      textlogo: "text-white",
     };
   } else {
     return {
       background: "bg-bg/50 backdrop-blur-md shadow-sm",
-      text: "text-green",
+      text: `${isMobile.value ? "text-black" : "text-green"} font-montserrat-bold inline-block relative py-1 transition-all duration-300 lg:py-0 lg:mx-6 lg:my-6 lg:text-xl`,
+      hambuerger: "text-green",
       logo: "drop-shadow-[0px_0px_1px_rgb(0,0,0)]",
+      textlogo: "text-green",
     };
   }
 });
@@ -148,11 +146,13 @@ const menuTheme = computed(() => {
   if (isMobile.value) {
     if (currentRoute === "Home" || currentRoute === "AboutUs") {
       return {
-        background: isScrolled.value ? "backdrop-blur-md bg-black" : "bg-transparent",
+        background: "bg-black backdrop-blur-md shadow-[0px_0px_8px_0px_rgb(0,_0,_0)]",
+        head: "text-green border-b-2 border-b-grey",
       };
     } else {
       return {
-        background: "bg-bg backdrop-blur-md shadow-sm",
+        background: "bg-white backdrop-blur-md shadow-[0px_0px_8px_0px_rgb(0,_0,_0)]",
+        head: "text-brown border-b-2 border-b-grey",
       };
     }
   }
@@ -164,12 +164,6 @@ const menuTheme = computed(() => {
 <style lang="scss" scoped>
 .links {
   a {
-    display: inline-block;
-    position: relative;
-    text-decoration: none;
-    margin: 1rem 2rem;
-    transition: all 0.25s;
-
     &:hover {
       color: var(--color-light-green);
     }
