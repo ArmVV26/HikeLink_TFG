@@ -1,386 +1,171 @@
 <template>
-    <div class="foro-wrapper">
-        <div class="foro-card" v-for="thread in paginatedThreads" :key="thread.id">
-            <router-link :to="{ name: 'ThreadDetail', params: {id: thread.id, slug: thread.slug } }">
-                <div class="card-left">
-                    <img :src="getIconUserThread(thread.user)"
-                        @error="handleImgError"
-                        class="avatar-thread"
-                        alt="Imagen del Usuario"
-                    />
-                    <h1>{{ thread.user.username }}</h1>
-                </div>
+  <main class="flex flex-col gap-4">
+    <section
+      class="bg-white px-2 py-4 shadow-[0px_0px_6px_0px_rgb(0,_0,_0)] transition-all duration-300 hover:scale-99 sm:rounded-3xl"
+      v-for="thread in paginatedThreads"
+      :key="thread.id"
+    >
+      <router-link
+        :to="{ name: 'ThreadDetail', params: { id: thread.id, slug: thread.slug } }"
+        class="flex flex-col gap-1 md:grid md:grid-cols-[10rem_1fr_8rem]"
+      >
+        <article class="flex flex-col items-center gap-2">
+          <img
+            :src="getIconUserThread(thread.user)"
+            @error="handleImgError"
+            class="border-green h-20 w-20 rounded-3xl border-2 object-cover"
+            alt="Imagen del Usuario"
+          />
+          <h1 class="font-montserrat-bold text-green text-lg lg:text-2xl">
+            {{ thread.user.username }}
+          </h1>
+        </article>
 
-                <div class="card-center">
-                    <h1>{{ thread.title }}</h1>
-                    <p>{{ thread.content }}</p>
-                    <p class="created-date">{{ formatDate(thread.created_date) }}</p>
-                </div>
+        <article class="relative flex min-w-0 flex-col pb-6">
+          <h1
+            class="font-montserrat-bold text-green line-clamp-2 text-center text-xl leading-tight text-ellipsis sm:text-left lg:text-3xl"
+          >
+            {{ thread.title }}
+          </h1>
+          <p class="my-2 line-clamp-3 max-w-full indent-8 text-sm text-ellipsis sm:text-base">
+            {{ thread.content }}
+          </p>
+          <p class="text-light-green absolute bottom-0 left-0 text-right text-sm font-bold">
+            {{ formatDate(thread.created_date) }}
+          </p>
+        </article>
 
-                <div class="card-right">
-                    <i class="fa-solid fa-comment"></i>
-                    <p>{{ thread.comments_count }}</p>
-                </div>
-            </router-link>
-        </div>
+        <article class="flex items-center justify-center gap-2">
+          <i
+            class="fa-solid fa-comment text-green drop-shadow-light-green text-4xl drop-shadow-sm"
+          ></i>
+          <p class="text-xl font-bold italic">{{ thread.comments_count }}</p>
+        </article>
+      </router-link>
+    </section>
 
-        <div class="pagination">
-            <button @click="emit('change-page', props.currentPage - 1)" :disabled="props.currentPage === 1" class="nav-btn">
-                <i class="fa-solid fa-less-than"></i>
-            </button>
+    <!-- Paginacion -->
+    <section class="my-4 flex items-center justify-center gap-2">
+      <button
+        @click="emit('change-page', props.currentPage - 1)"
+        :disabled="props.currentPage === 1"
+        class="border-green hover:bg-green tranext-wsition-all hover:thite cursor-pointer rounded-3xl border-2 bg-white px-2 py-1 text-sm duration-300 disabled:hidden sm:px-4 sm:py-2 sm:text-lg"
+      >
+        <i class="fa-solid fa-less-than"></i>
+      </button>
 
-            <button v-for="page in paginationPages" :key="page"
-                :disabled="page === '...'"
-                :class="['page-btn', {'active': page === props.currentPage}]"
-                @click="typeof page === 'number' && emit('change-page', page)">
-                {{ page }}
-            </button>
+      <button
+        v-for="page in paginationPages"
+        :key="page"
+        :disabled="page === '...'"
+        :class="[
+          'text-sm transition-all duration-300 sm:text-lg',
+          {
+            'bg-green text-white': page === props.currentPage,
+            'bg-white': page !== props.currentPage && page !== '...',
+            'text-brown cursor-default border-0 p-0 font-bold': page === '...',
+            'border-green hover:bg-green cursor-pointer rounded-3xl border-2 px-2 py-1 hover:text-white sm:px-4 sm:py-2':
+              page !== '...',
+          },
+        ]"
+        @click="typeof page === 'number' && emit('change-page', page)"
+      >
+        {{ page }}
+      </button>
 
-            <button @click="emit('change-page', props.currentPage + 1)" :disabled="props.currentPage === props.totalPages" class="nav-btn">
-                <i class="fa-solid fa-greater-than"></i>
-            </button>
-        </div>
-    </div>
+      <button
+        @click="emit('change-page', props.currentPage + 1)"
+        :disabled="props.currentPage === props.totalPages"
+        class="border-green hover:bg-green cursor-pointer rounded-3xl border-2 bg-white px-2 py-1 text-sm transition-all duration-300 hover:text-white disabled:hidden sm:px-4 sm:py-2 sm:text-lg"
+      >
+        <i class="fa-solid fa-greater-than"></i>
+      </button>
+    </section>
+  </main>
 </template>
 
 <script setup>
-    // IMPORTS
-    import { computed, watch } from 'vue'
-    import { useUserThreadImage } from '@/composables/useUserImage'
+// IMPORTS
+import { computed, watch } from "vue";
+import { useUserThreadImage } from "@/composables/useUserImage";
 
-    // PROPS
-    const props = defineProps({
-        threads: {
-            type: Array,
-            required: true
-        },
-        currentPage: {
-            type: Number,
-            required: true
-        },
-        totalPages: {
-            type: Number,
-            required: true
-        }
-    })
+// PROPS
+const props = defineProps({
+  threads: {
+    type: Array,
+    required: true,
+  },
+  currentPage: {
+    type: Number,
+    required: true,
+  },
+  totalPages: {
+    type: Number,
+    required: true,
+  },
+});
 
-    // VARIABLES
-    const maxVisiblePages = 5
-    
-    const emit = defineEmits(['change-page'])
+// VARIABLES
+const maxVisiblePages = 5;
 
-    const { getIconUserThread, handleImgError } = useUserThreadImage()
+const emit = defineEmits(["change-page"]);
 
-    // Paginas a mostrar en una pagina
-    const paginatedThreads = computed(() => props.threads )
+const { getIconUserThread, handleImgError } = useUserThreadImage();
 
-    // WATCHER
-    watch(() => props.threads.length, () => {
-        const page = Math.min(props.currentPage, props.totalPages)
-        emit('change-page', page < 1 ? 1 : page)
-    });
+// Paginas a mostrar en una pagina
+const paginatedThreads = computed(() => props.threads);
 
-    // METODOS
-    // Funcion para determinar el numero de paginas que se muestran en el pagination
-    const paginationPages = computed(() => {
-        const pages = []
-        const total = props.totalPages
-        const current = props.currentPage
+// WATCHER
+watch(
+  () => props.threads.length,
+  () => {
+    const page = Math.min(props.currentPage, props.totalPages);
+    emit("change-page", page < 1 ? 1 : page);
+  },
+);
 
-        if (total <= maxVisiblePages) {
-            for (let i = 1; i <= total; i++) {
-                pages.push(i)
-            }
-        } else {
-            pages.push(1)
+// METODOS
+// Funcion para determinar el numero de paginas que se muestran en el pagination
+const paginationPages = computed(() => {
+  const pages = [];
+  const total = props.totalPages;
+  const current = props.currentPage;
 
-            if (current > 3) {
-                pages.push('...')
-            }
-
-            const start = Math.max(2, current - 1)
-            const end = Math.min(total - 1, current + 1)
-
-            for (let i = start; i <= end; i++) {
-                pages.push(i)
-            }
-
-            if (current < total - 2) {
-                pages.push('...')
-            }
-
-            pages.push(total)
-        }
-
-        return pages
-    })
-
-    // Transformar la fecha en "10 de marzo de 2026"
-    const formatDate = (dateString) => {
-        const date = new Date(dateString)
-        return new Intl.DateTimeFormat('es-ES', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        }).format(date)
+  if (total <= maxVisiblePages) {
+    for (let i = 1; i <= total; i++) {
+      pages.push(i);
     }
+  } else {
+    pages.push(1);
+
+    if (current > 3) {
+      pages.push("...");
+    }
+
+    const start = Math.max(2, current - 1);
+    const end = Math.min(total - 1, current + 1);
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (current < total - 2) {
+      pages.push("...");
+    }
+
+    pages.push(total);
+  }
+
+  return pages;
+});
+
+// Transformar la fecha en "10 de marzo de 2026"
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("es-ES", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+};
 </script>
-
-<style lang="scss" scoped>
-    .foro-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-
-        .foro-card {
-            padding: 0.5rem;
-            border-radius: 25px;
-            box-shadow: 2px 2px 5px 1px var(--color-black);  
-            background-color: var(--color-white);  
-            transition: all 0.25s;
-
-            &:hover {
-                transform: scale(0.995);
-            }
-
-            a {
-                display: grid;
-                grid-template-columns: 10rem 1fr 8rem;
-                gap: 0.5rem;
-
-                .card-left {
-                    display: flex;
-                    align-items: center;
-                    flex-direction: column;
-                    gap: 0.5rem;
-
-                    .avatar-thread {
-                        width: 6rem;
-                        height: 6rem;
-                        object-fit: cover;
-                        border-radius: 25px;
-                        border: 2px solid var(--color-green);
-                    }
-
-                    h1 {
-                        font-family: "Montserrat-Bold";
-                        font-size: 1.5rem;
-                        color: var(--color-green);
-                    }
-                }
-
-                .card-center {
-                    position: relative;
-                    display: flex;
-                    flex-direction: column;
-                    min-width: 0;
-                    padding-bottom: 2rem;
-
-                    h1 {
-                        font-family: "Montserrat-Bold";
-                        color: var(--color-green);
-                        font-size: 2rem;
-                        line-height: 1;
-                        text-align: left;
-                        display: -webkit-box;
-                        line-clamp: 2;
-                        -webkit-line-clamp: 2;       
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
-
-                    p {
-                        margin: 0.5rem 0;
-                        max-width: 100%;
-                        display: -webkit-box;
-                        line-clamp: 3;
-                        -webkit-line-clamp: 3;       
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        text-indent: 2rem;
-                    }
-
-                    .created-date {
-                        position: absolute;
-                        font-weight: 900;
-                        bottom: 0;
-                        left: 0;
-                        color: var(--color-light-green);
-                        text-align: right;
-                    }
-                }
-
-                .card-right {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 1rem;
-
-                    i {
-                        font-size: 3rem;
-                        color: var(--color-green);
-                        filter: drop-shadow(4px 4px 0px var(--color-light-green));
-                    }
-
-                    p {
-                        font-size: 1.5rem;
-                        font-weight: 900;
-                        font-style: italic;
-                    }
-                }
-            }
-        }
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        margin: 1rem 0;
-
-        .nav-btn, .page-btn {
-            font-size: 1.25rem;
-            padding: 0.35rem 0.85rem;
-            border: 2px solid var(--color-green);
-            background-color: var(--color-white);
-            border-radius: 25rem;
-            cursor: pointer;
-            transition: all 0.25s;
-
-            &:hover {
-                background-color: var(--color-green);
-                color: var(--color-white);
-            }
-
-        }
-            
-        .nav-btn:disabled {
-            display: none;
-        }
-
-        .page-btn:disabled {
-            border: 0px;
-            padding: 0;
-            color: var(--color-brown);
-            font-weight: 900;
-            cursor: default;
-
-            &:hover {
-                background-color: transparent;
-                color: var(--color-brown);
-            }
-        }
-
-        .active {
-            background-color: var(--color-green);
-            color: var(--color-white);
-        }
-    }
-
-    @media (max-width: 768px) {
-        .foro-wrapper {
-            .foro-card {
-                a {
-                    grid-template-columns: 1fr 1fr;
-                    grid-template-rows: 1fr 5rem;
-                    gap: 0.25rem;
-
-                    .card-left {
-                        flex-direction: row-reverse;
-                        grid-column: 1 / 2;
-                        grid-row: 2 / 3;
-                        justify-self: flex-end;
-
-                        .avatar-thread {
-                            width: 4rem;
-                            height: 4rem;
-                        }
-
-                        h1 {
-                            font-size: 1.25rem;
-                            white-space: nowrap;         
-                            overflow: hidden;             
-                            text-overflow: ellipsis; 
-                            max-width: 100%;
-                            display: block;
-                        }
-                    }
-
-                    .card-center {
-                        padding: 0.5rem 1rem 1.5rem;
-                        grid-column: 1 / 3;
-                        grid-row: 1 / 2;
-
-                        h1 {
-                            text-align: center;
-                            font-size: 1.5rem;
-                        }
-
-                        .created-date {
-                            right: 1rem;
-                        }
-                    }
-
-                    .card-right {
-                        grid-column: 2 / 3;
-                        grid-row: 2 / 3;
-                        justify-self: flex-start;
-                        align-self: center;
-                    }
-                }
-            }
-        }
-    }
-
-    @media (max-width: 500px) {
-        .foro-wrapper {
-            .foro-card {
-                margin: 0 0.5rem;
-
-                a {
-                    grid-template-columns: 1fr;
-                    grid-template-rows: 1fr 3rem 3rem;
-                    gap: 0;
-
-                    .card-left {
-                        grid-column: 1 / 2;
-                        grid-row: 2 / 3;
-                        justify-self: center;
-
-                        .avatar-thread {
-                            width: 3rem;
-                            height: 3rem;
-                        }
-                    }
-
-                    .card-center {
-                        grid-column: 1 / 2;
-                        grid-row: 1 / 2;
-                    }
-
-                    .card-right {
-                        grid-column: 1 / 2;
-                        grid-row: 3 / 4;
-                        justify-self: center;
-
-                        i {
-                            font-size: 2rem;
-                        }
-                    }
-                }
-            }
-        }
-
-        .pagination {
-            gap: 0.5rem;
-
-            .nav-btn, .page-btn {
-                font-size: 1rem;
-                padding: 0.25rem 0.5rem;
-            }
-        }
-    }
-</style>

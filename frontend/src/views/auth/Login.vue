@@ -1,275 +1,161 @@
 <template>
-    <div class="main-container">
-        <div class="login-form">
-            <h1>Inicia sesión</h1>
-            <h2>Para comenzar la aventura</h2>
-            <p class="success" v-if="success">
-                <i class="fa-solid fa-circle-check"></i>
-                {{ success }}
-            </p>
+  <main class="flex h-full items-center justify-center py-10 sm:px-6">
+    <section
+      class="flex w-full flex-col justify-center bg-white px-6 py-6 shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] sm:max-w-110 sm:rounded-3xl"
+    >
+      <h1 class="font-montserrat-bold text-green text-center text-3xl leading-6">Inicia sesión</h1>
+      <h2 class="font-montserrat-bold text-brown mb-4 text-center text-base sm:text-xl">
+        Para comenzar la aventura
+      </h2>
 
-            <form @submit.prevent="login">
-                <input type="text" v-model="inputUserMail" placeholder="Usuario o Correo" />
-                <div class="password-wrapper">
-                    <input :type="showPassword ? 'text' : 'password'"
-                        v-model="password" 
-                        placeholder="Contraseña"  
-                    />
-                    <span class="toggle-password" @click="togglePassword">
-                        <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-                    </span>
-                    <p class="forgot-password">
-                        <router-link to="/forgot-password">¿Olvidaste tu contraseña?</router-link>
-                    </p>
-                </div>
+      <p
+        class="text-green bg-light-green-50 mb-6 rounded-3xl px-1 py-2 text-center text-base font-bold"
+        v-if="success"
+      >
+        <i class="fa-solid fa-circle-check"></i>
+        {{ success }}
+      </p>
 
-                <div v-if="error || Object.keys(fieldErrors).length > 0" class="errors-container">
-                    <ul>
-                        <li class="error" v-for="err in fieldErrors">{{ err }}</li>
-                    </ul>
-                    <p class="error">{{ error }}</p>
-                </div>
-                
-                <button type="submit">Iniciar Sesión</button>
-            </form>
+      <form @submit.prevent="login" class="font-lato flex flex-col gap-2 text-sm sm:text-base">
+        <input type="text" v-model="inputUserMail" placeholder="Usuario o Correo" />
 
-            <div class="divisor">o</div>
-            <p>¿No tienes cuenta?<router-link to="/register"> Registrate Aquí</router-link></p>
-        </div>
-    </div>
+        <article class="relative m-auto mb-4 w-[90%]">
+          <input
+            :type="showPassword ? 'text' : 'password'"
+            v-model="password"
+            placeholder="Contraseña"
+          />
+          <span
+            class="text-brown hover:text-green absolute top-[35%] right-0 -translate-y-1/2 cursor-pointer transition-all duration-250"
+            @click="togglePassword"
+          >
+            <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </span>
+          <p class="text-green m-0 p-0 text-left text-sm font-bold">
+            <router-link to="/forgot-password" class="hover:text-brown"
+              >¿Olvidaste tu contraseña?</router-link
+            >
+          </p>
+        </article>
+
+        <article
+          v-if="error || Object.keys(fieldErrors).length > 0"
+          class="mb-5 rounded-lg bg-red-600 p-2"
+        >
+          <ul>
+            <li class="text-center text-base font-bold text-red-100" v-for="err in fieldErrors">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ err }}
+            </li>
+          </ul>
+          <p v-if="error" class="text-center text-base font-bold text-red-100">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ error }}
+          </p>
+        </article>
+
+        <button
+          type="submit"
+          class="bg-green hover:bg-light-green hover:text-green m-auto w-[90%] cursor-pointer rounded-3xl px-3 py-2 text-base font-bold text-white transition-all duration-250"
+        >
+          Iniciar Sesión
+        </button>
+      </form>
+
+      <p class="text-dark-grey mx-2 text-center">o</p>
+      <p class="text-center">
+        ¿No tienes cuenta?<router-link
+          to="/register"
+          class="text-green cursor-pointer font-bold transition-all duration-250 hover:text-black"
+        >
+          Registrate Aquí</router-link
+        >
+      </p>
+    </section>
+  </main>
 </template>
-  
+
 <script setup>
-    // IMPORTS
-    import { ref, computed } from 'vue'
-    import { useRouter, useRoute } from 'vue-router'
-    import { useAuthStore } from '@/stores/authStore'
-    import { useFormValidation } from '@/composables/useValidation'
-    
-    // VARIABLES
-    const inputUserMail = ref('')
-    const password = ref('')
-    const router = useRouter()
-    const route = useRoute()
-    const error = ref('')
-    const success = computed(() => route.query.message)
-    const authStore = useAuthStore()
+// IMPORTS
+import { ref, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
+import { useFormValidation } from "@/composables/useValidation";
 
-    const { 
-        fieldErrors,
-        resetErrors,
-        validateEmail,
-        validateUsername
-    } = useFormValidation();
-    
-    // METODOS
-    // Validacion del email o username
-    const validateLoginIdentifier = (input) => {
-        if (validateEmail(input)) return true
-        if (validateUsername(input)) return true
-        return false
-    }
-    
-    // Validacion general
-    const validateLoginForm = () => {
-        resetErrors()
-        let valid = true
+// VARIABLES
+const inputUserMail = ref("");
+const password = ref("");
+const router = useRouter();
+const route = useRoute();
+const error = ref("");
+const success = computed(() => route.query.message);
+const authStore = useAuthStore();
 
-        if (!inputUserMail.value) {
-            fieldErrors.value.email = 'El correo electrónico o el username es obligatorio.'
-            valid = false
-        } else if (!validateLoginIdentifier(inputUserMail.value)) {
-            fieldErrors.value.identifier = 'Debes introducir un correo válido o un nombre de usuario sin espacios.'
-            valid = false
-        }
+const { fieldErrors, resetErrors, validateEmail, validateUsername } = useFormValidation();
 
-        if (!password.value) {
-            fieldErrors.value.password = 'La contraseña es obligatoria.'
-            valid = false
-        }
+// METODOS
+// Validacion del email o username
+const validateLoginIdentifier = (input) => {
+  if (validateEmail(input)) return true;
+  if (validateUsername(input)) return true;
+  return false;
+};
 
-        return valid
-    }
-    // Para mostrar el contenido de la contraseña
-    const showPassword = ref(false)
-    const togglePassword = () => {
-        showPassword.value = !showPassword.value
-    }
+// Validacion general
+const validateLoginForm = () => {
+  resetErrors();
+  let valid = true;
 
-    // Funcion para incicar sesion
-    const login = async () => {
-        if (!validateLoginForm()) return
+  if (!inputUserMail.value) {
+    fieldErrors.value.email = "El correo electrónico o el username es obligatorio.";
+    valid = false;
+  } else if (!validateLoginIdentifier(inputUserMail.value)) {
+    fieldErrors.value.identifier =
+      "Debes introducir un correo válido o un nombre de usuario sin espacios.";
+    valid = false;
+  }
 
-        try {
-            await authStore.login(inputUserMail.value, password.value)
-            router.push('/')
-        } catch (err) {
-            error.value = 'Usuario o contraseña incorrectos'
-        }
-    }
+  if (!password.value) {
+    fieldErrors.value.password = "La contraseña es obligatoria.";
+    valid = false;
+  }
+
+  return valid;
+};
+// Para mostrar el contenido de la contraseña
+const showPassword = ref(false);
+const togglePassword = () => {
+  showPassword.value = !showPassword.value;
+};
+
+// Funcion para incicar sesion
+const login = async () => {
+  if (!validateLoginForm()) return;
+
+  try {
+    await authStore.login(inputUserMail.value, password.value);
+    router.push("/");
+  } catch (err) {
+    error.value = "Usuario o contraseña incorrectos";
+  }
+};
 </script>
-  
+
 <style lang="scss" scoped>
-    .main-container {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 2rem 0;
+form {
+  input[type="text"],
+  input[type="password"] {
+    border: 2px solid var(--color-brown);
+    border-radius: 12px;
+    margin: auto;
+    width: 90%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    color: var(--color-black);
+
+    &:hover {
+      border: 2px solid var(--color-green);
     }
-
-    .login-form {
-        max-width: 25rem;
-        padding: 2rem 1.5rem;
-        background-color: var(--color-white);
-        border-radius: 25px;
-        box-shadow: 0px 0px 10px 0px var(--color-black);
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        
-        h1 {
-            font-family: "Montserrat-Bold";
-            font-size: 2rem;
-            color: var(--color-green);
-            text-shadow: none;
-            line-height: 1;
-        }
-
-        h2 {
-            font-family: "Montserrat-Bold";
-            font-size: 1.5rem;
-            color: var(--color-brown);
-            text-shadow: none;
-            margin-bottom: 1rem;
-        }
-        
-        .success {
-            color: var(--color-green);
-            background-color: var(--color-light-green-opacity);
-            border-radius: 25px;
-            padding: 0.25rem 0.5rem;
-            font-size: 1rem;
-            font-weight: 900;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            font-family: "Lato";
-
-            input[type="text"], input[type="password"] {
-                width: 90%;
-                padding: 0.5rem 0.75rem;
-                margin: auto;
-                font-size: 1rem;
-                color: var(--color-black);
-                border: 2px solid var(--color-brown);
-                border-radius: 10px;
-
-                &:hover {
-                    border: 2px solid var(--color-green);
-                }
-            }
-
-            .password-wrapper {
-                position: relative;
-                width: 90%;
-                margin: auto;
-
-                input {
-                    width: 100%;
-                    padding-right: 2.5rem;
-                }
-
-                .toggle-password {
-                    position: absolute;
-                    top: 35%;
-                    right: 0.75rem;
-                    color: var(--color-brown);
-                    transform: translateY(-50%);
-                    transition: all 0.25s;
-                    cursor: pointer;
-                    
-                    &:hover {
-                        color: var(--color-green);
-                    }
-                }
-
-                .forgot-password {
-                    padding: 0;
-                    margin: 0;
-                    text-align: left;
-                    font-size: 0.85rem;
-                }
-            }
-
-            .errors-container {
-                background-color: rgba(255, 103, 103, 0.3);
-                border-radius: 25px;
-                padding: 0.5rem;
-                margin: 0 0.5rem;
-
-                .error {
-                    text-align: center;
-                    color: var(--color-red-400);
-                    font-size: 1rem;
-                    font-weight: 900;
-                }
-            }
-
-            button[type="submit"] {
-                width: 90%;
-                padding: 0.5rem 0.75rem;
-                margin: auto;
-                font-size: 1rem;
-                font-weight: 900;
-                color: var(--color-white);
-                background-color: var(--color-green);
-                border-radius: 25px;
-                cursor: pointer;
-                transition: all 0.25s;
-
-                &:hover {
-                    background-color: var(--color-light-green);
-                    color: var(--color-green);
-                }
-            }
-        }    
-
-        .divisor {
-            color: var(--color-dark-grey);
-            text-align: center;
-            margin: 0.5rem 0;
-        }
-
-        p {
-            text-align: center;
-
-            a {
-                color: var(--color-green);
-                font-weight: bold;
-                cursor: pointer;
-                transition: all 0.25s;
-
-                &:hover {
-                    color: var(--color-black);
-                }
-            }
-        }
-    }
-
-    @media (max-width: 400px) {
-        .login-form {
-            width: 100%;
-            padding: 1rem 0;
-            border-top: 5px solid var(--color-green);
-            border-bottom: 5px solid var(--color-green);
-            border-radius: 0;
-        }
-    }
-</style>  
+  }
+}
+</style>
