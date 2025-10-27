@@ -32,6 +32,7 @@ DEBUG = env.bool("DEBUG", default=False)
 
 # Configuración de hosts permitidos
 ALLOWED_HOSTS = [
+    'hikelink',
     'localhost',
     '127.0.0.1',
     'hikelink.es',
@@ -41,6 +42,14 @@ ALLOWED_HOSTS = [
 
 # Configuración de CORS
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://hikelink.es",
+    "https://www.hikelink.es",
+    "https://hikelink-frontend.up.railway.app",  
+]
+
+CORS_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://hikelink.es",
@@ -281,9 +290,9 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 26214400
 
 # Configuración de seguridad adicional
 if not DEBUG or DATABASE_URL:
-    SECURE_SSL_REDIRECT = not DEBUG
-    SESSION_COOKIE_SECURE = not DEBUG
-    CSRF_COOKIE_SECURE = not DEBUG
+    SECURE_SSL_REDIRECT = env.bool('SSL', default=True)
+    SESSION_COOKIE_SECURE = env.bool('COOKIE', default=True)
+    CSRF_COOKIE_SECURE = env.bool('CSRF_COOKIE', default=True)
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'

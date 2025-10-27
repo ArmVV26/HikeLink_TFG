@@ -783,7 +783,7 @@ onUnmounted(() => {
       display: flex;
       gap: 1rem;
 
-      z-index: 1000;
+      z-index: 1020;
 
       .route-imgs {
         display: flex;
@@ -1037,12 +1037,12 @@ onUnmounted(() => {
 
         .close-btn {
           top: 0.75rem;
-          font-size: 0.95rem;
+          font-size: 0.85rem;
 
           background-color: var(--color-white);
           border-radius: 10rem;
 
-          padding: 0px 5px;
+          padding: 0px 4.5px;
         }
       }
     }
