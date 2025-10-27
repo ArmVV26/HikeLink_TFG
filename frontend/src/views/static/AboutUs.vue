@@ -4,403 +4,141 @@
     <h2>Más que rutas, compartimos experiencias. Así nació HikeLink.</h2>
   </HeroImage>
 
-  <div class="links-container">
-    <div class="links">
-      <h1>Sobre Nosotros</h1>
-      <nav>
-        <a href="#aboutus">Quiénes Somos</a>
-        <a href="#values">Nuestros Valores</a>
-        <a href="#living">Nuestros Forma de Vivir</a>
+  <section class="text-center">
+    <article
+      class="mx-auto mt-6 inline-flex w-[70%] flex-col items-center justify-center gap-6 border-b-4 border-black md:flex-row"
+    >
+      <h1
+        class="font-montserrat-bold text-green text-2xl leading-0 whitespace-nowrap italic md:pb-4"
+      >
+        Sobre Nosotros
+      </h1>
+      <nav class="flex flex-col md:flex-row md:gap-6">
+        <a
+          href="#aboutus"
+          class="hover:border-b-green border-b-4 border-transparent pb-2 whitespace-nowrap transition-all duration-300 hover:font-bold"
+          >Quiénes Somos</a
+        >
+        <a
+          href="#values"
+          class="hover:border-b-green border-b-4 border-transparent pb-2 whitespace-nowrap transition-all duration-300 hover:font-bold"
+          >Nuestros Valores</a
+        >
+        <a
+          href="#living"
+          class="hover:border-b-green border-b-4 border-transparent pb-2 whitespace-nowrap transition-all duration-300 hover:font-bold"
+          >Nuestros Forma de Vivir</a
+        >
       </nav>
-    </div>
-  </div>
+    </article>
+  </section>
 
-  <div id="aboutus" class="about-us">
-    <h1>Quiénes Somos</h1>
-    <p>
-       HikeLink nació del amor por la montaña y el deseo de compartirla.
-       Somos un equipo de senderistas, escaladores y aventureros que decidió 
-       crear una plataforma donde cualquier persona pudiera descubrir rutas
-       auténticas, compartir sus experiencias y conectar con otros amantes del outdoor.
+  <section id="aboutus" class="my-10 flex flex-col text-center">
+    <h1 class="font-montserrat-bold text-green text-2xl md:text-4xl">Quiénes Somos</h1>
+    <p class="m-auto w-[90%] text-sm sm:w-[60%] sm:text-base xl:w-[40%]">
+      HikeLink nació del amor por la montaña y el deseo de compartirla. Somos un equipo de
+      senderistas, escaladores y aventureros que decidió crear una plataforma donde cualquier
+      persona pudiera descubrir rutas auténticas, compartir sus experiencias y conectar con otros
+      amantes del outdoor.
     </p>
-    
-    <div class="collage">
-      <img class="img1" src="/images/img-collage/img-collage-1.jpg" alt="Imagen Collage 1" >
-      <img class="img2" src="/images/img-collage/img-collage-2.jpg" alt="Imagen Collage 2" >
-      <img class="img3" src="/images/img-collage/img-collage-3.jpg" alt="Imagen Collage 3" >
-      <img class="img4" src="/images/img-collage/img-collage-4.jpg" alt="Imagen Collage 4" >
-    </div>
-  </div>
 
-  <div id="values" class="values">
-    <h1>Nuestros Valores</h1>
-    
-    <div>
-      <div class="value-card">
-        <h1>Corresponsabilidad</h1>
-        <p>Promovemos un senderismo consciente y sostenible, cuidando los entornos que amamos.</p>
-      </div>
+    <article
+      class="mx-auto my-4 w-[90%] sm:w-[70%] md:grid md:grid-cols-3 md:grid-rows-[20rem_20rem] md:gap-4 xl:w-[50%]"
+    >
+      <img
+        class="col-span-2 row-span-1 hidden h-full w-full rounded-3xl object-cover brightness-100 contrast-100 saturate-110 sepia-20 md:block"
+        src="/images/img-collage/img-collage-1.jpg"
+        alt="Imagen Collage 1"
+      />
+      <img
+        class="col-span-1 row-span-2 hidden h-full w-full rounded-3xl object-cover brightness-100 contrast-100 saturate-110 sepia-20 md:block"
+        src="/images/img-collage/img-collage-2.jpg"
+        alt="Imagen Collage 2"
+      />
+      <img
+        class="col-span-1 row-span-1 h-full w-full rounded-3xl object-cover brightness-100 contrast-100 saturate-110 sepia-20"
+        src="/images/img-collage/img-collage-3.jpg"
+        alt="Imagen Collage 3"
+      />
+      <img
+        class="col-span-1 row-span-1 hidden h-full w-full rounded-3xl object-cover brightness-100 contrast-100 saturate-110 sepia-20 md:block"
+        src="/images/img-collage/img-collage-4.jpg"
+        alt="Imagen Collage 4"
+      />
+    </article>
+  </section>
 
-      <div class="value-card">
-        <h1>Pasión</h1>
-        <p>Cada paso que damos viene del amor por la montaña y la aventura al aire libre.</p>
-      </div>
+  <main id="values" class="bg-light-green-50 mb-10 py-10 text-center">
+    <h1 class="font-montserrat-bold text-green text-2xl md:text-4xl">Nuestros Valores</h1>
 
-      <div class="value-card">
-        <h1>Comunidad</h1>
-        <p>Creemos en la fuerza de compartir y aprender juntos. Cada ruta es una historia que suma.</p>
-      </div>
+    <section class="mx-4 mt-4 flex flex-wrap justify-center gap-6 min-[900px]:w-200 md:mx-auto">
+      <article
+        class="flex w-80 flex-col rounded-3xl bg-white px-4 py-6 shadow-[3px_3px_8px_0px_rgb(0,_0,_0)]"
+      >
+        <h1 class="font-montserrat-bold text-light-green text-lg italic sm:text-2xl">
+          Corresponsabilidad
+        </h1>
+        <p class="text-sm sm:text-base">
+          Promovemos un senderismo consciente y sostenible, cuidando los entornos que amamos.
+        </p>
+      </article>
 
-      <div class="value-card">
-        <h1>Educación</h1>
-        <p>Creemos que compartir conocimiento enriquece la experiencia de todos y nos hace mejores montañeros.</p>
-      </div>
-    </div>
-  </div>
+      <article
+        class="flex w-80 flex-col rounded-3xl bg-white px-4 py-6 shadow-[3px_3px_8px_0px_rgb(0,_0,_0)]"
+      >
+        <h1 class="font-montserrat-bold text-light-green text-lg italic sm:text-2xl">Pasión</h1>
+        <p class="text-sm sm:text-base">
+          Cada paso que damos viene del amor por la montaña y la aventura al aire libre.
+        </p>
+      </article>
 
-  <div id="living" class="living">
-    <h1>Nuestra Forma de Vivir</h1>
-    <h2>Conectar con la montaña es reconectar contigo</h2>
-    <p>
-      El deporte en la naturaleza fortalece cuerpo y mente, reduce el estrés y mejora la salud física mientras 
-      te permite descubrir paisajes únicos y respirar aire puro.
-    </p>
+      <article
+        class="flex w-80 flex-col rounded-3xl bg-white px-4 py-6 shadow-[3px_3px_8px_0px_rgb(0,_0,_0)]"
+      >
+        <h1 class="font-montserrat-bold text-light-green text-lg italic sm:text-2xl">Comunidad</h1>
+        <p class="text-sm sm:text-base">
+          Creemos en la fuerza de compartir y aprender juntos. Cada ruta es una historia que suma.
+        </p>
+      </article>
+
+      <article
+        class="flex w-80 flex-col rounded-3xl bg-white px-4 py-6 shadow-[3px_3px_8px_0px_rgb(0,_0,_0)]"
+      >
+        <h1 class="font-montserrat-bold text-light-green text-lg italic sm:text-2xl">Educación</h1>
+        <p class="text-sm sm:text-base">
+          Creemos que compartir conocimiento enriquece la experiencia de todos y nos hace mejores
+          montañeros.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <section
+    id="living"
+    class="mx-6 mb-10 flex flex-col items-center justify-center text-center xl:mx-auto xl:grid xl:w-300 xl:grid-cols-2 xl:gap-6"
+  >
+    <article>
+      <h1 class="font-montserrat-bold text-green text-2xl md:text-4xl">Nuestra Forma de Vivir</h1>
+      <h2 class="font-montserrat-bold text-light-green text-base md:text-xl">
+        Conectar con la montaña es reconectar contigo
+      </h2>
+      <p class="mx-auto w-full text-sm sm:text-base md:w-[50%] xl:mt-4 xl:w-[80%]">
+        El deporte en la naturaleza fortalece cuerpo y mente, reduce el estrés y mejora la salud
+        física mientras te permite descubrir paisajes únicos y respirar aire puro.
+      </p>
+    </article>
+
     <ResponsiveImage
       :info="['decorative-SobreNosotros', 'img-decorative']"
       :formats="['jpg', 'webp']"
-      figureClass="about-us-img-container"
-      imgClass="about-us-img"
+      imgClass="my-6 h-50 w-full object-cover rounded-3xl shadow-[0px_0px_10px_0px_rgb(0,_0,_0)] brightness-95 contrast-120 saturate-90 sepia-10 sm:h-100 xl:w-150 xl:h-full"
       alt="Imagen Living HikeLink"
     />
-  </div>
+  </section>
 </template>
 
 <script setup>
-  // IMPORTS
-  import HeroImage from '@/components/images/HeroImage.vue';
-  import ResponsiveImage from '@/components/images/ResponsiveImage.vue';
+// IMPORTS
+import HeroImage from "@/components/images/HeroImage.vue";
+import ResponsiveImage from "@/components/images/ResponsiveImage.vue";
 </script>
-
-<style lang="scss" scoped>
-  .links-container {
-    text-align: center;
-
-    .links {
-      display: inline-flex;   
-      align-items: center;
-      gap: 2rem;
-      margin: 2rem auto 0;
-      border-bottom: 3px solid var(--color-black);
-  
-      h1 {
-        font-family: "Montserrat-Bold";
-        font-size: 2rem;
-        font-style: italic;
-        color: var(--color-green);
-        margin: 0;
-        padding-bottom: 1rem;
-        line-height: 0;
-        white-space: nowrap;
-      }
-      
-      nav {
-        display: flex;
-        gap: 2rem;
-        
-        a {
-          padding-bottom: 0.5rem;
-          border-bottom: 3px solid transparent;
-          white-space: nowrap;
-          transition: all 0.25s;
-    
-          &:hover {
-            font-weight: 900;
-            border-bottom-color: var(--color-green);
-          }
-        }
-      }
-    }
-  }
-
-  .about-us {
-    display: flex;
-    flex-direction: column;
-    margin: 1rem 0;
-
-    h1 {
-      font-family: "Montserrat-Bold";
-      font-size: 2.5rem;
-      color: var(--color-green);
-    } 
-
-    p {
-      width: 40%;
-      margin: auto;
-      text-align: center;
-    }
-
-    .collage {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 20rem 20rem;
-      gap: 1rem;
-      margin: 1rem auto;
-      width: 50%;
-
-      img {
-        border-radius: 25px;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .img1 {
-        grid-column: 1 / 3;
-        grid-row: 1 / 2;
-      }
-
-      .img2 {
-        grid-column: 3 / 4;
-        grid-row: 1 / 3;
-      }
-
-      .img3 {
-        grid-column: 1 / 2;
-        grid-row: 2 / 3;
-      }
-
-      .img4 {
-        grid-column: 2 / 3;
-        grid-row: 2 / 3;
-      }
-    }
-  }
-
-  .values {
-    margin-top: 5rem;
-    padding: 1rem 2rem 2rem;
-    background-color: var(--color-vanille-opacity);
-
-    h1 {
-      font-family: "Montserrat-Bold";
-      font-size: 2.5rem;
-      color: var(--color-green);
-    }
-
-    div {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 2rem;
-
-      .value-card {
-        display: flex;
-        flex-direction: column;
-        gap: 0rem;
-        background-color: var(--color-white);
-        border-radius: 25px;
-        box-shadow: 3px 3px 8px 0px var(--color-black);
-        padding: 2rem 1rem;
-        width: 20rem;
-
-        h1 {
-          font-size: 1.5rem;
-          font-style: italic;
-          color: var(--color-light-green);
-        }
-
-        p {
-          text-align: center;
-        }
-      }
-    }
-  }
-
-  .living {
-    display: flex;
-    flex-direction: column;
-    margin: 5rem 0;
-
-    h1 {
-      font-family: "Montserrat-Bold";
-      font-size: 2.5rem;
-      color: var(--color-green);
-      line-height: 1;
-    }
-
-    h2 {
-      font-family: "Montserrat-Bold";
-      font-size: 1.5rem;
-      color: var(--color-light-green);
-    }
-
-    p {
-      text-align: center;
-      width: 40%;
-      margin: auto;
-    }
-
-    .about-us-img-container {
-      margin: 2rem auto;
-    }
-  }
-
-  @media (max-width: 1440px) {
-    .about-us {
-      p {
-        width: 70%;
-      }
-
-      .collage {
-        width: 80%;
-      }
-    }
-
-    .living {
-      p {
-        width: 70%;
-      }
-
-      .about-us-img-container {
-        margin: 2rem 5rem;
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    .links-container {
-      .links {
-        flex-direction: column;
-        gap: 1rem;
-
-        h1 {
-          padding-bottom: 0;
-        }
-
-        nav {
-          justify-content: center;
-          align-items: center;
-        }
-      }
-    }
-
-    .about-us {
-      .collage {
-        display: flex;
-        flex-direction: column;
-
-        img {
-          width: 100%;
-          height: 20rem;
-        }
-
-        .img1, .img2, .img3 {
-          display: none;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 470px) {
-    .links-container {
-        .links {
-          h1 {
-            font-size: 1.5rem;
-          }
-
-          nav {
-            gap: 1rem;
-
-            a {
-              font-size: 0.85rem;
-            }
-          }
-        }
-    }
-
-    .about-us {
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      p {
-        width: 90%;
-        font-size: 0.85rem;
-      }
-
-      .collage {
-        width: 90%;
-      }
-    }
-
-    .values {
-      margin-top: 0.5rem;
-
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      div {
-        .value-card {
-          h1 {
-            font-size: 1.25rem;
-          }
-
-          p {
-            font-size: 0.85rem;
-          }
-        }
-      }
-    }
-
-    .living {
-      margin-top: 2rem;
-      margin-bottom: 2rem;
-
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      h2 {
-        font-size: 1rem;
-      }
-
-      p {
-        font-size: 0.85rem;
-      }
-
-      .about-us-img-container {
-        margin: 2rem 1rem;
-        height: 20rem;
-      }
-    }
-  }
-
-  @media (max-width: 370px) {
-    .links-container {
-      .links {
-        width: 100%;
-        margin: 2rem 0;
-
-        nav {
-          gap: 0;
-          flex-direction: column;
-
-          a {
-            padding-bottom: 0;
-          }
-        }
-      }
-    }
-  }
-</style>
-
-<style>
-  .about-us-img {
-    width: 70rem;
-    height: 100%;
-    border-radius: 25px;
-    box-shadow: 0px 0px 10px 0px var(--color-black);
-    object-fit: cover;
-  }
-</style>

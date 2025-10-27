@@ -1,166 +1,109 @@
 <template>
-    <button
-        v-if="asButton"
-        type="button"
-        @click="$emit('click')"
-        :disabled="disabled"
-        :class="['common-button', { 'hero-button': header, 'thin-button': thin, 'disabled-button': disabled }]"
-    >
-        <i v-if="icon !== ''" :class="icon"></i>
-        {{ text }}
-    </button>
-    
-    <a 
-        v-else-if="samePage"
-        @click.prevent="scrollToSection"
-        :href="route"
-        :class="['common-button', {'hero-button': header}]"
-    >
-        {{ text }}
-    </a>
+  <button
+    v-if="asButton"
+    type="button"
+    @click="$emit('click')"
+    :disabled="disabled"
+    :class="[
+      'font-lato cursor-pointer rounded-3xl border-2 font-bold transition-all duration-500 disabled:pointer-events-none',
+      {
+        'text-2xl sm:text-3xl': header,
+        'text-base sm:text-xl': !header,
+        'px-2 py-2': thin,
+        'px-2 py-2 sm:px-4': !thin,
+        'bg-grey border-black text-white': disabled,
+        'bg-green border-light-green hover:bg-light-green hover:border-green hover:text-green text-white':
+          !disabled,
+      },
+    ]"
+  >
+    <i v-if="icon !== ''" :class="icon" class="mr-2"></i>
+    {{ text }}
+  </button>
 
-    <router-link
-        v-else 
-        :to="route" 
-        :class="['common-button', {'hero-button': header, 'thin-button': thin, 'disabled-a': disabled}]"
-    >
-        <i v-if="icon != ''" :class="icon"></i>
-        {{ text }}
-    </router-link>
+  <a
+    v-else-if="samePage"
+    @click.prevent="scrollToSection"
+    :href="route"
+    :class="[
+      'font-lato border-light-green hover:bg-light-green hover:border-green hover:text-green bg-green cursor-pointer rounded-3xl border-2 px-2 py-2 font-bold text-white transition-all duration-500 disabled:pointer-events-none sm:px-4',
+      { 'text-2xl sm:text-3xl': header, 'text-lg sm:text-xl': !header },
+    ]"
+  >
+    {{ text }}
+  </a>
+
+  <router-link
+    v-else
+    :to="route"
+    :class="[
+      'font-lato cursor-pointer rounded-3xl border-2 font-bold transition-all duration-500 disabled:pointer-events-none',
+      {
+        'text-2xl sm:text-3xl': header,
+        'text-base sm:text-xl': !header,
+        'px-2 py-2': thin,
+        'px-2 py-4 sm:px-4': !thin,
+        'bg-grey pointer-events-none border-black text-white': disabled,
+        'bg-green border-light-green hover:bg-light-green hover:border-green hover:text-green text-white':
+          !disabled,
+      },
+    ]"
+  >
+    <i v-if="icon != ''" :class="icon" class="mr-2"></i>
+    {{ text }}
+  </router-link>
 </template>
 
 <script setup>
-    // PROPS
-    const props = defineProps({
-        text: {
-            type: String,
-            required: true
-        },
-        route: {
-            type: String,
-            required: true
-        },
-        samePage: {
-            type: Boolean,
-            default: false
-        },
-        header: {
-            type: Boolean,
-            default: false
-        },
-        icon: {
-            type: String,
-            default: ''
-        },
-        thin: {
-            type: Boolean,
-            default: false
-        },
-        asButton: {
-            type: Boolean,
-            default: false
-        },
-        disabled: {
-            type: Boolean,
-            default: false
-        }
+// PROPS
+const props = defineProps({
+  text: {
+    type: String,
+    required: true,
+  },
+  route: {
+    type: String,
+    required: true,
+  },
+  samePage: {
+    type: Boolean,
+    default: false,
+  },
+  header: {
+    type: Boolean,
+    default: false,
+  },
+  icon: {
+    type: String,
+    default: "",
+  },
+  thin: {
+    type: Boolean,
+    default: false,
+  },
+  asButton: {
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+// VARIABLES
+// Defino el emit
+defineEmits(["click"]);
+
+// METODOS
+// Método para desplazarse a la sección
+const scrollToSection = () => {
+  const section = document.querySelector(props.route);
+  if (section) {
+    section.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
     });
-
-    // VARIABLES
-    // Defino el emit
-    defineEmits(['click'])
-
-    // METODOS
-    // Método para desplazarse a la sección
-    const scrollToSection = () => {
-        const section = document.querySelector(props.route);
-        if (section) {
-            section.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start' 
-            });
-        }
-    };
+  }
+};
 </script>
-
-<style lang="scss" scoped>
-    .common-button {
-        font-size: 1.5rem;
-        font-family: 'Lato';
-        font-weight: bold;
-        cursor: pointer;
-
-        color: var(--color-white);
-
-        padding: 1rem 2rem;
-        background-color: var(--color-green);
-        border: 2px solid var(--color-light-green);
-        border-radius: 25px;
-
-        transition: all 0.5s;
-        
-        &:hover {
-            background-color: var(--color-light-green);
-            border: 2px solid var(--color-green);
-            color: var(--color-green);
-        }
-
-        &:disabled {
-            pointer-events: none;
-        }
-        
-    }
-    
-    .hero-button {
-        font-size: 2rem;
-    }
-
-    .thin-button {
-        padding: 0.25rem 1rem;
-    }
-
-    .disabled-a {
-        background-color: var(--color-grey);
-        border-color: var(--color-black);
-        color: var(--color-white);
-        pointer-events: none;
-    }
-
-    .disabled-button {
-        background-color: var(--color-grey);
-        border-color: var(--color-black);
-        color: var(--color-white);
-    }
-    
-    i {
-        margin-right: 0.5rem;
-    }
-
-    @media (max-width: 500px) {
-        .common-button {
-            font-size: 1.25rem;
-            padding: 1rem;
-        }
-
-        .hero-button {
-            padding: 1rem 2rem;
-            font-size: 2rem;
-        }
-
-        .thin-button {
-            padding: 0.25rem 1rem;
-        }
-    }
-
-    @media (max-width: 350px) {
-        .common-button {
-            font-size: 1rem;
-            padding: 0.5rem;
-        }
-
-        .hero-button {
-            padding: 0.75rem 1.5rem;
-            font-size: 1.5rem;
-        }
-    }
-</style>

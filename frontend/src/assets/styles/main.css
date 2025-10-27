@@ -1,66 +1,65 @@
 @import "tailwindcss";
 
-/* Declaro el reset de CSS */
-/* * {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-decoration: none;
-  border: none;
-  outline: none;
-} */
-
 /* Declara colores */
 :root {
-  --color-green: #2E7D32;
-  --color-light-green: #81C784;
-  --color-light-green-opacity: rgba(129, 199, 132, 0.5);
-  --color-brown: #8D6E63;
-  --color-vanille: #F6D7B0;
-  --color-vanille-opacity: #F6D7B080;
+  --color-green: #2e7d32;
+  --color-light-green: #81c784;
+  --color-light-green-opacity: #81c78480;
+  --color-brown: #8d6e63;
+  --color-vanille: #f6d7b0;
+  --color-vanille-opacity: #f6d7b080;
   --color-black: #212121;
-  --color-black-opacity: rgba(33, 33, 33, 0.5); 
-  --color-white: #FAFAFA;
+  --color-black-opacity: #21212180;
+  --color-white: #fafafa;
   --color-dark-grey: #656565;
-  --color-grey: #BDBDBD;
+  --color-grey: #bdbdbd;
+
+  --color-bg-main: #eeeeee;
+  --color-bg: #d8ebd8;
+}
+
+body {
+  background-color: var(--color-bg-main);
 }
 
 /* Declaro las fuentes */
 @font-face {
   font-family: "Lato";
-  src: url('../fonts/Lato-Regular.ttf') format("truetype");
+  src: url("../fonts/Lato-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Montserrat";
-  src: url('../fonts/Montserrat-Regular.ttf') format("truetype");
+  src: url("../fonts/Montserrat-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Montserrat-Bold";
-  src: url('../fonts/Montserrat-ExtraBold.ttf') format("truetype");
+  src: url("../fonts/Montserrat-ExtraBold.ttf") format("truetype");
 }
 
 /* Declaro los estilos basicos */
 body {
-  font-family: 'Lato', sans-serif !important;
+  font-family: "Lato", sans-serif !important;
+  color: var(--color-black);
 }
 
-h1, h2 {
-  font-family: 'Montserrat', sans-serif;
-  text-align: center;
-  font-weight: bolder;
-}
+@theme {
+  --color-green: var(--color-green);
+  --color-light-green: var(--color-light-green);
+  --color-light-green-50: var(--color-light-green-opacity);
+  --color-brown: var(--color-brown);
+  --color-vanille: var(--color-vanille);
+  --color-vanille-50: var(--color-vanille-opacity);
+  --color-black: var(--color-black);
+  --color-black-50: var(--color-black-opacity);
+  --color-white: var(--color-white);
+  --color-dark-grey: var(--color-dark-grey);
+  --color-grey: var(--color-grey);
 
-h1 {
-  font-size: 3.5rem;
-}
-h2 {
-  font-size: 3rem;
-}
-h3 {
-  font-size: 2.5rem;
-}
-h4 {
-  font-size: 2rem;
+  --color-bg: var(--color-bg);
+
+  --font-lato: "Lato";
+  --font-montserrat: "Montserrat";
+  --font-montserrat-bold: "Montserrat-Bold";
 }
